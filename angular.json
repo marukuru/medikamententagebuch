@@ -19,7 +19,11 @@
             "polyfills": [],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "favicon.ico"
+              {
+                "glob": "icon.svg",
+                "input": ".",
+                "output": "/"
+              }
             ],
             "styles": [],
             "scripts": []
