@@ -1,4 +1,3 @@
-import '@angular/compiler';
 import { bootstrapApplication } from '@angular/platform-browser';
 // FIX: Replaced deprecated `provideExperimentalZonelessChangeDetection` with the stable `provideZonelessChangeDetection`.
 import { provideZonelessChangeDetection } from '@angular/core';
