@@ -25,7 +25,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
       
       # Das manuelle Setup des Android SDK ist nicht nötig, da der Gradle-Build
       # die benötigten Komponenten bei Bedarf selbst herunterlädt.
