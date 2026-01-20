@@ -1,11 +1,64 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1024" height="1024">
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="pillGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    <!-- Pill color gradients -->
+    <linearGradient id="leftHalf" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF9A9A"/>
+      <stop offset="100%" stop-color="#E64A4A"/>
     </linearGradient>
+
+    <linearGradient id="rightHalf" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7FB2FF"/>
+      <stop offset="100%" stop-color="#2F6FE4"/>
+    </linearGradient>
+
+    <!-- Gloss highlight -->
+    <linearGradient id="gloss" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.55"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Soft shadow -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="20" flood-opacity="0.25"/>
+    </filter>
   </defs>
-  <path d="M 85,15 A 35,35 0 0 0 15,85 A 35,35 0 0 0 85,15 Z" fill="url(#pillGradient)"/>
-  <path d="M 85,15 A 35,35 0 0 0 50,50 L 50,50 L 15,85 A 35,35 0 0 0 85,15 Z" fill="#ffffff" fill-opacity="0.3"/>
-  <line x1="18" y1="82" x2="82" y2="18" stroke="white" stroke-width="4" stroke-linecap="round" />
+
+  <!-- Optional background -->
+  <rect width="512" height="512" rx="112" fill="#FFFFFF"/>
+
+  <!-- Pill -->
+  <g transform="translate(256 256) rotate(-35)" filter="url(#shadow)">
+    <!-- Left half -->
+    <path
+      d="M-160 -64 h160 a64 64 0 0 1 0 128 h-160 a64 64 0 0 1 0 -128 z"
+      fill="url(#leftHalf)"
+    />
+
+    <!-- Right half -->
+    <path
+      d="M0 -64 h160 a64 64 0 0 1 0 128 h-160 z"
+      fill="url(#rightHalf)"
+    />
+
+    <!-- Seam -->
+    <rect
+      x="-4"
+      y="-64"
+      width="8"
+      height="128"
+      fill="#FFFFFF"
+      opacity="0.6"
+    />
+
+    <!-- Gloss highlight -->
+    <rect
+      x="-150"
+      y="-52"
+      width="300"
+      height="40"
+      rx="20"
+      fill="url(#gloss)"
+    />
+  </g>
 </svg>
