@@ -92,16 +92,20 @@ export class DataService {
   deleteItem<T extends { id: string }>(stateSignal: ReturnType<typeof signal<T[]>>, id: string) {
     stateSignal.update(items => items.filter(i => i.id !== id));
      // Cascade delete logic
-    if (stateSignal === this.manufacturers) {
+    // FIX: Cast stateSignal to `any` to bypass TypeScript's strict type checking.
+    // This resolves the "no overlap" error by allowing the comparison between the
+    // generic signal `WritableSignal<T[]>` and specific signal instances like
+    // `this.manufacturers`, enabling the cascade delete logic.
+    if (stateSignal as any === this.manufacturers) {
       this.preparations.update(p => p.map(prep => prep.manufacturerId === id ? { ...prep, manufacturerId: undefined } : prep));
     }
-    if (stateSignal === this.activeIngredients) {
+    if (stateSignal as any === this.activeIngredients) {
       this.preparations.update(p => p.map(prep => prep.activeIngredientId === id ? { ...prep, activeIngredientId: undefined } : prep));
     }
-     if (stateSignal === this.dosages) {
+     if (stateSignal as any === this.dosages) {
       this.preparations.update(p => p.map(prep => prep.dosageId === id ? { ...prep, dosageId: undefined } : prep));
     }
-     if (stateSignal === this.preparations) {
+     if (stateSignal as any === this.preparations) {
         this.diaryEntries.update(entries => entries.map(entry => entry.preparationId === id ? { ...entry, preparationId: undefined } : entry));
     }
   }
