@@ -6,7 +6,7 @@
     "medikamententagebuch": {
       "projectType": "application",
       "root": "",
-      "sourceRoot": "src",
+      "sourceRoot": ".",
       "prefix": "app",
       "architect": {
         "build": {
@@ -17,7 +17,7 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.json",
             "assets": [
-              "favicon.ico"
+              "icon.svg"
             ],
             "styles": [],
             "scripts": []
