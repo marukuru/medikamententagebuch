@@ -34,12 +34,12 @@ export class SettingsComponent {
   preparationForm = signal<Partial<Preparation>>({});
   
   entityConfigs = computed(() => [
-    { type: 'Mood' as const, title: 'Stimmungen', emoji: '🙆', items: this.dataService.moods(), display: (i: Mood) => `${i.emoji} ${i.description}` },
-    { type: 'Effect' as const, title: 'Effekte', emoji: '🧖', items: this.dataService.effects(), display: (i: Effect) => `${i.emoji} ${i.description}` },
-    { type: 'Manufacturer' as const, title: 'Hersteller', emoji: '🏢', items: this.dataService.manufacturers(), display: (i: Manufacturer) => i.name },
-    { type: 'Preparation' as const, title: 'Präparate', emoji: '💊', items: this.dataService.preparations(), display: (i: Preparation) => i.name },
-    { type: 'Dosage' as const, title: 'Dosierungen', emoji: '💧', items: this.dataService.dosages(), display: (i: Dosage) => `${i.amount} ${i.unit}` },
-    { type: 'ActiveIngredient' as const, title: 'Wirkstoffgehalte', emoji: '🧪', items: this.dataService.activeIngredients(), display: (i: ActiveIngredient) => `${i.amount} ${i.unit}` }
+    { type: 'Mood' as const, title: 'Stimmungen', emoji: '🙆', items: this.dataService.moods(), display: (i: any) => `${i.emoji} ${i.description}` },
+    { type: 'Effect' as const, title: 'Effekte', emoji: '🧖', items: this.dataService.effects(), display: (i: any) => `${i.emoji} ${i.description}` },
+    { type: 'Manufacturer' as const, title: 'Hersteller', emoji: '🏢', items: this.dataService.manufacturers(), display: (i: any) => i.name },
+    { type: 'Preparation' as const, title: 'Präparate', emoji: '💊', items: this.dataService.preparations(), display: (i: any) => i.name },
+    { type: 'Dosage' as const, title: 'Dosierungen', emoji: '💧', items: this.dataService.dosages(), display: (i: any) => `${i.amount} ${i.unit}` },
+    { type: 'ActiveIngredient' as const, title: 'Wirkstoffgehalte', emoji: '🧪', items: this.dataService.activeIngredients(), display: (i: any) => `${i.amount} ${i.unit}` }
   ]);
 
   openCreateForm(type: CrudEntity) {
