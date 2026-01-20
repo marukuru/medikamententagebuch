@@ -44,11 +44,11 @@ jobs:
         run: npx cap sync android
 
       - name: Build Debug APK
-        run: ./android/gradlew -p android assembleRelease
+        run: ./android/gradlew -p android assembleDebug
 
       - name: Rename APK
         run: |
-          mv android/app/build/outputs/apk/release/app-release-unsigned.apk Medikamententagebuch-v${{ github.run_number }}.apk
+          mv android/app/build/outputs/apk/release/app-debug.apk Medikamententagebuch-v${{ github.run_number }}.apk
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
