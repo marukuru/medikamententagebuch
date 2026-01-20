@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import angular from '@vitejs/plugin-angular';
+import angular from '@analogjs/vite-plugin-angular';
 
 export default defineConfig({
   plugins: [
