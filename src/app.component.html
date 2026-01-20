@@ -1,0 +1,54 @@
+<div class="min-h-screen w-full">
+  <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-30 shadow-md border-b border-slate-200 dark:border-slate-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center">
+          <span class="text-2xl mr-2">💊</span>
+          <span class="font-bold text-xl text-primary-600 dark:text-primary-400">Medikamententagebuch</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <button (click)="toggleTheme()" class="text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400">
+              @if (dataService.theme() === 'light') {
+                <i class="fas fa-moon text-xl"></i>
+              } @else {
+                <i class="fas fa-sun text-xl"></i>
+              }
+            </button>
+
+            <!-- Kebab Menu -->
+            <div class="relative">
+                <button (click)="toggleMenu()" class="text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400">
+                    <i class="fas fa-ellipsis-v text-xl"></i>
+                </button>
+                @if (menuOpen()) {
+                    <div class="absolute right-0 mt-2 w-56 origin-top-right bg-white dark:bg-slate-800 divide-y divide-slate-100 dark:divide-slate-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div class="py-1">
+                            <a (click)="navigate('diary')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                <span class="w-6 text-center">💊</span> Medikamententagebuch
+                            </a>
+                             <a (click)="navigate('stats')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                <span class="w-6 text-center">📊</span> Statistik
+                            </a>
+                             <a (click)="navigate('settings')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                <span class="w-6 text-center">⚙️</span> Einstellungen
+                            </a>
+                            <a (click)="navigate('info')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                <span class="w-6 text-center">ℹ️</span> Informationen
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    @switch (currentPage()) {
+      @case ('diary') { <diary-list /> }
+      @case ('stats') { <statistics /> }
+      @case ('settings') { <settings /> }
+      @case ('info') { <info /> }
+    }
+  </main>
+</div>

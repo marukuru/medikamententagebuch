@@ -1,0 +1,101 @@
+<div class="p-4 md:p-6">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-6 flex items-center gap-3">
+      <span class="text-4xl">📊</span>
+      <span>Statistik</span>
+    </h1>
+
+    <div class="space-y-8">
+      <!-- Top Präparate -->
+      <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+        <h2 class="text-2xl font-semibold mb-4 flex items-center gap-2">
+            <span class="text-3xl">💊</span>
+            <span>Top 5 Präparate</span>
+        </h2>
+        @if(topPreparations().length > 0) {
+            <ol class="list-decimal list-inside space-y-2">
+                @for(stat of topPreparations(); track stat.prep.id; let i = $index) {
+                <li>
+                    <span>
+                        @if (stat.man) {<span>{{ stat.man.name }} - </span>}
+                        <strong>{{ stat.prep.name }}</strong>
+                        @if (stat.ai) {<span class="text-sm text-slate-500"> ({{ stat.ai.amount }} {{ stat.ai.unit }})</span>}
+                    </span>
+                    <span class="text-sm font-mono bg-slate-100 dark:bg-slate-700 rounded px-2 py-0.5 ml-2">{{ stat.count }}x</span>
+                </li>
+                }
+            </ol>
+        } @else {
+            <p class="text-slate-500 dark:text-slate-400">Keine Daten für diese Statistik verfügbar.</p>
+        }
+      </div>
+
+      <!-- Stimmung -->
+      <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+        <h2 class="text-2xl font-semibold mb-4 flex items-center gap-2">
+            <span class="text-3xl">🙆</span>
+            <span>Stimmungen & Präparate</span>
+        </h2>
+        <div class="space-y-6">
+          @for(stat of moodStats(); track stat.moodName) {
+            <div>
+                <h3 class="font-semibold text-lg flex items-center gap-2"><span class="text-2xl">{{ stat.emoji }}</span> {{ stat.moodName }}</h3>
+                @if(stat.topPreps.length > 0) {
+                    <ol class="list-decimal list-inside space-y-1 pl-4 mt-1 text-slate-700 dark:text-slate-300">
+                         @for(p of stat.topPreps; track p.prep.id) {
+                            <li>
+                                <span>
+                                    @if (p.man) {<span>{{ p.man.name }} - </span>}
+                                    <strong>{{ p.prep.name }}</strong>
+                                    @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
+                                </span>
+                            </li>
+                        }
+                    </ol>
+                } @else {
+                     <p class="text-slate-500 dark:text-slate-400 pl-4">Keine verknüpften Präparate.</p>
+                }
+            </div>
+          }
+           @if(moodStats().length === 0) {
+             <p class="text-slate-500 dark:text-slate-400">Keine Daten für diese Statistik verfügbar.</p>
+          }
+        </div>
+      </div>
+      
+      <!-- Effekte -->
+      <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+        <h2 class="text-2xl font-semibold mb-4 flex items-center gap-2">
+            <span class="text-3xl">🧖</span>
+            <span>Effekte & Präparate</span>
+        </h2>
+        <div class="space-y-6">
+          @for(stat of effectStats(); track stat.effectName) {
+            <div>
+                <h3 class="font-semibold text-lg flex items-center gap-2"><span class="text-2xl">{{ stat.emoji }}</span> {{ stat.effectName }}</h3>
+                @if(stat.topPreps.length > 0) {
+                    <ol class="list-decimal list-inside space-y-1 pl-4 mt-1 text-slate-700 dark:text-slate-300">
+                         @for(p of stat.topPreps; track p.prep.id) {
+                            <li>
+                                <span>
+                                    @if (p.man) {<span>{{ p.man.name }} - </span>}
+                                    <strong>{{ p.prep.name }}</strong>
+                                    @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
+                                </span>
+                            </li>
+                        }
+                    </ol>
+                } @else {
+                     <p class="text-slate-500 dark:text-slate-400 pl-4">Keine verknüpften Präparate.</p>
+                }
+            </div>
+          }
+           @if(effectStats().length === 0) {
+             <p class="text-slate-500 dark:text-slate-400">Keine Daten für diese Statistik verfügbar.</p>
+          }
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

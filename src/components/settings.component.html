@@ -1,0 +1,178 @@
+<div class="p-4 md:p-6">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-6 flex items-center gap-3">
+      <span class="text-4xl">⚙️</span>
+      <span>Einstellungen</span>
+    </h1>
+
+    <div class="space-y-8">
+      <!-- CRUD SECTIONS -->
+      @for (entity of entityConfigs(); track entity.type) {
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-semibold flex items-center gap-2">
+              <span class="text-3xl">{{ entity.emoji }}</span>
+              <span>{{ entity.title }}</span>
+            </h2>
+            <button (click)="openCreateForm(entity.type)" class="px-3 py-1 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors text-sm flex items-center gap-1">
+              <i class="fa fa-plus"></i> Anlegen
+            </button>
+          </div>
+          <div class="max-h-60 overflow-y-auto pr-2">
+            @if(entity.items.length > 0) {
+              <ul class="space-y-2">
+                @for(item of entity.items; track item.id) {
+                  <li class="flex justify-between items-center p-2 rounded-lg bg-slate-50 dark:bg-slate-700/50">
+                    <span class="text-slate-800 dark:text-slate-200">{{ entity.display(item) }}</span>
+                    <div class="flex gap-2">
+                      <button (click)="openEditForm(entity.type, item)" class="text-yellow-500 hover:text-yellow-600"><i class="fa fa-pencil"></i></button>
+                      <button (click)="requestDeleteItem(entity.type, item.id, entity.display(item))" class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
+                    </div>
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="text-slate-500 dark:text-slate-400 text-center py-4">Keine Einträge vorhanden.</p>
+            }
+          </div>
+        </div>
+      }
+      <!-- Data Management -->
+      <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+        <h2 class="text-2xl font-semibold mb-4 flex items-center gap-2">
+            <span class="text-3xl">💾</span>
+            <span>Datenverwaltung</span>
+        </h2>
+        <div class="flex flex-wrap gap-4">
+            <button (click)="exportData()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">Exportieren (Backup)</button>
+            <button (click)="triggerImport()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Importieren (Wiederherstellen)</button>
+            <input type="file" id="import-file" class="hidden" (change)="importData($event)" accept=".json">
+            <button (click)="resetAllData()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">App zurücksetzen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Generic Form Modal -->
+@if(creatingEntity() || editingEntity()) {
+  <div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 p-4" (click)="cancelForm()">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-lg" (click)="$event.stopPropagation()">
+        <h2 class="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-6">{{ editingEntity() ? 'Bearbeiten' : 'Anlegen' }}</h2>
+        <form (ngSubmit)="saveForm()" class="space-y-4">
+        @switch(creatingEntity() || editingEntity()?.type) {
+            @case('Mood') {
+                <input type="text" [(ngModel)]="moodForm().emoji" name="emoji" placeholder="Emoji" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                <input type="text" [(ngModel)]="moodForm().description" name="description" placeholder="Beschreibung" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+            }
+            @case('Effect') {
+                <input type="text" [(ngModel)]="effectForm().emoji" name="emoji" placeholder="Emoji" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                <input type="text" [(ngModel)]="effectForm().description" name="description" placeholder="Beschreibung" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+            }
+            @case('Manufacturer') {
+                <input type="text" [(ngModel)]="manufacturerForm().name" name="name" placeholder="Name des Herstellers" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+            }
+             @case('Dosage') {
+                <input type="number" step="any" [(ngModel)]="dosageForm().amount" name="amount" placeholder="Menge" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                <input type="text" [(ngModel)]="dosageForm().unit" name="unit" placeholder="Einheit" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+            }
+             @case('ActiveIngredient') {
+                <input type="text" [(ngModel)]="activeIngredientForm().amount" name="amount" placeholder="Menge" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                <input type="text" [(ngModel)]="activeIngredientForm().unit" name="unit" placeholder="Einheit" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+            }
+            @case('Preparation') {
+                <input type="text" [(ngModel)]="preparationForm().name" name="name" placeholder="Name des Präparats" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                 <select [(ngModel)]="preparationForm().manufacturerId" name="manufacturerId" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                    <option [ngValue]="undefined">Hersteller (optional)</option>
+                    @for(man of dataService.manufacturers(); track man.id) { <option [value]="man.id">{{ man.name }}</option> }
+                </select>
+                <select [(ngModel)]="preparationForm().activeIngredientId" name="activeIngredientId" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                    <option [ngValue]="undefined">Wirkstoffgehalt (optional)</option>
+                    @for(ai of dataService.activeIngredients(); track ai.id) { <option [value]="ai.id">{{ ai.amount }} {{ ai.unit }}</option> }
+                </select>
+                <select [(ngModel)]="preparationForm().dosageId" name="dosageId" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                    <option [ngValue]="undefined">Standard-Dosierung (optional)</option>
+                    @for(dos of dataService.dosages(); track dos.id) { <option [value]="dos.id">{{ dos.amount }} {{ dos.unit }}</option> }
+                </select>
+            }
+        }
+        <div class="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700 mt-6">
+            <button type="button" (click)="cancelForm()" class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500">Abbrechen</button>
+            <button type="submit" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700">Speichern</button>
+        </div>
+        </form>
+    </div>
+  </div>
+}
+
+<!-- Delete item confirmation modal -->
+@if(itemToDelete(); as item) {
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] p-4" (click)="cancelDeleteItem()">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
+      <h3 class="text-xl font-bold mb-4">Eintrag löschen?</h3>
+      <p class="text-slate-600 dark:text-slate-400 mb-6">Möchten Sie "{{ item.name }}" wirklich endgültig löschen?</p>
+      <div class="flex justify-center gap-4">
+        <button (click)="cancelDeleteItem()" class="px-6 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
+          Abbrechen
+        </button>
+        <button (click)="confirmDeleteItem()" class="px-6 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">
+          Ja, löschen
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Import confirmation modal -->
+@if(importFileContent()) {
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] p-4" (click)="cancelImport()">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
+      <h3 class="text-xl font-bold mb-4">Daten importieren?</h3>
+      <p class="text-slate-600 dark:text-slate-400 mb-6">Möchten Sie wirklich Daten importieren? Alle aktuellen Daten werden überschrieben.</p>
+      <div class="flex justify-center gap-4">
+        <button (click)="cancelImport()" class="px-6 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
+          Abbrechen
+        </button>
+        <button (click)="confirmImport()" class="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+          Ja, importieren
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Reset confirmation step 1 modal -->
+@if(showResetConfirmStep1()) {
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] p-4" (click)="cancelReset()">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
+      <h3 class="text-xl font-bold mb-4 text-red-600">WARNUNG</h3>
+      <p class="text-slate-600 dark:text-slate-400 mb-6">Dies löscht ALLE Ihre Daten und setzt die App auf die Standardwerte zurück. Dieser Vorgang kann nicht rückgängig gemacht werden. Fortfahren?</p>
+      <div class="flex justify-center gap-4">
+        <button (click)="cancelReset()" class="px-6 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
+          Abbrechen
+        </button>
+        <button (click)="proceedToResetStep2()" class="px-6 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">
+          Fortfahren
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Reset confirmation step 2 modal -->
+@if(showResetConfirmStep2()) {
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] p-4" (click)="cancelReset()">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
+      <h3 class="text-xl font-bold mb-4 text-red-600">Endgültige Bestätigung</h3>
+      <p class="text-slate-600 dark:text-slate-400 mb-6">Bitte bestätigen Sie erneut: Alle Daten werden endgültig gelöscht.</p>
+      <div class="flex justify-center gap-4">
+        <button (click)="cancelReset()" class="px-6 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
+          Abbrechen
+        </button>
+        <button (click)="confirmReset()" class="px-6 py-2 rounded-lg bg-red-800 text-white hover:bg-red-900 transition-colors">
+          ALLES LÖSCHEN
+        </button>
+      </div>
+    </div>
+  </div>
+}

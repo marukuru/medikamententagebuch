@@ -1,0 +1,96 @@
+<div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 p-4" (click)="cancel()">
+  <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+    <h2 class="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-6">{{ entryToEdit() ? 'Eintrag bearbeiten' : 'Neuer Eintrag' }}</h2>
+    
+    <form (ngSubmit)="save()" class="space-y-4">
+      <!-- Stimmung -->
+      <div>
+        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Stimmung *</label>
+        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+            @for(mood of dataService.moods(); track mood.id) {
+            <label 
+                (click)="fieldChanged()"
+                [class.ring-2]="formMoodId() === mood.id"
+                [class.ring-primary-500]="formMoodId() === mood.id"
+                [class.bg-slate-200]="formMoodId() === mood.id"
+                [class.dark:bg-slate-600]="formMoodId() === mood.id"
+                class="cursor-pointer text-center p-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                <input type="radio" name="mood" [value]="mood.id" [(ngModel)]="formMoodId" class="sr-only">
+                <span class="text-3xl">{{ mood.emoji }}</span>
+                <span class="block text-xs mt-1">{{ mood.description }}</span>
+            </label>
+            }
+        </div>
+      </div>
+
+      <!-- Präparat -->
+      <div>
+        <label for="preparation" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Präparat</label>
+        <select id="preparation" name="preparation" [(ngModel)]="formPreparationId" (change)="fieldChanged()" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
+          <option [ngValue]="undefined">-- Optional --</option>
+          @for(prep of dataService.preparations(); track prep.id) {
+            <option [value]="prep.id">{{ prep.name }}</option>
+          }
+        </select>
+      </div>
+      
+      <!-- Dosierung -->
+      <div>
+        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Dosierung</label>
+        <div class="flex gap-2">
+            <input type="number" step="any" name="dosageAmount" [(ngModel)]="formDosageAmount" (input)="fieldChanged()" placeholder="Menge" class="block w-2/3 pl-3 pr-2 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
+            <input type="text" name="dosageUnit" [(ngModel)]="formDosageUnit" (input)="fieldChanged()" placeholder="Einheit (z.B. mg)" class="block w-1/3 pl-3 pr-2 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
+        </div>
+      </div>
+      
+      <!-- Effekte -->
+      <div>
+        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Effekte</label>
+        <div class="flex flex-wrap gap-2">
+          @for(effect of dataService.effects(); track effect.id) {
+            <button type="button" 
+                    (click)="toggleEffect(effect.id)"
+                    [class.bg-primary-500]="isEffectSelected(effect.id)"
+                    [class.text-white]="isEffectSelected(effect.id)"
+                    [class.bg-slate-100]="!isEffectSelected(effect.id)"
+                    [class.dark:bg-slate-700]="!isEffectSelected(effect.id)"
+                    class="px-3 py-1 rounded-full text-sm flex items-center gap-2 transition-colors">
+              <span>{{effect.emoji}}</span>
+              <span>{{effect.description}}</span>
+            </button>
+          }
+        </div>
+      </div>
+      
+      <!-- Notiz -->
+       <div>
+        <label for="note" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Notiz (max. 160 Zeichen)</label>
+        <input type="text" id="note" name="note" [(ngModel)]="formNote" (input)="fieldChanged()" maxlength="160" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-700 mt-6">
+        <button type="button" (click)="cancel()" class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">Abbrechen</button>
+        <button type="submit" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors">Speichern</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Cancel Confirmation Modal -->
+@if (showCancelConfirm()) {
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
+      <h3 class="text-xl font-bold mb-4">Änderungen verwerfen?</h3>
+      <p class="text-slate-600 dark:text-slate-400 mb-6">Möchten Sie das Formular wirklich schließen und alle ungespeicherten Änderungen verwerfen?</p>
+      <div class="flex justify-center gap-4">
+        <button (click)="abortClose()" class="px-6 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
+          Zurück
+        </button>
+        <button (click)="confirmClose()" class="px-6 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">
+          Ja, verwerfen
+        </button>
+      </div>
+    </div>
+  </div>
+}
