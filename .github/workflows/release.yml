@@ -48,7 +48,7 @@ jobs:
 
       - name: Rename APK
         run: |
-          mv android/app/build/outputs/apk/release/app-debug.apk Medikamententagebuch-v${{ github.run_number }}.apk
+          mv android/app/build/outputs/apk/debug/app-debug.apk Medikamententagebuch-v${{ github.run_number }}.apk
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
