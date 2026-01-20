@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { DataService } from '../services/data.service';
-import { DiaryEntry, Preparation, Manufacturer, ActiveIngredient } from '../models';
+import { DiaryEntry, Preparation, Manufacturer, ActiveIngredient, Mood, Effect, Dosage } from '../models';
 import { DiaryEntryFormComponent } from './diary-entry-form.component';
 
 @Component({

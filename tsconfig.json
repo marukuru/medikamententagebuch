@@ -20,7 +20,7 @@
     "noFallthroughCasesInSwitch": true
   },
   "files": [
-    "src/main.ts"
+    "index.tsx"
   ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

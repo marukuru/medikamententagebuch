@@ -47,7 +47,7 @@ export class StatisticsComponent {
     });
 
     const result: { moodName: string, emoji: string, topPreps: PreparationStat[] }[] = [];
-    stats.forEach((value) => {
+    stats.forEach((value, key) => {
       result.push({
         moodName: value.moodName,
         emoji: value.emoji,
@@ -71,7 +71,7 @@ export class StatisticsComponent {
     });
 
     const result: { effectName: string, emoji: string, topPreps: PreparationStat[] }[] = [];
-    stats.forEach((value) => {
+    stats.forEach((value, key) => {
         result.push({
             effectName: value.effectName,
             emoji: value.emoji,

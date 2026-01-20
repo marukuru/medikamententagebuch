@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, inject, signal, input, output, effe
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
-import { DiaryEntry } from '../models';
+import { DiaryEntry, Mood, Effect, Preparation, Dosage } from '../models';
 
 @Component({
   selector: 'diary-entry-form',
