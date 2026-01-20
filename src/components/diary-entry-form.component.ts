@@ -155,4 +155,10 @@ export class DiaryEntryFormComponent {
   abortClose() {
     this.showCancelConfirm.set(false);
   }
+
+  formatPreparation(prep: any): string {
+    const man = this.dataService.manufacturers().find((m: any) => m.id === prep.manufacturerId);
+    const ai = this.dataService.activeIngredients().find((a: any) => a.id === prep.activeIngredientId);
+    return `${man ? man.name + ' ' : ''}${prep.name}${ai ? ` (${ai.amount})` : ''}`;
+  }
 }

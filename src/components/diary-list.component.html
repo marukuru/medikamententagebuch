@@ -1,7 +1,7 @@
 <div class="p-4 md:p-6 min-h-screen relative">
   <div class="max-w-4xl mx-auto">
-    <h1 class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-6 flex items-center gap-3">
-      <span class="text-4xl">💊</span>
+    <h1 class="text-2xl md:text-3xl font-bold text-primary-600 dark:text-primary-400 mb-6 flex items-center gap-3">
+      <span class="text-3xl md:text-4xl">💊</span>
       <span>Medikamententagebuch</span>
     </h1>
 
@@ -66,7 +66,7 @@
   </div>
 
   <!-- FAB -->
-  <button (click)="addEntry()" class="fixed bottom-6 right-6 bg-primary-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-3xl hover:bg-primary-700 transition-transform hover:scale-110">
+  <button (click)="addEntry()" class="fixed bg-primary-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-3xl hover:bg-primary-700 transition-transform hover:scale-110 bottom-[calc(1.5rem+env(safe-area-inset-bottom,0rem))] right-[calc(1.5rem+env(safe-area-inset-right,0rem))]">
     +
   </button>
 </div>
@@ -79,10 +79,10 @@
 <!-- Detail View Modal -->
 @if (showDetail(); as entry) {
   @let details = getPreparationDetails(entry.preparationId);
-  <div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-40 p-4" (click)="showDetail.set(null)">
+  <div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-40 px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="showDetail.set(null)">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold text-primary-600 dark:text-primary-400">Eintrag Details</h2>
+        <h2 class="text-xl md:text-2xl font-bold text-primary-600 dark:text-primary-400">Eintrag Details</h2>
         <button (click)="showDetail.set(null)" class="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-2xl">&times;</button>
       </div>
 
@@ -154,7 +154,7 @@
 
 <!-- Delete Confirmation Modal -->
 @if (entryToDeleteId()) {
-  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4" (click)="cancelDelete()">
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="cancelDelete()">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
       <h3 class="text-xl font-bold mb-4">Eintrag löschen?</h3>
       <p class="text-slate-600 dark:text-slate-400 mb-6">Möchten Sie diesen Eintrag wirklich endgültig löschen?</p>

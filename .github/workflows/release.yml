@@ -38,7 +38,7 @@ jobs:
       - name: Install Capacitor Assets and Generate Icons
         run: |
           npm install @capacitor/assets -D
-          npx capacitor-assets generate --iconPath icon.svg --splashPath icon.svg --android
+          npx capacitor-assets generate --assetPath . --android
 
       - name: Sync Capacitor project
         run: npx cap sync android

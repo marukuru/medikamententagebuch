@@ -1,7 +1,7 @@
 <div class="p-4 md:p-6">
   <div class="max-w-4xl mx-auto">
-    <h1 class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-6 flex items-center gap-3">
-      <span class="text-4xl">⚙️</span>
+    <h1 class="text-2xl md:text-3xl font-bold text-primary-600 dark:text-primary-400 mb-6 flex items-center gap-3">
+      <span class="text-3xl md:text-4xl">⚙️</span>
       <span>Einstellungen</span>
     </h1>
 
@@ -9,13 +9,13 @@
       <!-- CRUD SECTIONS -->
       @for (entity of entityConfigs(); track entity.type) {
         <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-semibold flex items-center gap-2">
-              <span class="text-3xl">{{ entity.emoji }}</span>
+          <div class="flex justify-between items-center mb-4 gap-4">
+            <h2 class="text-xl md:text-2xl font-semibold flex items-center gap-3">
+              <span class="text-2xl md:text-3xl">{{ entity.emoji }}</span>
               <span>{{ entity.title }}</span>
             </h2>
-            <button (click)="openCreateForm(entity.type)" class="px-3 py-1 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors text-sm flex items-center gap-1">
-              <i class="fa fa-plus"></i> Anlegen
+            <button (click)="openCreateForm(entity.type)" title="Neuen Eintrag anlegen" class="flex-shrink-0 w-9 h-9 rounded-full bg-primary-500 text-white hover:bg-primary-600 transition-colors flex items-center justify-center">
+              <i class="fa fa-plus"></i>
             </button>
           </div>
           <div class="max-h-60 overflow-y-auto pr-2">
@@ -39,7 +39,7 @@
       }
       <!-- Data Management -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
-        <h2 class="text-2xl font-semibold mb-4 flex items-center gap-2">
+        <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
             <span class="text-3xl">💾</span>
             <span>Datenverwaltung</span>
         </h2>
@@ -56,9 +56,9 @@
 
 <!-- Generic Form Modal -->
 @if(creatingEntity() || editingEntity()) {
-  <div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 p-4" (click)="cancelForm()">
+  <div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="cancelForm()">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-lg" (click)="$event.stopPropagation()">
-        <h2 class="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-6">{{ editingEntity() ? 'Bearbeiten' : 'Anlegen' }}</h2>
+        <h2 class="text-xl md:text-2xl font-bold text-primary-600 dark:text-primary-400 mb-6">{{ editingEntity() ? 'Bearbeiten' : 'Anlegen' }}</h2>
         <form (ngSubmit)="saveForm()" class="space-y-4">
         @switch(creatingEntity() || editingEntity()?.type) {
             @case('Mood') {
@@ -68,6 +68,13 @@
             @case('Effect') {
                 <input type="text" [(ngModel)]="effectForm().emoji" name="emoji" placeholder="Emoji" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
                 <input type="text" [(ngModel)]="effectForm().description" name="description" placeholder="Beschreibung" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                <label class="block">
+                  <span class="text-sm mb-1 inline-block">Wahrnehmung</span>
+                  <select [(ngModel)]="effectForm().perception" name="perception" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                    <option [ngValue]="undefined">(keine)</option>
+                    @for(opt of perceptionOptions; track opt.value) { <option [value]="opt.value">{{ opt.label }}</option> }
+                  </select>
+                </label>
             }
             @case('Manufacturer') {
                 <input type="text" [(ngModel)]="manufacturerForm().name" name="name" placeholder="Name des Herstellers" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
@@ -107,7 +114,7 @@
 
 <!-- Delete item confirmation modal -->
 @if(itemToDelete(); as item) {
-  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] p-4" (click)="cancelDeleteItem()">
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="cancelDeleteItem()">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
       <h3 class="text-xl font-bold mb-4">Eintrag löschen?</h3>
       <p class="text-slate-600 dark:text-slate-400 mb-6">Möchten Sie "{{ item.name }}" wirklich endgültig löschen?</p>
@@ -125,7 +132,7 @@
 
 <!-- Import confirmation modal -->
 @if(importFileContent()) {
-  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] p-4" (click)="cancelImport()">
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="cancelImport()">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
       <h3 class="text-xl font-bold mb-4">Daten importieren?</h3>
       <p class="text-slate-600 dark:text-slate-400 mb-6">Möchten Sie wirklich Daten importieren? Alle aktuellen Daten werden überschrieben.</p>
@@ -143,7 +150,7 @@
 
 <!-- Reset confirmation step 1 modal -->
 @if(showResetConfirmStep1()) {
-  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] p-4" (click)="cancelReset()">
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="cancelReset()">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
       <h3 class="text-xl font-bold mb-4 text-red-600">WARNUNG</h3>
       <p class="text-slate-600 dark:text-slate-400 mb-6">Dies löscht ALLE Ihre Daten und setzt die App auf die Standardwerte zurück. Dieser Vorgang kann nicht rückgängig gemacht werden. Fortfahren?</p>
@@ -161,7 +168,7 @@
 
 <!-- Reset confirmation step 2 modal -->
 @if(showResetConfirmStep2()) {
-  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] p-4" (click)="cancelReset()">
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="cancelReset()">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
       <h3 class="text-xl font-bold mb-4 text-red-600">Endgültige Bestätigung</h3>
       <p class="text-slate-600 dark:text-slate-400 mb-6">Bitte bestätigen Sie erneut: Alle Daten werden endgültig gelöscht.</p>

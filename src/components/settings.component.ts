@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@a
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
-import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation } from '../models';
+import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, EffectPerception } from '../models';
 
 type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredient' | 'Preparation';
 
@@ -33,6 +33,12 @@ export class SettingsComponent {
   activeIngredientForm = signal<Partial<ActiveIngredient>>({});
   preparationForm = signal<Partial<Preparation>>({});
   
+  perceptionOptions: { label: string; value: EffectPerception }[] = [
+    { label: 'positiv', value: 'positive' },
+    { label: 'negativ', value: 'negative' },
+    { label: 'neutral', value: 'neutral' },
+  ];
+
   entityConfigs = computed(() => [
     { type: 'Mood' as const, title: 'Stimmungen', emoji: '🙆', items: this.dataService.moods(), display: (i: any) => `${i.emoji} ${i.description}` },
     { type: 'Effect' as const, title: 'Effekte', emoji: '🧖', items: this.dataService.effects(), display: (i: any) => `${i.emoji} ${i.description}` },

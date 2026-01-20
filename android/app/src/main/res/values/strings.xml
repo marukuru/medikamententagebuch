@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Medikamententagebuch</string>
+    <string name="title_activity_main">Medikamententagebuch</string>
+    <string name="package_name">com.medikamententagebuch.app</string>
+    <string name="custom_url_scheme">com.medikamententagebuch.app</string>
+</resources>

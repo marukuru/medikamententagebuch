@@ -1,3 +1,5 @@
+export type EffectPerception = 'positive' | 'negative' | 'neutral';
+
 export interface Mood {
   id: string;
   description: string;
@@ -8,6 +10,7 @@ export interface Effect {
   id: string;
   description: string;
   emoji: string;
+  perception: EffectPerception;
 }
 
 export interface Manufacturer {

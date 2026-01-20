@@ -171,20 +171,62 @@ export class DataService {
 
   private getDefaultEffects(): Effect[] {
     return [
-      { id: '1', emoji: '😴', description: 'Schläfrig' },
-      { id: '2', emoji: '😌', description: 'Schmerzlindernd' },
-      { id: '3', emoji: '🤕', description: 'Schmerzverstärkend' },
-      { id: '4', emoji: '😌', description: 'Körperlich entspannend' },
-      { id: '5', emoji: '🧘', description: 'Geistig entspannt' },
-      { id: '6', emoji: '🤸', description: 'Belebend' },
-      { id: '7', emoji: '🙂‍↕️', description: 'Beruhigend' },
-      { id: '8', emoji: '🫠', description: 'Verballert' },
-      { id: '9', emoji: '👍', description: 'Motivierend' },
-      { id: '10', emoji: '🤢', description: 'Unwohl' },
-      { id: '11', emoji: '😨', description: 'Ängstlich' },
-      { id: '12', emoji: '🤔', description: 'Fokussierend' },
-      { id: '13', emoji: '🤓', description: 'Konzentriert' },
-      { id: '14', emoji: '👥', description: 'Sozial' },
+      {
+        id: '1', emoji: '😴', description: 'Schläfrig',
+        perception: 'positive'
+      },
+      {
+        id: '2', emoji: '😌', description: 'Schmerzlindernd',
+        perception: 'positive'
+      },
+      {
+        id: '3', emoji: '🤕', description: 'Schmerzverstärkend',
+        perception: 'negative'
+      },
+      {
+        id: '4', emoji: '😌', description: 'Körperlich entspannend',
+        perception: 'positive'
+      },
+      {
+        id: '5', emoji: '🧘', description: 'Geistig entspannt',
+        perception: 'positive'
+      },
+      {
+        id: '6', emoji: '🤸', description: 'Belebend',
+        perception: 'positive'
+      },
+      {
+        id: '7', emoji: '🙂‍↕️', description: 'Beruhigend',
+        perception: 'positive'
+      },
+      {
+        id: '8', emoji: '🫠', description: 'Verballert',
+        perception: 'negative'
+      },
+      {
+        id: '9', emoji: '👍', description: 'Motivierend',
+        perception: 'positive'
+      },
+      {
+        id: '10', emoji: '🤢', description: 'Unwohl',
+        perception: 'negative'
+      },
+      {
+        id: '11', emoji: '😨', description: 'Ängstlich',
+        perception: 'negative'
+      },
+      {
+        id: '12', emoji: '🤔', description: 'Fokussierend',
+        perception: 'positive'
+      },
+      {
+        id: '13', emoji: '🤓', description: 'Konzentriert',
+        perception: 'positive'
+      },
+      {
+        id: '14', emoji: '👥', description: 'Sozial',
+        perception: 'neutral'
+      },
     ];
   }
 }

@@ -16,7 +16,7 @@ npm run build
 # 3. Initialize Capacitor and add Android platform (if not already present)
 if [ ! -d "android" ]; then
   echo "🤖 Step 3/6: Initializing Capacitor and adding Android platform..."
-  npx cap init "Medikamententagebuch" "com.medikamententagebuch.app" --web-dir "www"
+  npx cap init "Medikamententagebuch" "com.medikamententagebuch.app" --web-dir "www/browser"
   npx cap add android
 else
   echo "🤖 Step 3/6: Android platform already exists. Skipping initialization."
@@ -27,7 +27,7 @@ if [ -f "icon.svg" ]; then
     echo "🎨 Step 4/6: Generating app icons from icon.svg..."
     # Capacitor Assets requires the package to be installed, let's ensure it is.
     npm install @capacitor/assets -D
-    npx capacitor-assets generate --iconPath icon.svg --splashPath icon.svg --android
+    npx capacitor-assets generate --assetPath . --android
 else
     echo "⚠️ Step 4/6: icon.svg not found. Skipping icon generation."
 fi
