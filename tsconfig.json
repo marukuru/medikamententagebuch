@@ -11,17 +11,11 @@
     "useDefineForClassFields": false,
     "lib": ["ES2022", "dom"],
     "types": [],
-    "outDir": "./dist/out-tsc",
-    "declaration": false,
-    "sourceMap": true,
     "noImplicitOverride": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "files": [
-    "index.tsx"
-  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
