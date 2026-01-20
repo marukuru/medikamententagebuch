@@ -1,0 +1,6 @@
+{
+  "appId": "com.medikamententagebuch.app",
+  "appName": "Medikamententagebuch",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
