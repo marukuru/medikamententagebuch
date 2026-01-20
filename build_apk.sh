@@ -10,7 +10,7 @@ echo "📦 Step 1/6: Installing project dependencies..."
 npm install
 
 # 2. Build the web application
-echo "🏗️ Step 2/6: Building the Angular web app with Vite..."
+echo "🏗️ Step 2/6: Building the Angular web app with Angular CLI..."
 npm run build
 
 # 3. Initialize Capacitor and add Android platform (if not already present)
