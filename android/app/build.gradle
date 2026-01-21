@@ -3,6 +3,21 @@ apply plugin: 'com.android.application'
 android {
     namespace = "com.medikamententagebuch.app"
     compileSdk = rootProject.ext.compileSdkVersion
+
+    signingConfigs {
+        release {
+            // 1. Suche in Umgebungsvariablen (für CI/GitHub oder dein lokales Script)
+            // 2. Fallback auf lokale Gradle-Properties (optional)
+            // 3. Fallback auf Standard-Dateinamen
+            
+            def keystoreFile = System.getenv("RELEASE_STORE_FILE") ?: "medikamententagebuch.jks"
+            storeFile = file(keystoreFile)
+            storePassword = System.getenv("RELEASE_STORE_PASSWORD")
+            keyAlias = System.getenv("RELEASE_KEY_ALIAS")
+            keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+        }
+    }
+
     defaultConfig {
         applicationId "com.medikamententagebuch.app"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -11,13 +26,17 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
-             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
-             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+
     buildTypes {
         release {
+            // Nur signieren, wenn die Passwörter auch wirklich gesetzt sind
+            if (signingConfigs.release.storePassword != null) {
+                signingConfig = signingConfigs.release
+            }
+            
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
