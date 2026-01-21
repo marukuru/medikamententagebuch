@@ -1,22 +1,25 @@
 import { Component, ChangeDetectionStrategy, signal, effect, Renderer2, Inject, inject } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { DiaryListComponent } from './components/diary-list.component';
 import { StatisticsComponent } from './components/statistics.component';
 import { SettingsComponent } from './components/settings.component';
 import { InfoComponent } from './components/info.component';
 import { DataService } from './services/data.service';
+import { UiService } from './services/ui.service';
 
 type Page = 'diary' | 'stats' | 'settings' | 'info';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [DiaryListComponent, StatisticsComponent, SettingsComponent, InfoComponent],
+  imports: [CommonModule, FormsModule, DiaryListComponent, StatisticsComponent, SettingsComponent, InfoComponent],
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   dataService = inject(DataService);
+  uiService = inject(UiService);
   currentPage = signal<Page>('diary');
   menuOpen = signal(false);
 

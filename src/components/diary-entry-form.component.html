@@ -35,14 +35,19 @@
       <!-- Präparat -->
       <div>
         <label for="preparation" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Präparat</label>
-        <select id="preparation" name="preparation" [(ngModel)]="formPreparationId" (change)="fieldChanged()" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
-          <option [ngValue]="undefined">-- Optional --</option>
-          @for(prep of dataService.preparations(); track prep.id) {
-            <option [value]="prep.id">
-              {{ formatPreparation(prep) }}
-            </option>
-          }
-        </select>
+        <div class="flex items-center gap-2 mt-1">
+          <select id="preparation" name="preparation" [(ngModel)]="formPreparationId" (change)="fieldChanged()" class="block w-full pl-3 pr-10 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
+            <option [ngValue]="undefined">-- Optional --</option>
+            @for(prep of preparationsForDropdown(); track prep.id) {
+              <option [value]="prep.id">
+                {{ prep.formattedName }}
+              </option>
+            }
+          </select>
+          <button type="button" (click)="openCreatePreparationForm()" title="Neues Präparat anlegen" class="flex-shrink-0 w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
       </div>
       
       <!-- Dosierung -->

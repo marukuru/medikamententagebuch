@@ -27,6 +27,41 @@ export class DataService {
     this.diaryEntries().slice().sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime())
   );
 
+  // Computed signals for sorted data
+  sortedManufacturers = computed(() =>
+    this.manufacturers().slice().sort((a, b) => a.name.localeCompare(b.name, 'de', { sensitivity: 'base' }))
+  );
+
+  sortedDosages = computed(() =>
+    this.dosages().slice().sort((a, b) => {
+      if (a.amount !== b.amount) {
+        return a.amount - b.amount;
+      }
+      return a.unit.localeCompare(b.unit, 'de', { sensitivity: 'base' });
+    })
+  );
+
+  sortedActiveIngredients = computed(() =>
+    this.activeIngredients().slice().sort((a, b) => {
+      // Attempt to compare amounts as numbers if possible
+      const amountA = parseFloat(a.amount.replace(',', '.'));
+      const amountB = parseFloat(b.amount.replace(',', '.'));
+      if (!isNaN(amountA) && !isNaN(amountB) && amountA !== amountB) {
+        return amountA - amountB;
+      }
+      // Fallback to string comparison for amount
+      const amountCompare = a.amount.localeCompare(b.amount, 'de', { sensitivity: 'base' });
+      if (amountCompare !== 0) {
+        return amountCompare;
+      }
+      return a.unit.localeCompare(b.unit, 'de', { sensitivity: 'base' });
+    })
+  );
+
+  sortedPreparations = computed(() =>
+    this.preparations().slice().sort((a, b) => a.name.localeCompare(b.name, 'de', { sensitivity: 'base' }))
+  );
+
   constructor() {
     this.loadFromLocalStorage();
     effect(() => this.saveToLocalStorage());

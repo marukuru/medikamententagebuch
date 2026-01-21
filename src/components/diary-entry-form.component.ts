@@ -1,8 +1,9 @@
-import { Component, ChangeDetectionStrategy, inject, signal, input, output, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, input, output, effect, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
-import { DiaryEntry } from '../models';
+import { DiaryEntry, Preparation } from '../models';
+import { UiService } from '../services/ui.service';
 
 @Component({
   selector: 'diary-entry-form',
@@ -13,6 +14,7 @@ import { DiaryEntry } from '../models';
 })
 export class DiaryEntryFormComponent {
   dataService = inject(DataService);
+  uiService = inject(UiService);
   entryToEdit = input<DiaryEntry | null>(null);
   close = output();
 
@@ -28,6 +30,15 @@ export class DiaryEntryFormComponent {
   formDosageAmount = signal<number | null>(null);
   formDosageUnit = signal('');
   formNote = signal('');
+
+  preparationsForDropdown = computed(() => {
+    return this.dataService.preparations()
+        .map(prep => ({
+            id: prep.id,
+            formattedName: this.formatPreparation(prep)
+        }))
+        .sort((a, b) => a.formattedName.localeCompare(b.formattedName, 'de', { sensitivity: 'base' }));
+  });
 
   constructor() {
     effect(() => {
@@ -157,6 +168,10 @@ export class DiaryEntryFormComponent {
     }
   }
 
+  openCreatePreparationForm() {
+    this.uiService.openCreateForm('Preparation');
+  }
+
   confirmClose() {
     this.showCancelConfirm.set(false);
     this.close.emit();
@@ -166,10 +181,10 @@ export class DiaryEntryFormComponent {
     this.showCancelConfirm.set(false);
   }
 
-  formatPreparation(prep: any): string {
-    const man = this.dataService.manufacturers().find((m: any) => m.id === prep.manufacturerId);
-    const ai = this.dataService.activeIngredients().find((a: any) => a.id === prep.activeIngredientId);
-    return `${man ? man.name + ' ' : ''}${prep.name}${ai ? ` (${ai.amount})` : ''}`;
+  formatPreparation(prep: Preparation): string {
+    const man = this.dataService.manufacturers().find((m) => m.id === prep.manufacturerId);
+    const ai = this.dataService.activeIngredients().find((a) => a.id === prep.activeIngredientId);
+    return `${man ? man.name + ' - ' : ''}${prep.name}${ai ? ` (${ai.amount} ${ai.unit})` : ''}`;
   }
 
   private formatDateForInput(date: Date): string {
