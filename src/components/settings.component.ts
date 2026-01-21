@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
 import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, EffectPerception } from '../models';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredient' | 'Preparation';
 
@@ -15,12 +17,12 @@ type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredi
 })
 export class SettingsComponent {
   dataService = inject(DataService);
-  
-  editingEntity = signal<{type: CrudEntity, item: any} | null>(null);
+
+  editingEntity = signal<{ type: CrudEntity, item: any } | null>(null);
   creatingEntity = signal<CrudEntity | null>(null);
 
   // Confirmation Modals State
-  itemToDelete = signal<{type: CrudEntity, id: string, name: string} | null>(null);
+  itemToDelete = signal<{ type: CrudEntity, id: string, name: string } | null>(null);
   importFileContent = signal<string | null>(null);
   showResetConfirmStep1 = signal(false);
   showResetConfirmStep2 = signal(false);
@@ -32,7 +34,7 @@ export class SettingsComponent {
   dosageForm = signal<Partial<Dosage>>({});
   activeIngredientForm = signal<Partial<ActiveIngredient>>({});
   preparationForm = signal<Partial<Preparation>>({});
-  
+
   perceptionOptions: { label: string; value: EffectPerception }[] = [
     { label: 'positiv', value: 'positive' },
     { label: 'negativ', value: 'negative' },
@@ -53,13 +55,13 @@ export class SettingsComponent {
     this.creatingEntity.set(type);
     this.editingEntity.set(null);
   }
-  
+
   openEditForm(type: CrudEntity, item: any) {
     this.resetForms();
     this.creatingEntity.set(null);
     this.editingEntity.set({ type, item: { ...item } });
 
-    switch(type) {
+    switch (type) {
       case 'Mood': this.moodForm.set({ ...item }); break;
       case 'Effect': this.effectForm.set({ ...item }); break;
       case 'Manufacturer': this.manufacturerForm.set({ ...item }); break;
@@ -78,7 +80,7 @@ export class SettingsComponent {
   saveForm() {
     const creating = this.creatingEntity();
     const editing = this.editingEntity();
-    
+
     if (creating) {
       this.handleCreate(creating);
     } else if (editing) {
@@ -88,36 +90,36 @@ export class SettingsComponent {
   }
 
   private handleCreate(type: CrudEntity) {
-    switch(type) {
-      case 'Mood': if(this.moodForm().description && this.moodForm().emoji) this.dataService.addItem(this.dataService.moods, this.moodForm() as Omit<Mood, 'id'>); break;
-      case 'Effect': if(this.effectForm().description && this.effectForm().emoji) this.dataService.addItem(this.dataService.effects, this.effectForm() as Omit<Effect, 'id'>); break;
-      case 'Manufacturer': if(this.manufacturerForm().name) this.dataService.addItem(this.dataService.manufacturers, this.manufacturerForm() as Omit<Manufacturer, 'id'>); break;
-      case 'Dosage': if(this.dosageForm().amount && this.dosageForm().unit) this.dataService.addItem(this.dataService.dosages, this.dosageForm() as Omit<Dosage, 'id'>); break;
-      case 'ActiveIngredient': if(this.activeIngredientForm().amount && this.activeIngredientForm().unit) this.dataService.addItem(this.dataService.activeIngredients, this.activeIngredientForm() as Omit<ActiveIngredient, 'id'>); break;
-      case 'Preparation': if(this.preparationForm().name) this.dataService.addItem(this.dataService.preparations, this.preparationForm() as Omit<Preparation, 'id'>); break;
+    switch (type) {
+      case 'Mood': if (this.moodForm().description && this.moodForm().emoji) this.dataService.addItem(this.dataService.moods, this.moodForm() as Omit<Mood, 'id'>); break;
+      case 'Effect': if (this.effectForm().description && this.effectForm().emoji) this.dataService.addItem(this.dataService.effects, this.effectForm() as Omit<Effect, 'id'>); break;
+      case 'Manufacturer': if (this.manufacturerForm().name) this.dataService.addItem(this.dataService.manufacturers, this.manufacturerForm() as Omit<Manufacturer, 'id'>); break;
+      case 'Dosage': if (this.dosageForm().amount && this.dosageForm().unit) this.dataService.addItem(this.dataService.dosages, this.dosageForm() as Omit<Dosage, 'id'>); break;
+      case 'ActiveIngredient': if (this.activeIngredientForm().amount && this.activeIngredientForm().unit) this.dataService.addItem(this.dataService.activeIngredients, this.activeIngredientForm() as Omit<ActiveIngredient, 'id'>); break;
+      case 'Preparation': if (this.preparationForm().name) this.dataService.addItem(this.dataService.preparations, this.preparationForm() as Omit<Preparation, 'id'>); break;
     }
   }
 
   private handleUpdate(type: CrudEntity, id: string) {
-     switch(type) {
-      case 'Mood': if(this.moodForm().description && this.moodForm().emoji) this.dataService.updateItem(this.dataService.moods, { ...this.moodForm(), id } as Mood); break;
-      case 'Effect': if(this.effectForm().description && this.effectForm().emoji) this.dataService.updateItem(this.dataService.effects, { ...this.effectForm(), id } as Effect); break;
-      case 'Manufacturer': if(this.manufacturerForm().name) this.dataService.updateItem(this.dataService.manufacturers, { ...this.manufacturerForm(), id } as Manufacturer); break;
-      case 'Dosage': if(this.dosageForm().amount && this.dosageForm().unit) this.dataService.updateItem(this.dataService.dosages, { ...this.dosageForm(), id } as Dosage); break;
-      case 'ActiveIngredient': if(this.activeIngredientForm().amount && this.activeIngredientForm().unit) this.dataService.updateItem(this.dataService.activeIngredients, { ...this.activeIngredientForm(), id } as ActiveIngredient); break;
-      case 'Preparation': if(this.preparationForm().name) this.dataService.updateItem(this.dataService.preparations, { ...this.preparationForm(), id } as Preparation); break;
+    switch (type) {
+      case 'Mood': if (this.moodForm().description && this.moodForm().emoji) this.dataService.updateItem(this.dataService.moods, { ...this.moodForm(), id } as Mood); break;
+      case 'Effect': if (this.effectForm().description && this.effectForm().emoji) this.dataService.updateItem(this.dataService.effects, { ...this.effectForm(), id } as Effect); break;
+      case 'Manufacturer': if (this.manufacturerForm().name) this.dataService.updateItem(this.dataService.manufacturers, { ...this.manufacturerForm(), id } as Manufacturer); break;
+      case 'Dosage': if (this.dosageForm().amount && this.dosageForm().unit) this.dataService.updateItem(this.dataService.dosages, { ...this.dosageForm(), id } as Dosage); break;
+      case 'ActiveIngredient': if (this.activeIngredientForm().amount && this.activeIngredientForm().unit) this.dataService.updateItem(this.dataService.activeIngredients, { ...this.activeIngredientForm(), id } as ActiveIngredient); break;
+      case 'Preparation': if (this.preparationForm().name) this.dataService.updateItem(this.dataService.preparations, { ...this.preparationForm(), id } as Preparation); break;
     }
   }
 
   requestDeleteItem(type: CrudEntity, id: string, name: string) {
-    this.itemToDelete.set({type, id, name});
+    this.itemToDelete.set({ type, id, name });
   }
 
   confirmDeleteItem() {
     const item = this.itemToDelete();
     if (!item) return;
 
-    switch(item.type) {
+    switch (item.type) {
       case 'Mood': this.dataService.deleteItem(this.dataService.moods, item.id); break;
       case 'Effect': this.dataService.deleteItem(this.dataService.effects, item.id); break;
       case 'Manufacturer': this.dataService.deleteItem(this.dataService.manufacturers, item.id); break;
@@ -141,21 +143,39 @@ export class SettingsComponent {
     this.preparationForm.set({});
   }
 
-  exportData() {
+  async exportData() {
     const data = this.dataService.exportData();
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `medikamententagebuch_backup_${new Date().toISOString().slice(0,10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const fileName = `medikamententagebuch_backup_${new Date().toISOString().slice(0, 10)}.json`;
+
+    if (Capacitor.isNativePlatform()) {
+      try {
+        await Filesystem.writeFile({
+          path: fileName,
+          data: data,
+          directory: Directory.Documents,
+          encoding: Encoding.UTF8,
+        });
+        alert(`Backup wurde erfolgreich in Ihrem "Dokumente"-Ordner gespeichert als:\n${fileName}`);
+      } catch (e) {
+        console.error('Unable to write file', e);
+        alert('Fehler beim Speichern des Backups.');
+      }
+    } else {
+      // Web fallback
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
   }
 
   triggerImport() {
     document.getElementById('import-file')?.click();
   }
-  
+
   importData(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
