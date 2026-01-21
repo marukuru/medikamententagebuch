@@ -10,7 +10,7 @@
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
             <span class="text-3xl">💊</span>
-            <span>Top 5 Präparate</span>
+            <span>Präparate</span>
         </h2>
         @if(topPreparations().length > 0) {
             <ol class="list-decimal list-inside space-y-2">
@@ -34,7 +34,7 @@
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
             <span class="text-3xl">🙆</span>
-            <span>Stimmungen & Präparate</span>
+            <span>Stimmungen</span>
         </h2>
         <div class="space-y-6">
           @for(stat of moodStats(); track stat.moodName) {
@@ -63,35 +63,60 @@
         </div>
       </div>
       
-      <!-- Effekte -->
+      <!-- Positive Effekte -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
-            <span class="text-3xl">🧖</span>
-            <span>Effekte & Präparate</span>
+            <span class="text-3xl">😊</span>
+            <span>Positive Effekte</span>
         </h2>
         <div class="space-y-6">
-          @for(stat of effectStats(); track stat.effectName) {
+          @for(stat of categorizedEffectStats().positive; track stat.effectName) {
             <div>
                 <h3 class="font-semibold text-lg flex items-center gap-2"><span class="text-2xl">{{ stat.emoji }}</span> {{ stat.effectName }}</h3>
-                @if(stat.topPreps.length > 0) {
-                    <ol class="list-decimal list-inside space-y-1 pl-4 mt-1 text-slate-700 dark:text-slate-300">
-                         @for(p of stat.topPreps; track p.prep.id) {
-                            <li>
-                                <span>
-                                    @if (p.man) {<span>{{ p.man.name }} - </span>}
-                                    <strong>{{ p.prep.name }}</strong>
-                                    @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
-                                </span>
-                            </li>
-                        }
-                    </ol>
-                } @else {
-                     <p class="text-slate-500 dark:text-slate-400 pl-4">Keine verknüpften Präparate.</p>
-                }
+                <ol class="list-decimal list-inside space-y-1 pl-4 mt-1 text-slate-700 dark:text-slate-300">
+                      @for(p of stat.topPreps; track p.prep.id) {
+                        <li>
+                            <span>
+                                @if (p.man) {<span>{{ p.man.name }} - </span>}
+                                <strong>{{ p.prep.name }}</strong>
+                                @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
+                            </span>
+                        </li>
+                    }
+                </ol>
             </div>
           }
-           @if(effectStats().length === 0) {
-             <p class="text-slate-500 dark:text-slate-400">Keine Daten für diese Statistik verfügbar.</p>
+          @if(categorizedEffectStats().positive.length === 0) {
+            <p class="text-slate-500 dark:text-slate-400">Keine Daten für positive Effekte verfügbar.</p>
+          }
+        </div>
+      </div>
+
+      <!-- Negative Effekte -->
+      <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+        <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
+            <span class="text-3xl">😟</span>
+            <span>Negative Effekte</span>
+        </h2>
+        <div class="space-y-6">
+          @for(stat of categorizedEffectStats().negative; track stat.effectName) {
+            <div>
+                <h3 class="font-semibold text-lg flex items-center gap-2"><span class="text-2xl">{{ stat.emoji }}</span> {{ stat.effectName }}</h3>
+                <ol class="list-decimal list-inside space-y-1 pl-4 mt-1 text-slate-700 dark:text-slate-300">
+                      @for(p of stat.topPreps; track p.prep.id) {
+                        <li>
+                            <span>
+                                @if (p.man) {<span>{{ p.man.name }} - </span>}
+                                <strong>{{ p.prep.name }}</strong>
+                                @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
+                            </span>
+                        </li>
+                    }
+                </ol>
+            </div>
+          }
+          @if(categorizedEffectStats().negative.length === 0) {
+            <p class="text-slate-500 dark:text-slate-400">Keine Daten für negative Effekte verfügbar.</p>
           }
         </div>
       </div>
