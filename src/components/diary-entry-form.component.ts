@@ -20,6 +20,8 @@ export class DiaryEntryFormComponent {
   showCancelConfirm = signal(false);
 
   // Form fields
+  formDate = signal(''); // YYYY-MM-DD
+  formTime = signal(''); // HH:mm
   formMoodId = signal<string | undefined>(undefined);
   formEffectIds = signal<string[]>([]);
   formPreparationId = signal<string | undefined>(undefined);
@@ -31,6 +33,9 @@ export class DiaryEntryFormComponent {
     effect(() => {
         const entry = this.entryToEdit();
         if (entry) {
+            const entryDate = new Date(entry.datetime);
+            this.formDate.set(this.formatDateForInput(entryDate));
+            this.formTime.set(this.formatTimeForInput(entryDate));
             this.formMoodId.set(entry.mood.id);
             this.formEffectIds.set(entry.effects.map(e => e.id));
             this.formPreparationId.set(entry.preparationId);
@@ -76,6 +81,9 @@ export class DiaryEntryFormComponent {
   }
 
   resetForm() {
+    const now = new Date();
+    this.formDate.set(this.formatDateForInput(now));
+    this.formTime.set(this.formatTimeForInput(now));
     this.formMoodId.set(undefined);
     this.formEffectIds.set([]);
     this.formPreparationId.set(undefined);
@@ -103,10 +111,12 @@ export class DiaryEntryFormComponent {
     }
 
     const effects = this.dataService.effects().filter(e => this.formEffectIds().includes(e.id));
+    const newDatetime = new Date(`${this.formDate()}T${this.formTime()}`).toISOString();
 
     if (this.entryToEdit()) {
       const updatedEntry: DiaryEntry = {
         ...this.entryToEdit()!,
+        datetime: newDatetime,
         mood: mood,
         preparationId: this.formPreparationId(),
         effects: effects,
@@ -121,7 +131,7 @@ export class DiaryEntryFormComponent {
       this.dataService.updateDiaryEntry(updatedEntry);
     } else {
       const newEntry: Omit<DiaryEntry, 'id'> = {
-        datetime: new Date().toISOString(),
+        datetime: newDatetime,
         mood: mood,
         preparationId: this.formPreparationId(),
         effects: effects,
@@ -160,5 +170,18 @@ export class DiaryEntryFormComponent {
     const man = this.dataService.manufacturers().find((m: any) => m.id === prep.manufacturerId);
     const ai = this.dataService.activeIngredients().find((a: any) => a.id === prep.activeIngredientId);
     return `${man ? man.name + ' ' : ''}${prep.name}${ai ? ` (${ai.amount})` : ''}`;
+  }
+
+  private formatDateForInput(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  private formatTimeForInput(date: Date): string {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
   }
 }
