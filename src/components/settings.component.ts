@@ -59,7 +59,7 @@ export class SettingsComponent {
 
   async exportData() {
     const data = this.dataService.exportData();
-    const fileName = `medikamententagebuch_backup_${new Date().toISOString().slice(0, 10)}.json`;
+    const fileName = `medikamententagebuch_backup_${new Date().toISOString().slice(0,19).replace('T','_').replace(/:/g,'-')}.json`;
 
     if (Capacitor.isNativePlatform()) {
       try {
