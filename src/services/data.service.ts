@@ -7,6 +7,7 @@ import {
   ActiveIngredient,
   Preparation,
   DiaryEntry,
+  CrudEntity,
 } from '../models';
 
 @Injectable({
@@ -88,25 +89,31 @@ export class DataService {
   updateItem<T extends { id: string }>(stateSignal: ReturnType<typeof signal<T[]>>, updatedItem: T) {
     stateSignal.update(items => items.map(i => i.id === updatedItem.id ? updatedItem : i));
   }
-
-  deleteItem<T extends { id: string }>(stateSignal: ReturnType<typeof signal<T[]>>, id: string) {
-    stateSignal.update(items => items.filter(i => i.id !== id));
-     // Cascade delete logic
-    // FIX: Cast stateSignal to `any` to bypass TypeScript's strict type checking.
-    // This resolves the "no overlap" error by allowing the comparison between the
-    // generic signal `WritableSignal<T[]>` and specific signal instances like
-    // `this.manufacturers`, enabling the cascade delete logic.
-    if (stateSignal as any === this.manufacturers) {
-      this.preparations.update(p => p.map(prep => prep.manufacturerId === id ? { ...prep, manufacturerId: undefined } : prep));
-    }
-    if (stateSignal as any === this.activeIngredients) {
-      this.preparations.update(p => p.map(prep => prep.activeIngredientId === id ? { ...prep, activeIngredientId: undefined } : prep));
-    }
-     if (stateSignal as any === this.dosages) {
-      this.preparations.update(p => p.map(prep => prep.dosageId === id ? { ...prep, dosageId: undefined } : prep));
-    }
-     if (stateSignal as any === this.preparations) {
+  
+  deleteItem(entityType: CrudEntity, id: string) {
+    switch (entityType) {
+      case 'Mood':
+        this.moods.update(items => items.filter(i => i.id !== id));
+        break;
+      case 'Effect':
+        this.effects.update(items => items.filter(i => i.id !== id));
+        break;
+      case 'Manufacturer':
+        this.manufacturers.update(items => items.filter(i => i.id !== id));
+        this.preparations.update(p => p.map(prep => prep.manufacturerId === id ? { ...prep, manufacturerId: undefined } : prep));
+        break;
+      case 'Dosage':
+        this.dosages.update(items => items.filter(i => i.id !== id));
+        this.preparations.update(p => p.map(prep => prep.dosageId === id ? { ...prep, dosageId: undefined } : prep));
+        break;
+      case 'ActiveIngredient':
+        this.activeIngredients.update(items => items.filter(i => i.id !== id));
+        this.preparations.update(p => p.map(prep => prep.activeIngredientId === id ? { ...prep, activeIngredientId: undefined } : prep));
+        break;
+      case 'Preparation':
+        this.preparations.update(items => items.filter(i => i.id !== id));
         this.diaryEntries.update(entries => entries.map(entry => entry.preparationId === id ? { ...entry, preparationId: undefined } : entry));
+        break;
     }
   }
 
@@ -203,30 +210,12 @@ export class DataService {
         id: '8', emoji: '🫠', description: 'Verballert',
         perception: 'negative'
       },
-      {
-        id: '9', emoji: '👍', description: 'Motivierend',
-        perception: 'positive'
-      },
-      {
-        id: '10', emoji: '🤢', description: 'Unwohl',
-        perception: 'negative'
-      },
-      {
-        id: '11', emoji: '😨', description: 'Ängstlich',
-        perception: 'negative'
-      },
-      {
-        id: '12', emoji: '🤔', description: 'Fokussierend',
-        perception: 'positive'
-      },
-      {
-        id: '13', emoji: '🤓', description: 'Konzentriert',
-        perception: 'positive'
-      },
-      {
-        id: '14', emoji: '👥', description: 'Sozial',
-        perception: 'neutral'
-      },
+      { id: '9', emoji: '👍', description: 'Motivierend', perception: 'positive' },
+      { id: '10', emoji: '🤢', description: 'Unwohl', perception: 'negative' },
+      { id: '11', emoji: '😨', description: 'Ängstlich', perception: 'negative' },
+      { id: '12', emoji: '🤔', description: 'Fokussierend', perception: 'positive' },
+      { id: '13', emoji: '🤓', description: 'Konzentriert', perception: 'positive' },
+      { id: '14', emoji: '👥', description: 'Sozial', perception: 'neutral' },
     ];
   }
 }

@@ -1,12 +1,16 @@
-import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
-import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, EffectPerception } from '../models';
+import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, EffectPerception, CrudEntity } from '../models';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
-type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredient' | 'Preparation';
+interface FormState {
+  type: CrudEntity;
+  item?: any; // For editing
+  formValues: Partial<any>; // The value of the corresponding form signal
+}
 
 @Component({
   selector: 'settings',
@@ -18,8 +22,13 @@ type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredi
 export class SettingsComponent {
   dataService = inject(DataService);
 
-  editingEntity = signal<{ type: CrudEntity, item: any } | null>(null);
-  creatingEntity = signal<CrudEntity | null>(null);
+  // Form Stack for managing nested forms
+  formStack = signal<FormState[]>([]);
+  // FIX: Replaced .at(-1) with array access to support older TypeScript targets.
+  currentForm = computed(() => {
+    const stack = this.formStack();
+    return stack[stack.length - 1];
+  });
 
   // Confirmation Modals State
   itemToDelete = signal<{ type: CrudEntity, id: string, name: string } | null>(null);
@@ -49,44 +58,68 @@ export class SettingsComponent {
     { type: 'Dosage' as const, title: 'Dosierungen', emoji: '💧', items: this.dataService.dosages(), display: (i: any) => `${i.amount} ${i.unit}` },
     { type: 'ActiveIngredient' as const, title: 'Wirkstoffgehalte', emoji: '🧪', items: this.dataService.activeIngredients(), display: (i: any) => `${i.amount} ${i.unit}` }
   ]);
+  
+  constructor() {
+    effect(() => {
+        const form = this.currentForm();
+        this.resetForms(); // Clear all form signals first
+        if(form) {
+            // Populate with saved state from the stack
+            switch(form.type) {
+                case 'Mood': this.moodForm.set(form.formValues); break;
+                case 'Effect': this.effectForm.set(form.formValues); break;
+                case 'Manufacturer': this.manufacturerForm.set(form.formValues); break;
+                case 'Dosage': this.dosageForm.set(form.formValues); break;
+                case 'ActiveIngredient': this.activeIngredientForm.set(form.formValues); break;
+                case 'Preparation': this.preparationForm.set(form.formValues); break;
+            }
+        }
+    }, { allowSignalWrites: true });
+  }
 
   openCreateForm(type: CrudEntity) {
-    this.resetForms();
-    this.creatingEntity.set(type);
-    this.editingEntity.set(null);
+    this.formStack.set([{ type, formValues: {} }]);
   }
 
   openEditForm(type: CrudEntity, item: any) {
-    this.resetForms();
-    this.creatingEntity.set(null);
-    this.editingEntity.set({ type, item: { ...item } });
-
-    switch (type) {
-      case 'Mood': this.moodForm.set({ ...item }); break;
-      case 'Effect': this.effectForm.set({ ...item }); break;
-      case 'Manufacturer': this.manufacturerForm.set({ ...item }); break;
-      case 'Dosage': this.dosageForm.set({ ...item }); break;
-      case 'ActiveIngredient': this.activeIngredientForm.set({ ...item }); break;
-      case 'Preparation': this.preparationForm.set({ ...item }); break;
-    }
+    this.formStack.set([{ type, item: { ...item }, formValues: { ...item } }]);
+  }
+  
+  openSubCreateForm(subFormType: CrudEntity) {
+    this.formStack.update(stack => {
+        // FIX: Replaced .at(-1) with array access to support older TypeScript targets.
+        const currentFormState = stack[stack.length - 1]!;
+        let currentFormValues;
+        // Save the current values of the parent form before switching
+        switch(currentFormState.type) {
+            case 'Preparation': currentFormValues = this.preparationForm(); break;
+            default: currentFormValues = {};
+        }
+        
+        const newStack = stack.slice(0, -1); // Remove old state
+        newStack.push({ ...currentFormState, formValues: currentFormValues }); // Add updated state
+        newStack.push({ type: subFormType, formValues: {} }); // Add new sub-form state
+        return newStack;
+    });
   }
 
+
   cancelForm() {
-    this.editingEntity.set(null);
-    this.creatingEntity.set(null);
-    this.resetForms();
+    this.formStack.update(stack => stack.slice(0, -1));
   }
 
   saveForm() {
-    const creating = this.creatingEntity();
-    const editing = this.editingEntity();
+    const form = this.currentForm();
+    if (!form) return;
 
-    if (creating) {
-      this.handleCreate(creating);
-    } else if (editing) {
-      this.handleUpdate(editing.type, editing.item.id);
+    if (form.item) {
+      this.handleUpdate(form.type, form.item.id);
+    } else {
+      this.handleCreate(form.type);
     }
-    this.cancelForm();
+    
+    // Pop the form from the stack to go back or close
+    this.formStack.update(stack => stack.slice(0, -1));
   }
 
   private handleCreate(type: CrudEntity) {
@@ -119,14 +152,7 @@ export class SettingsComponent {
     const item = this.itemToDelete();
     if (!item) return;
 
-    switch (item.type) {
-      case 'Mood': this.dataService.deleteItem(this.dataService.moods, item.id); break;
-      case 'Effect': this.dataService.deleteItem(this.dataService.effects, item.id); break;
-      case 'Manufacturer': this.dataService.deleteItem(this.dataService.manufacturers, item.id); break;
-      case 'Dosage': this.dataService.deleteItem(this.dataService.dosages, item.id); break;
-      case 'ActiveIngredient': this.dataService.deleteItem(this.dataService.activeIngredients, item.id); break;
-      case 'Preparation': this.dataService.deleteItem(this.dataService.preparations, item.id); break;
-    }
+    this.dataService.deleteItem(item.type, item.id);
     this.itemToDelete.set(null);
   }
 
@@ -167,7 +193,9 @@ export class SettingsComponent {
       const a = document.createElement('a');
       a.href = url;
       a.download = fileName;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
   }

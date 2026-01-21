@@ -1,5 +1,7 @@
 export type EffectPerception = 'positive' | 'negative' | 'neutral';
 
+export type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredient' | 'Preparation';
+
 export interface Mood {
   id: string;
   description: string;
