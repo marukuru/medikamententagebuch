@@ -86,15 +86,14 @@ export class UiService {
         const form = this.currentForm();
         if (!form) return;
 
+        let success = false;
         if (form.item) {
-          this.handleUpdate(form.type, form.item.id);
+          success = this.handleUpdate(form.type, form.item.id);
         } else {
-          this.handleCreate(form.type);
+          success = this.handleCreate(form.type);
         }
         
-        // Only close form if save was successful
-        const newForm = this.currentForm();
-        if (form === newForm) { // if form hasn't changed (due to error), don't pop stack
+        if (success) {
             this.formStack.update(stack => stack.slice(0, -1));
         }
     }
@@ -103,148 +102,162 @@ export class UiService {
         alert(this.translationService.t(key));
     }
 
-    private handleCreate(type: CrudEntity) {
+    private handleCreate(type: CrudEntity): boolean {
         switch (type) {
             case 'Mood': {
                 const formValues = this.moodForm();
-                if (!formValues.description || !formValues.emoji) return;
+                if (!formValues.description || !formValues.emoji) return false;
                 const description = formValues.description.trim();
-                if (!description) return;
+                if (!description) return false;
                 if (this.dataService.moods().some(m => m.description.toLowerCase() === description.toLowerCase())) {
-                    return this.showAlert('duplicateMoodError');
+                    this.showAlert('duplicateMoodError');
+                    return false;
                 }
                 this.dataService.addItem(this.dataService.moods, { ...formValues, description } as Omit<Mood, 'id'>);
                 break;
             }
             case 'Effect': {
                 const formValues = this.effectForm();
-                if (!formValues.description || !formValues.emoji) return;
+                if (!formValues.description || !formValues.emoji) return false;
                 const description = formValues.description.trim();
-                if (!description) return;
+                if (!description) return false;
                 if (this.dataService.effects().some(e => e.description.toLowerCase() === description.toLowerCase())) {
-                    return this.showAlert('duplicateEffectError');
+                    this.showAlert('duplicateEffectError');
+                    return false;
                 }
                 this.dataService.addItem(this.dataService.effects, { ...formValues, description } as Omit<Effect, 'id'>);
                 break;
             }
             case 'Manufacturer': {
                 const formValues = this.manufacturerForm();
-                if (!formValues.name) return;
+                if (!formValues.name) return false;
                 const name = formValues.name.trim();
-                if (!name) return;
+                if (!name) return false;
                 if (this.dataService.manufacturers().some(m => m.name.toLowerCase() === name.toLowerCase())) {
-                    return this.showAlert('duplicateManufacturerError');
+                    this.showAlert('duplicateManufacturerError');
+                    return false;
                 }
                 this.dataService.addItem(this.dataService.manufacturers, { ...formValues, name } as Omit<Manufacturer, 'id'>);
                 break;
             }
             case 'Dosage': {
                 const formValues = this.dosageForm();
-                if (!formValues.amount || !formValues.unit) return;
+                if (!formValues.amount || !formValues.unit) return false;
                 const unit = formValues.unit.trim();
-                if (!unit) return;
+                if (!unit) return false;
                 if (this.dataService.dosages().some(d => d.amount === formValues.amount && d.unit.toLowerCase() === unit.toLowerCase())) {
-                    return this.showAlert('duplicateDosageError');
+                    this.showAlert('duplicateDosageError');
+                    return false;
                 }
                 this.dataService.addItem(this.dataService.dosages, { ...formValues, unit } as Omit<Dosage, 'id'>);
                 break;
             }
             case 'ActiveIngredient': {
                 const formValues = this.activeIngredientForm();
-                if (!formValues.amount || !formValues.unit) return;
+                if (!formValues.amount || !formValues.unit) return false;
                 const amount = formValues.amount.trim();
                 const unit = formValues.unit.trim();
-                if (!amount || !unit) return;
+                if (!amount || !unit) return false;
                 if (this.dataService.activeIngredients().some(ai => ai.amount.toLowerCase() === amount.toLowerCase() && ai.unit.toLowerCase() === unit.toLowerCase())) {
-                    return this.showAlert('duplicateActiveIngredientError');
+                    this.showAlert('duplicateActiveIngredientError');
+                    return false;
                 }
                 this.dataService.addItem(this.dataService.activeIngredients, { ...formValues, amount, unit } as Omit<ActiveIngredient, 'id'>);
                 break;
             }
             case 'Preparation': {
                 const formValues = this.preparationForm();
-                if (!formValues.name) return;
+                if (!formValues.name) return false;
                 const name = formValues.name.trim();
-                if (!name) return;
+                if (!name) return false;
                 if (this.dataService.preparations().some(p => p.name.toLowerCase() === name.toLowerCase() && p.manufacturerId === formValues.manufacturerId && p.activeIngredientId === formValues.activeIngredientId)) {
-                    return this.showAlert('duplicatePreparationError');
+                    this.showAlert('duplicatePreparationError');
+                    return false;
                 }
                 this.dataService.addItem(this.dataService.preparations, { ...formValues, name } as Omit<Preparation, 'id'>);
                 break;
             }
         }
+        return true;
     }
   
-    private handleUpdate(type: CrudEntity, id: string) {
+    private handleUpdate(type: CrudEntity, id: string): boolean {
         switch (type) {
             case 'Mood': {
                 const formValues = this.moodForm();
-                if (!formValues.description || !formValues.emoji) return;
+                if (!formValues.description || !formValues.emoji) return false;
                 const description = formValues.description.trim();
-                if (!description) return;
+                if (!description) return false;
                 if (this.dataService.moods().some(m => m.id !== id && m.description.toLowerCase() === description.toLowerCase())) {
-                    return this.showAlert('duplicateMoodError');
+                    this.showAlert('duplicateMoodError');
+                    return false;
                 }
                 this.dataService.updateItem(this.dataService.moods, { ...formValues, id, description } as Mood);
                 break;
             }
             case 'Effect': {
                 const formValues = this.effectForm();
-                if (!formValues.description || !formValues.emoji) return;
+                if (!formValues.description || !formValues.emoji) return false;
                 const description = formValues.description.trim();
-                if (!description) return;
+                if (!description) return false;
                 if (this.dataService.effects().some(e => e.id !== id && e.description.toLowerCase() === description.toLowerCase())) {
-                    return this.showAlert('duplicateEffectError');
+                    this.showAlert('duplicateEffectError');
+                    return false;
                 }
                 this.dataService.updateItem(this.dataService.effects, { ...formValues, id, description } as Effect);
                 break;
             }
             case 'Manufacturer': {
                 const formValues = this.manufacturerForm();
-                if (!formValues.name) return;
+                if (!formValues.name) return false;
                 const name = formValues.name.trim();
-                if (!name) return;
+                if (!name) return false;
                 if (this.dataService.manufacturers().some(m => m.id !== id && m.name.toLowerCase() === name.toLowerCase())) {
-                    return this.showAlert('duplicateManufacturerError');
+                    this.showAlert('duplicateManufacturerError');
+                    return false;
                 }
                 this.dataService.updateItem(this.dataService.manufacturers, { ...formValues, id, name } as Manufacturer);
                 break;
             }
             case 'Dosage': {
                 const formValues = this.dosageForm();
-                if (!formValues.amount || !formValues.unit) return;
+                if (!formValues.amount || !formValues.unit) return false;
                 const unit = formValues.unit.trim();
-                if (!unit) return;
+                if (!unit) return false;
                 if (this.dataService.dosages().some(d => d.id !== id && d.amount === formValues.amount && d.unit.toLowerCase() === unit.toLowerCase())) {
-                    return this.showAlert('duplicateDosageError');
+                    this.showAlert('duplicateDosageError');
+                    return false;
                 }
                 this.dataService.updateItem(this.dataService.dosages, { ...formValues, id, unit } as Dosage);
                 break;
             }
             case 'ActiveIngredient': {
                 const formValues = this.activeIngredientForm();
-                if (!formValues.amount || !formValues.unit) return;
+                if (!formValues.amount || !formValues.unit) return false;
                 const amount = formValues.amount.trim();
                 const unit = formValues.unit.trim();
-                if (!amount || !unit) return;
+                if (!amount || !unit) return false;
                 if (this.dataService.activeIngredients().some(ai => ai.id !== id && ai.amount.toLowerCase() === amount.toLowerCase() && ai.unit.toLowerCase() === unit.toLowerCase())) {
-                    return this.showAlert('duplicateActiveIngredientError');
+                    this.showAlert('duplicateActiveIngredientError');
+                    return false;
                 }
                 this.dataService.updateItem(this.dataService.activeIngredients, { ...formValues, id, amount, unit } as ActiveIngredient);
                 break;
             }
             case 'Preparation': {
                 const formValues = this.preparationForm();
-                if (!formValues.name) return;
+                if (!formValues.name) return false;
                 const name = formValues.name.trim();
-                if (!name) return;
+                if (!name) return false;
                 if (this.dataService.preparations().some(p => p.id !== id && p.name.toLowerCase() === name.toLowerCase() && p.manufacturerId === formValues.manufacturerId && p.activeIngredientId === formValues.activeIngredientId)) {
-                    return this.showAlert('duplicatePreparationError');
+                    this.showAlert('duplicatePreparationError');
+                    return false;
                 }
                 this.dataService.updateItem(this.dataService.preparations, { ...formValues, id, name } as Preparation);
                 break;
             }
         }
+        return true;
     }
 
     private resetForms() {
