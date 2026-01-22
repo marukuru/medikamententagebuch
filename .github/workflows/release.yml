@@ -62,23 +62,20 @@ jobs:
       - name: Generate Changelog
         id: changelog
         run: |
-          # Versuche, den letzten Tag zu finden
           PREVIOUS_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
           
           if [ -z "$PREVIOUS_TAG" ]; then
-            echo "Kein vorheriger Tag gefunden. Liste alle Commits auf."
             LOGS=$(git log --format="- %s")
           else
-            echo "Letzter Tag war $PREVIOUS_TAG. Liste Commits seitdem auf."
             LOGS=$(git log --format="- %s" $PREVIOUS_TAG..HEAD)
           fi
           
-          # Multiline-String sicher in GITHUB_ENV speichern
+          # set multiline step output so it can be used in later steps
           {
-            echo "COMMIT_LOG<<EOF"
+            echo "commit_log<<EOF"
             echo "$LOGS"
             echo "EOF"
-          } >> $GITHUB_ENV
+          } >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
@@ -86,10 +83,9 @@ jobs:
           artifacts: "Medikamententagebuch-v${{ github.run_number }}.apk"
           tag: v${{ github.run_number }}
           name: "Release v${{ github.run_number }}"
-          # Hier nutzen wir nun die generierte Variable
           body: |
             Automatisch erstelltes Release der Medikamententagebuch App.
             
             ### Änderungen in diesem Release:
-            ${{ env.COMMIT_LOG }}
+            ${{ steps.changelog.outputs.commit_log }}
           token: ${{ secrets.GITHUB_TOKEN }}
