@@ -44,7 +44,6 @@ export const LANG_EN = {
     top5Preparations: 'Top 5 Preparations',
     preparations: 'Preparations',
     noDataForStatistic: 'No data available for this statistic.',
-    moodsAndPreparations: 'Moods & Preparations',
     moods: 'Moods',
     noAssociatedPreparations: 'No associated preparations.',
     positiveEffects: 'Positive Effects',
