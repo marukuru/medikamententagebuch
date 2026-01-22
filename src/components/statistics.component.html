@@ -2,7 +2,7 @@
   <div class="max-w-4xl mx-auto">
     <h1 class="text-2xl md:text-3xl font-bold text-primary-600 dark:text-primary-400 mb-6 flex items-center gap-3">
       <span class="text-3xl md:text-4xl">📊</span>
-      <span>Statistik</span>
+      <span>{{ t().statisticsTitle }}</span>
     </h1>
 
     <div class="space-y-8">
@@ -10,7 +10,7 @@
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
             <span class="text-3xl">💊</span>
-            <span>Präparate</span>
+            <span>{{ t().top5Preparations }}</span>
         </h2>
         @if(topPreparations().length > 0) {
             <ol class="list-decimal list-inside space-y-2">
@@ -26,7 +26,7 @@
                 }
             </ol>
         } @else {
-            <p class="text-slate-500 dark:text-slate-400">Keine Daten für diese Statistik verfügbar.</p>
+            <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForStatistic }}</p>
         }
       </div>
 
@@ -34,7 +34,7 @@
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
             <span class="text-3xl">🙆</span>
-            <span>Stimmungen</span>
+            <span>{{ t().moodsAndPreparations }}</span>
         </h2>
         <div class="space-y-6">
           @for(stat of moodStats(); track stat.moodName) {
@@ -53,12 +53,12 @@
                         }
                     </ol>
                 } @else {
-                     <p class="text-slate-500 dark:text-slate-400 pl-4">Keine verknüpften Präparate.</p>
+                     <p class="text-slate-500 dark:text-slate-400 pl-4">{{ t().noAssociatedPreparations }}</p>
                 }
             </div>
           }
            @if(moodStats().length === 0) {
-             <p class="text-slate-500 dark:text-slate-400">Keine Daten für diese Statistik verfügbar.</p>
+             <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForStatistic }}</p>
           }
         </div>
       </div>
@@ -67,7 +67,7 @@
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
             <span class="text-3xl">😊</span>
-            <span>Positive Effekte</span>
+            <span>{{ t().positiveEffects }}</span>
         </h2>
         <div class="space-y-6">
           @for(stat of categorizedEffectStats().positive; track stat.effectName) {
@@ -87,7 +87,7 @@
             </div>
           }
           @if(categorizedEffectStats().positive.length === 0) {
-            <p class="text-slate-500 dark:text-slate-400">Keine Daten für positive Effekte verfügbar.</p>
+            <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForPositiveEffects }}</p>
           }
         </div>
       </div>
@@ -96,7 +96,7 @@
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
             <span class="text-3xl">😟</span>
-            <span>Negative Effekte</span>
+            <span>{{ t().negativeEffects }}</span>
         </h2>
         <div class="space-y-6">
           @for(stat of categorizedEffectStats().negative; track stat.effectName) {
@@ -116,7 +116,7 @@
             </div>
           }
           @if(categorizedEffectStats().negative.length === 0) {
-            <p class="text-slate-500 dark:text-slate-400">Keine Daten für negative Effekte verfügbar.</p>
+            <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForNegativeEffects }}</p>
           }
         </div>
       </div>

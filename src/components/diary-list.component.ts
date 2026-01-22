@@ -3,6 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { DataService } from '../services/data.service';
 import { DiaryEntry, Preparation, Manufacturer, ActiveIngredient } from '../models';
 import { DiaryEntryFormComponent } from './diary-entry-form.component';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'diary-list',
@@ -13,6 +14,8 @@ import { DiaryEntryFormComponent } from './diary-entry-form.component';
 })
 export class DiaryListComponent {
   dataService = inject(DataService);
+  translationService = inject(TranslationService);
+  t = this.translationService.translations;
 
   showForm = signal(false);
   showDetail = signal<DiaryEntry | null>(null);

@@ -1,4 +1,4 @@
-import { Injectable, signal, effect, computed } from '@angular/core';
+import { Injectable, signal, effect, computed, inject } from '@angular/core';
 import {
   Mood,
   Effect,
@@ -9,11 +9,14 @@ import {
   DiaryEntry,
   CrudEntity,
 } from '../models';
+import { TranslationService } from './translation.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
+  private translationService = inject(TranslationService);
+
   theme = signal<'light' | 'dark'>('light');
   moods = signal<Mood[]>([]);
   effects = signal<Effect[]>([]);
@@ -29,7 +32,7 @@ export class DataService {
 
   // Computed signals for sorted data
   sortedManufacturers = computed(() =>
-    this.manufacturers().slice().sort((a, b) => a.name.localeCompare(b.name, 'de', { sensitivity: 'base' }))
+    this.manufacturers().slice().sort((a, b) => a.name.localeCompare(b.name, this.translationService.language(), { sensitivity: 'base' }))
   );
 
   sortedDosages = computed(() =>
@@ -37,7 +40,7 @@ export class DataService {
       if (a.amount !== b.amount) {
         return a.amount - b.amount;
       }
-      return a.unit.localeCompare(b.unit, 'de', { sensitivity: 'base' });
+      return a.unit.localeCompare(b.unit, this.translationService.language(), { sensitivity: 'base' });
     })
   );
 
@@ -50,16 +53,16 @@ export class DataService {
         return amountA - amountB;
       }
       // Fallback to string comparison for amount
-      const amountCompare = a.amount.localeCompare(b.amount, 'de', { sensitivity: 'base' });
+      const amountCompare = a.amount.localeCompare(b.amount, this.translationService.language(), { sensitivity: 'base' });
       if (amountCompare !== 0) {
         return amountCompare;
       }
-      return a.unit.localeCompare(b.unit, 'de', { sensitivity: 'base' });
+      return a.unit.localeCompare(b.unit, this.translationService.language(), { sensitivity: 'base' });
     })
   );
 
   sortedPreparations = computed(() =>
-    this.preparations().slice().sort((a, b) => a.name.localeCompare(b.name, 'de', { sensitivity: 'base' }))
+    this.preparations().slice().sort((a, b) => a.name.localeCompare(b.name, this.translationService.language(), { sensitivity: 'base' }))
   );
 
   constructor() {
@@ -76,16 +79,16 @@ export class DataService {
     if (data) {
       const parsedData = JSON.parse(data);
       this.theme.set(parsedData.theme || 'light');
-      this.moods.set(parsedData.moods || this.getDefaultMoods());
-      this.effects.set(parsedData.effects || this.getDefaultEffects());
+      this.moods.set(parsedData.moods || this.translationService.defaultMoods());
+      this.effects.set(parsedData.effects || this.translationService.defaultEffects());
       this.manufacturers.set(parsedData.manufacturers || []);
       this.dosages.set(parsedData.dosages || []);
       this.activeIngredients.set(parsedData.activeIngredients || []);
       this.preparations.set(parsedData.preparations || []);
       this.diaryEntries.set(parsedData.diaryEntries || []);
     } else {
-      this.moods.set(this.getDefaultMoods());
-      this.effects.set(this.getDefaultEffects());
+      this.moods.set(this.translationService.defaultMoods());
+      this.effects.set(this.translationService.defaultEffects());
     }
   }
 
@@ -160,6 +163,7 @@ export class DataService {
   exportData(): string {
     return JSON.stringify({
       theme: this.theme(),
+      language: this.translationService.language(),
       moods: this.moods(),
       effects: this.effects(),
       manufacturers: this.manufacturers(),
@@ -174,6 +178,9 @@ export class DataService {
     try {
       const data = JSON.parse(json);
       this.theme.set(data.theme || 'light');
+      if (data.language && (data.language === 'en' || data.language === 'de')) {
+        this.translationService.setLanguage(data.language);
+      }
       this.moods.set(data.moods || []);
       this.effects.set(data.effects || []);
       this.manufacturers.set(data.manufacturers || []);
@@ -190,67 +197,12 @@ export class DataService {
 
   resetToDefaults() {
     this.theme.set('light');
-    this.moods.set(this.getDefaultMoods());
-    this.effects.set(this.getDefaultEffects());
+    this.moods.set(this.translationService.defaultMoods());
+    this.effects.set(this.translationService.defaultEffects());
     this.manufacturers.set([]);
     this.dosages.set([]);
     this.activeIngredients.set([]);
     this.preparations.set([]);
     this.diaryEntries.set([]);
-  }
-
-  // --- Default Data ---
-  private getDefaultMoods(): Mood[] {
-    return [
-      { id: '1', emoji: '💩', description: 'Lausig' },
-      { id: '2', emoji: '😥', description: 'Traurig' },
-      { id: '3', emoji: '🥺', description: 'Schlecht' },
-      { id: '4', emoji: '😐', description: 'Okay' },
-      { id: '5', emoji: '🙂', description: 'Gut' },
-      { id: '6', emoji: '☺️', description: 'Prima' },
-    ];
-  }
-
-  private getDefaultEffects(): Effect[] {
-    return [
-      {
-        id: '1', emoji: '😴', description: 'Schläfrig',
-        perception: 'positive'
-      },
-      {
-        id: '2', emoji: '😌', description: 'Schmerzlindernd',
-        perception: 'positive'
-      },
-      {
-        id: '3', emoji: '🤕', description: 'Schmerzverstärkend',
-        perception: 'negative'
-      },
-      {
-        id: '4', emoji: '😌', description: 'Körperlich entspannend',
-        perception: 'positive'
-      },
-      {
-        id: '5', emoji: '🧘', description: 'Geistig entspannt',
-        perception: 'positive'
-      },
-      {
-        id: '6', emoji: '🤸', description: 'Belebend',
-        perception: 'positive'
-      },
-      {
-        id: '7', emoji: '🙂‍↕️', description: 'Beruhigend',
-        perception: 'positive'
-      },
-      {
-        id: '8', emoji: '🫠', description: 'Verballert',
-        perception: 'negative'
-      },
-      { id: '9', emoji: '👍', description: 'Motivierend', perception: 'positive' },
-      { id: '10', emoji: '🤢', description: 'Unwohl', perception: 'negative' },
-      { id: '11', emoji: '😨', description: 'Ängstlich', perception: 'negative' },
-      { id: '12', emoji: '🤔', description: 'Fokussierend', perception: 'positive' },
-      { id: '13', emoji: '🤓', description: 'Konzentriert', perception: 'positive' },
-      { id: '14', emoji: '👥', description: 'Sozial', perception: 'neutral' },
-    ];
   }
 }

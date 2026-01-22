@@ -1,6 +1,7 @@
 import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { DataService } from './data.service';
 import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, CrudEntity, EffectPerception } from '../models';
+import { TranslationService } from './translation.service';
 
 export interface FormState {
   type: CrudEntity;
@@ -11,6 +12,7 @@ export interface FormState {
 @Injectable({ providedIn: 'root' })
 export class UiService {
     dataService = inject(DataService);
+    translationService = inject(TranslationService);
 
     formStack = signal<FormState[]>([]);
     currentForm = computed(() => {
@@ -26,11 +28,14 @@ export class UiService {
     activeIngredientForm = signal<Partial<ActiveIngredient>>({});
     preparationForm = signal<Partial<Preparation>>({});
     
-    perceptionOptions: { label: string; value: EffectPerception }[] = [
-      { label: 'positiv', value: 'positive' },
-      { label: 'negativ', value: 'negative' },
-      { label: 'neutral', value: 'neutral' },
-    ];
+    perceptionOptions = computed(() => {
+        const t = this.translationService.translations();
+        return [
+            { label: t.formPerceptionPositive, value: 'positive' as EffectPerception },
+            { label: t.formPerceptionNegative, value: 'negative' as EffectPerception },
+            { label: t.formPerceptionNeutral, value: 'neutral' as EffectPerception },
+        ];
+    });
 
     constructor() {
         effect(() => {

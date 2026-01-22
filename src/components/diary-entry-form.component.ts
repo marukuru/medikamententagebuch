@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
 import { DiaryEntry, Preparation } from '../models';
 import { UiService } from '../services/ui.service';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'diary-entry-form',
@@ -15,6 +16,8 @@ import { UiService } from '../services/ui.service';
 export class DiaryEntryFormComponent {
   dataService = inject(DataService);
   uiService = inject(UiService);
+  translationService = inject(TranslationService);
+  t = this.translationService.translations;
   entryToEdit = input<DiaryEntry | null>(null);
   close = output();
 
@@ -109,7 +112,7 @@ export class DiaryEntryFormComponent {
     const mood = this.dataService.moods().find(m => m.id === moodId);
 
     if (!mood) {
-      alert('Stimmung ist ein Pflichtfeld.');
+      alert(this.translationService.t('moodIsRequired'));
       return;
     }
 
@@ -117,7 +120,7 @@ export class DiaryEntryFormComponent {
     const dosageUnit = this.formDosageUnit().trim();
 
     if ((dosageAmount !== null && !dosageUnit) || (dosageAmount === null && dosageUnit)) {
-        alert('Für die Dosierung müssen Menge und Einheit angegeben werden, oder beide Felder leer sein.');
+        alert(this.translationService.t('dosageFieldsIncomplete'));
         return;
     }
 

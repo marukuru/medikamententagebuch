@@ -7,6 +7,7 @@ import { SettingsComponent } from './components/settings.component';
 import { InfoComponent } from './components/info.component';
 import { DataService } from './services/data.service';
 import { UiService } from './services/ui.service';
+import { TranslationService } from './services/translation.service';
 
 type Page = 'diary' | 'stats' | 'settings' | 'info';
 
@@ -20,6 +21,9 @@ type Page = 'diary' | 'stats' | 'settings' | 'info';
 export class AppComponent {
   dataService = inject(DataService);
   uiService = inject(UiService);
+  translationService = inject(TranslationService);
+  t = this.translationService.translations;
+  
   currentPage = signal<Page>('diary');
   menuOpen = signal(false);
 
@@ -32,6 +36,11 @@ export class AppComponent {
       } else {
         this.renderer.removeClass(this.document.documentElement, 'dark');
       }
+    });
+
+    // Effect to set document language
+    effect(() => {
+      this.renderer.setAttribute(this.document.documentElement, 'lang', this.translationService.language());
     });
   }
 

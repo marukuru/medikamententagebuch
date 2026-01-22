@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'info',
@@ -7,7 +8,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InfoComponent {
-  appName = 'Medikamententagebuch';
+  translationService = inject(TranslationService);
+  t = this.translationService.translations;
+  
   appVersion = '1.0.0';
   author = 'u/gabbergand0lf';
 }

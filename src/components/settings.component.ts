@@ -6,6 +6,7 @@ import { CrudEntity } from '../models';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { UiService } from '../services/ui.service';
+import { Language, TranslationService } from '../services/translation.service';
 
 @Component({
   selector: 'settings',
@@ -17,6 +18,8 @@ import { UiService } from '../services/ui.service';
 export class SettingsComponent {
   dataService = inject(DataService);
   uiService = inject(UiService);
+  translationService = inject(TranslationService);
+  t = this.translationService.translations;
 
   // Confirmation Modals State
   itemToDelete = signal<{ type: CrudEntity, id: string, name: string } | null>(null);
@@ -24,14 +27,17 @@ export class SettingsComponent {
   showResetConfirmStep1 = signal(false);
   showResetConfirmStep2 = signal(false);
 
-  entityConfigs = computed(() => [
-    { type: 'Mood' as const, title: 'Stimmungen', emoji: '🙆', items: this.dataService.moods(), display: (i: any) => `${i.emoji} ${i.description}` },
-    { type: 'Effect' as const, title: 'Effekte', emoji: '🧖', items: this.dataService.effects(), display: (i: any) => `${i.emoji} ${i.description}` },
-    { type: 'Manufacturer' as const, title: 'Hersteller', emoji: '🏢', items: this.dataService.sortedManufacturers(), display: (i: any) => i.name },
-    { type: 'Preparation' as const, title: 'Präparate', emoji: '💊', items: this.dataService.sortedPreparations(), display: (i: any) => i.name },
-    { type: 'Dosage' as const, title: 'Dosierungen', emoji: '💧', items: this.dataService.sortedDosages(), display: (i: any) => `${i.amount} ${i.unit}` },
-    { type: 'ActiveIngredient' as const, title: 'Wirkstoffgehalte', emoji: '🧪', items: this.dataService.sortedActiveIngredients(), display: (i: any) => `${i.amount} ${i.unit}` }
-  ]);
+  entityConfigs = computed(() => {
+    const t = this.t();
+    return [
+      { type: 'Mood' as const, title: t.crudMoods, emoji: '🙆', items: this.dataService.moods(), display: (i: any) => `${i.emoji} ${i.description}` },
+      { type: 'Effect' as const, title: t.crudEffects, emoji: '🧖', items: this.dataService.effects(), display: (i: any) => `${i.emoji} ${i.description}` },
+      { type: 'Manufacturer' as const, title: t.crudManufacturers, emoji: '🏢', items: this.dataService.sortedManufacturers(), display: (i: any) => i.name },
+      { type: 'Preparation' as const, title: t.crudPreparations, emoji: '💊', items: this.dataService.sortedPreparations(), display: (i: any) => i.name },
+      { type: 'Dosage' as const, title: t.crudDosages, emoji: '💧', items: this.dataService.sortedDosages(), display: (i: any) => `${i.amount} ${i.unit}` },
+      { type: 'ActiveIngredient' as const, title: t.crudActiveIngredients, emoji: '🧪', items: this.dataService.sortedActiveIngredients(), display: (i: any) => `${i.amount} ${i.unit}` }
+    ];
+  });
   
   openCreateForm(type: CrudEntity) {
     this.uiService.openCreateForm(type);
@@ -69,10 +75,10 @@ export class SettingsComponent {
           directory: Directory.Documents,
           encoding: Encoding.UTF8,
         });
-        alert(`Backup wurde erfolgreich in Ihrem "Dokumente"-Ordner gespeichert als:\n${fileName}`);
+        alert(this.translationService.t('backupSavedSuccess').replace('{{fileName}}', fileName));
       } catch (e) {
         console.error('Unable to write file', e);
-        alert('Fehler beim Speichern des Backups.');
+        alert(this.translationService.t('backupSavedError'));
       }
     } else {
       // Web fallback
@@ -109,9 +115,9 @@ export class SettingsComponent {
     if (!content) return;
     const success = this.dataService.importData(content);
     if (!success) {
-      alert('Import fehlgeschlagen. Die Datei ist möglicherweise beschädigt.');
+      alert(this.translationService.t('importFailed'));
     } else {
-      alert('Import erfolgreich!');
+      alert(this.translationService.t('importSuccess'));
     }
     this.importFileContent.set(null);
   }
@@ -132,11 +138,15 @@ export class SettingsComponent {
   confirmReset() {
     this.dataService.resetToDefaults();
     this.showResetConfirmStep2.set(false);
-    alert('Die App wurde zurückgesetzt.');
+    alert(this.translationService.t('appResetSuccess'));
   }
 
   cancelReset() {
     this.showResetConfirmStep1.set(false);
     this.showResetConfirmStep2.set(false);
+  }
+
+  setLanguage(lang: Language) {
+    this.translationService.setLanguage(lang);
   }
 }

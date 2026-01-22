@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/c
 import { CommonModule } from '@angular/common';
 import { DataService } from '../services/data.service';
 import { Manufacturer, ActiveIngredient, Preparation, EffectPerception } from '../models';
+import { TranslationService } from '../services/translation.service';
 
 interface PreparationStat {
   prep: Preparation;
@@ -22,6 +23,8 @@ interface PreparationStat {
 })
 export class StatisticsComponent {
   dataService = inject(DataService);
+  translationService = inject(TranslationService);
+  t = this.translationService.translations;
   
   topPreparations = computed(() => {
     const counts = new Map<string, number>();
