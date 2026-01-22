@@ -54,9 +54,13 @@ jobs:
           RELEASE_KEY_ALIAS: ${{ secrets.ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
+      - name: Get package version
+        id: package-version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
       - name: Rename APK
         run: |
-          mv android/app/build/outputs/apk/release/app-release.apk Medikamententagebuch-v${{ github.run_number }}.apk
+          mv android/app/build/outputs/apk/release/app-release.apk Medikamententagebuch-v${{ steps.package-version.outputs.version }}-${{ github.run_number }}.apk
 
       # NEU: Changelog generieren
       - name: Generate Changelog
@@ -80,9 +84,9 @@ jobs:
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "Medikamententagebuch-v${{ github.run_number }}.apk"
-          tag: v${{ github.run_number }}
-          name: "Release v${{ github.run_number }}"
+          artifacts: "Medikamententagebuch-v${{ steps.package-version.outputs.version }}-${{ github.run_number }}.apk"
+          tag: v${{ steps.package-version.outputs.version }}-${{ github.run_number }}
+          name: "Release v${{ steps.package-version.outputs.version }} (Build ${{ github.run_number }})"
           body: |
             Automatisch erstelltes Release der Medikamententagebuch App.
             
