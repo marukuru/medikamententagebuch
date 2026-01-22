@@ -54,3 +54,9 @@ Stellen Sie sicher, dass Sie eine Android-Entwicklungsumgebung eingerichtet habe
 - `npm run android`: Baut die Web-App und führt sie auf einem verbundenen Android-Gerät/Emulator aus.
 - `./build_apk.sh`: Führt den kompletten Build-Prozess für die Android APK aus.
 - `./setup_android_dev.sh`: Hilfsskript zur Einrichtung der Android-Entwicklungsumgebung auf Ubuntu.
+
+## ⚙️ Benutzte Werkzeuge
+- AI Studio (Gemini 2.5 Pro)
+- git
+- GitHub & GitHub Actions
+- Visual Studio Code (GPT-5 mini)
