@@ -6,15 +6,7 @@
           <span class="text-2xl mr-2">💊</span>
           <span class="font-bold text-xl text-primary-600 dark:text-primary-400">{{ t().appName }}</span>
         </div>
-        <div class="flex items-center gap-4">
-            <button (click)="toggleTheme()" class="text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400">
-              @if (dataService.theme() === 'light') {
-                <i class="fas fa-moon text-xl"></i>
-              } @else {
-                <i class="fas fa-sun text-xl"></i>
-              }
-            </button>
-
+        <div class="flex items-center">
             <!-- Kebab Menu -->
             <div class="relative">
                 <button (click)="$event.stopPropagation(); toggleMenu()" class="text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400">

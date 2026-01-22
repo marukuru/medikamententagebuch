@@ -49,10 +49,6 @@ export class AppComponent {
     this.menuOpen.set(false);
   }
 
-  toggleTheme() {
-    this.dataService.toggleTheme();
-  }
-  
   toggleMenu() {
     this.menuOpen.update(open => !open);
   }
