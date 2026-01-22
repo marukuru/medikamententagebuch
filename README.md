@@ -1,4 +1,4 @@
-# Medikamententagebuch
+# 💊 Medikamententagebuch
 
 Eine App zur Erfassung der Einnahme von Medizin und deren Auswirkungen. Verwalten Sie Tagebucheinträge, sehen Sie Statistiken und passen Sie Ihre Daten an.
 
