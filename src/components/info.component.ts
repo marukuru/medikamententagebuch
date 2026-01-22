@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { TranslationService } from '../services/translation.service';
 import { NgOptimizedImage } from '@angular/common';
 import { version } from '../../package.json';
+import metadata from '../../metadata.json';
 
 @Component({
   selector: 'info',
@@ -15,5 +16,5 @@ export class InfoComponent {
   t = this.translationService.translations;
   
   appVersion = version;
-  author = 'u/gabbergand0lf';
+  author = metadata.author;
 }
