@@ -9,5 +9,5 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 export class InfoComponent {
   appName = 'Medikamententagebuch';
   appVersion = '1.0.0';
-  author = 'u/gabbergand0lf & Angular AI Engineer';
+  author = 'u/gabbergand0lf';
 }
