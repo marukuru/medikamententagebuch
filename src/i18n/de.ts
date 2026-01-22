@@ -138,6 +138,14 @@ export const LANG_DE = {
     design: 'Darstellung',
     lightTheme: 'Hell',
     darkTheme: 'Dunkel',
+
+    // Duplicate Errors
+    duplicateMoodError: 'Eine Stimmung mit dieser Beschreibung existiert bereits.',
+    duplicateEffectError: 'Ein Effekt mit dieser Beschreibung existiert bereits.',
+    duplicateManufacturerError: 'Ein Hersteller mit diesem Namen existiert bereits.',
+    duplicateDosageError: 'Eine Dosierung mit dieser Menge und Einheit existiert bereits.',
+    duplicateActiveIngredientError: 'Ein Wirkstoffgehalt mit dieser Menge und Einheit existiert bereits.',
+    duplicatePreparationError: 'Ein Präparat mit diesem Namen, Hersteller und Wirkstoffgehalt existiert bereits.',
   },
   defaultMoods: [
     { id: '1', emoji: '💩', description: 'Lausig' },

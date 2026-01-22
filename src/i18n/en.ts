@@ -138,6 +138,14 @@ export const LANG_EN = {
     design: 'Appearance',
     lightTheme: 'Light',
     darkTheme: 'Dark',
+
+    // Duplicate Errors
+    duplicateMoodError: 'A mood with this description already exists.',
+    duplicateEffectError: 'An effect with this description already exists.',
+    duplicateManufacturerError: 'A manufacturer with this name already exists.',
+    duplicateDosageError: 'A dosage with this amount and unit already exists.',
+    duplicateActiveIngredientError: 'An active ingredient with this amount and unit already exists.',
+    duplicatePreparationError: 'A preparation with this name, manufacturer, and active ingredient already exists.',
   },
   defaultMoods: [
     { id: '1', emoji: '💩', description: 'Awful' },
