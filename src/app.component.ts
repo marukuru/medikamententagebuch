@@ -47,4 +47,20 @@ export class AppComponent {
   toggleMenu() {
     this.menuOpen.update(open => !open);
   }
+
+  // Close kebab menu when clicking/touching outside.
+  closeMenu(): void {
+    // If menuOpen is a function (used in template as menuOpen()), call toggleMenu() to close.
+    if (typeof (this as any).menuOpen === 'function') {
+      if ((this as any).menuOpen()) {
+        (this as any).toggleMenu();
+      }
+      return;
+    }
+
+    // Fallback: if there's a boolean property named `menuOpen`, set it to false.
+    if (typeof (this as any).menuOpen === 'boolean') {
+      (this as any).menuOpen = false;
+    }
+  }
 }
