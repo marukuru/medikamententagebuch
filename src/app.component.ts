@@ -11,6 +11,7 @@ import { UiService } from './services/ui.service';
 import { TranslationService } from './services/translation.service';
 import { ToastComponent } from './components/toast.component';
 import { LockService } from './services/lock.service';
+import { NotificationService } from './services/notification.service';
 
 /**
  * Definiert die möglichen Seiten/Ansichten der Anwendung.
@@ -35,6 +36,8 @@ export class AppComponent {
   translationService = inject(TranslationService);
   // LockService hier initialisieren, um die App-Sperrlogik beim Start zu aktivieren
   lockService = inject(LockService);
+  // NotificationService hier initialisieren, um den Listener für Erinnerungen zu aktivieren
+  notificationService = inject(NotificationService);
   t = this.translationService.translations;
   
   // --- UI-Zustandssignale ---

@@ -79,3 +79,12 @@ export interface DiaryEntry {
   effects: Effect[]; // Copied entities
   note?: string;
 }
+
+/**
+ * Repräsentiert eine geplante Erinnerungsbenachrichtigung.
+ */
+export interface Reminder {
+  id: string;
+  time: string; // "HH:mm" format
+  days: number[]; // Wochentage, an denen wiederholt wird (1=So, 2=Mo, ..., 7=Sa)
+}

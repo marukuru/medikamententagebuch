@@ -146,6 +146,24 @@ export const LANG_DE = {
     lightTheme: 'Hell',
     darkTheme: 'Dunkel',
 
+    // Reminder Settings
+    remindersTitle: 'Erinnerungen',
+    addReminder: 'Erinnerung hinzufügen',
+    reminderTime: 'Uhrzeit',
+    reminderDays: 'Tage',
+    daily: 'Täglich',
+    weekday_mo: 'Mo',
+    weekday_tu: 'Di',
+    weekday_we: 'Mi',
+    weekday_th: 'Do',
+    weekday_fr: 'Fr',
+    weekday_sa: 'Sa',
+    weekday_su: 'So',
+    reminderErrorNoDays: 'Bitte wählen Sie mindestens einen Tag für die Erinnerung aus.',
+    notificationTitle: 'Medikamententagebuch',
+    notificationBody: 'Zeit für deinen Tagebucheintrag!',
+    notificationPermissionDenied: 'Benachrichtigungsberechtigung wurde verweigert. Bitte in den App-Einstellungen aktivieren.',
+
     // Security Settings
     security: 'Sicherheit',
     enableAppLock: 'App-Sperre aktivieren',

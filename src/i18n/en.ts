@@ -146,6 +146,24 @@ export const LANG_EN = {
     lightTheme: 'Light',
     darkTheme: 'Dark',
 
+    // Reminder Settings
+    remindersTitle: 'Reminders',
+    addReminder: 'Add Reminder',
+    reminderTime: 'Time',
+    reminderDays: 'Days',
+    daily: 'Daily',
+    weekday_mo: 'Mo',
+    weekday_tu: 'Tu',
+    weekday_we: 'We',
+    weekday_th: 'Th',
+    weekday_fr: 'Fr',
+    weekday_sa: 'Sa',
+    weekday_su: 'Su',
+    reminderErrorNoDays: 'Please select at least one day for the reminder.',
+    notificationTitle: 'Medicine Diary',
+    notificationBody: "Time for your diary entry!",
+    notificationPermissionDenied: 'Notification permission was denied. Please enable it in the app settings.',
+
     // Security Settings
     security: 'Security',
     enableAppLock: 'Enable App Lock',

@@ -38,6 +38,74 @@
           </div>
         </div>
       }
+      <!-- Karte: Erinnerungen -->
+       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+          <div class="flex justify-between items-center mb-4 gap-4">
+            <h2 class="text-xl md:text-2xl font-semibold flex items-center gap-3">
+              <span class="text-2xl md:text-3xl">⏰</span>
+              <span>{{ t().remindersTitle }}</span>
+            </h2>
+            <button (click)="openReminderModal()" [title]="t().addReminder" class="flex-shrink-0 w-9 h-9 rounded-full bg-primary-500 text-white hover:bg-primary-600 transition-colors flex items-center justify-center">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+          <div class="max-h-60 overflow-y-auto pr-2">
+            @if(dataService.reminders().length > 0) {
+              <ul class="space-y-2">
+                @for(reminder of dataService.reminders(); track reminder.id) {
+                  <li class="flex justify-between items-center p-2 rounded-lg bg-slate-50 dark:bg-slate-700/50">
+                    <div>
+                      <span class="text-slate-800 dark:text-slate-200 font-mono text-lg">{{ reminder.time }}</span>
+                      <span class="text-slate-600 dark:text-slate-400 text-sm ml-4">{{ formatReminderDays(reminder.days) }}</span>
+                    </div>
+                    <button (click)="dataService.deleteReminder(reminder.id)" class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="text-slate-500 dark:text-slate-400 text-center py-4">{{ t().noEntriesAvailable }}</p>
+            }
+          </div>
+        </div>
+      <!-- Karte: Sicherheits-Einstellungen -->
+      <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+        <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
+            <span class="text-3xl">🔒</span>
+            <span>{{ t().security }}</span>
+        </h2>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <label for="enable-lock" class="font-medium text-slate-700 dark:text-slate-300">{{ t().enableAppLock }}</label>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="enable-lock" 
+                [checked]="dataService.lockSettings().isEnabled" 
+                (change)="toggleLock($event)"
+                class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-primary-600"></div>
+            </label>
+          </div>
+          <!-- Zusätzliche Optionen, die nur sichtbar sind, wenn die Sperre aktiviert ist -->
+          @if(dataService.lockSettings().isEnabled) {
+            <div class="flex items-center justify-between">
+              <span class="font-medium text-slate-700 dark:text-slate-300">{{ t().changePin }}</span>
+              <button (click)="openPinModal('change')" class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 text-sm">
+                {{ t().change }}
+              </button>
+            </div>
+            <div class="flex items-center justify-between">
+              <label for="auto-lock-timeout" class="font-medium text-slate-700 dark:text-slate-300">{{ t().autoLock }}</label>
+              <select id="auto-lock-timeout" 
+                [ngModel]="dataService.lockSettings().timeout"
+                (ngModelChange)="updateTimeout($event)"
+                class="p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                @for(opt of timeoutOptions(); track opt.value) {
+                  <option [value]="opt.value">{{ opt.label }}</option>
+                }
+              </select>
+            </div>
+          }
+        </div>
+      </div>
       <!-- Karte: Design-Einstellungen -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
@@ -92,45 +160,6 @@
             </button>
         </div>
       </div>
-      <!-- Karte: Sicherheits-Einstellungen -->
-      <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
-        <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
-            <span class="text-3xl">🔒</span>
-            <span>{{ t().security }}</span>
-        </h2>
-        <div class="space-y-4">
-          <div class="flex items-center justify-between">
-            <label for="enable-lock" class="font-medium text-slate-700 dark:text-slate-300">{{ t().enableAppLock }}</label>
-            <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" id="enable-lock" 
-                [checked]="dataService.lockSettings().isEnabled" 
-                (change)="toggleLock($event)"
-                class="sr-only peer">
-              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-primary-600"></div>
-            </label>
-          </div>
-          <!-- Zusätzliche Optionen, die nur sichtbar sind, wenn die Sperre aktiviert ist -->
-          @if(dataService.lockSettings().isEnabled) {
-            <div class="flex items-center justify-between">
-              <span class="font-medium text-slate-700 dark:text-slate-300">{{ t().changePin }}</span>
-              <button (click)="openPinModal('change')" class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 text-sm">
-                {{ t().change }}
-              </button>
-            </div>
-            <div class="flex items-center justify-between">
-              <label for="auto-lock-timeout" class="font-medium text-slate-700 dark:text-slate-300">{{ t().autoLock }}</label>
-              <select id="auto-lock-timeout" 
-                [ngModel]="dataService.lockSettings().timeout"
-                (ngModelChange)="updateTimeout($event)"
-                class="p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
-                @for(opt of timeoutOptions(); track opt.value) {
-                  <option [value]="opt.value">{{ opt.label }}</option>
-                }
-              </select>
-            </div>
-          }
-        </div>
-      </div>
       <!-- Karte: Datenverwaltung -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
@@ -148,6 +177,53 @@
     </div>
   </div>
 </div>
+
+<!-- Modal zur Erinnerungserstellung -->
+@if(showReminderModal()) {
+  <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="closeReminderModal()">
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm" (click)="$event.stopPropagation()">
+      <h3 class="text-xl font-bold mb-4">{{ t().addReminder }}</h3>
+      <div class="space-y-4">
+        <div>
+          <label for="reminder-time" class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().reminderTime }}</label>
+          <input type="time" id="reminder-time" name="reminder-time" [(ngModel)]="reminderTime" required
+            class="mt-1 block w-full p-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md bg-white dark:bg-slate-700">
+        </div>
+         <div>
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().reminderDays }}</label>
+           <div class="grid grid-cols-4 gap-2 mt-1">
+             <button (click)="toggleDaily()"
+              [class.bg-primary-600]="isDaily()"
+              [class.text-white]="isDaily()"
+              [class.bg-slate-200]="!isDaily()"
+              [class.dark:bg-slate-700]="!isDaily()"
+              class="col-span-4 p-2 rounded-md hover:bg-primary-500 hover:text-white transition-colors">
+               {{ t().daily }}
+             </button>
+             @for(day of weekdays(); track day.value) {
+                <button (click)="toggleDay(day.value)"
+                  [class.bg-primary-600]="reminderDays().has(day.value)"
+                  [class.text-white]="reminderDays().has(day.value)"
+                  [class.bg-slate-200]="!reminderDays().has(day.value)"
+                  [class.dark:bg-slate-700]="!reminderDays().has(day.value)"
+                  class="p-2 rounded-md hover:bg-primary-500 hover:text-white transition-colors">
+                  {{ day.label }}
+                </button>
+             }
+           </div>
+        </div>
+      </div>
+      <div class="flex justify-end flex-wrap gap-2 mt-6">
+        <button (click)="closeReminderModal()" class="px-6 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
+          {{ t().cancel }}
+        </button>
+        <button (click)="saveReminder()" class="px-6 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors">
+          {{ t().save }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
 
 <!-- Modal zur PIN-Erstellung / -Änderung -->
 @if(showPinModal()) {

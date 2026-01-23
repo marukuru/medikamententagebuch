@@ -2,13 +2,14 @@ import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@a
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
-import { CrudEntity } from '../models';
+import { CrudEntity, Reminder } from '../models';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { UiService } from '../services/ui.service';
 import { Language, TranslationService } from '../services/translation.service';
 import { ToastService } from '../services/toast.service';
 import { LockService } from '../services/lock.service';
+import { NotificationService } from '../services/notification.service';
 
 /**
  * SettingsComponent ist eine umfassende Seite zur Verwaltung aller App-Einstellungen.
@@ -28,6 +29,7 @@ export class SettingsComponent {
   translationService = inject(TranslationService);
   toastService = inject(ToastService);
   lockService = inject(LockService);
+  notificationService = inject(NotificationService);
   t = this.translationService.translations;
 
   // --- Zustandssignale für Bestätigungsdialoge ---
@@ -42,6 +44,23 @@ export class SettingsComponent {
   pinEntry = signal('');
   pinConfirm = signal('');
   pinError = signal<string | null>(null);
+
+  // --- Zustandssignale für das Erinnerungs-Modal ---
+  showReminderModal = signal(false);
+  reminderTime = signal('08:00');
+  reminderDays = signal(new Set<number>()); // Verwendet ein Set für einfaches Hinzufügen/Entfernen
+
+  weekdays = computed(() => {
+    const t = this.t();
+    // Die Reihenfolge (Mo-So) ist für die UI. `value` entspricht den Capacitor-Wochentagen (1=So, 2=Mo...).
+    return [
+      { label: t.weekday_mo, value: 2 }, { label: t.weekday_tu, value: 3 }, { label: t.weekday_we, value: 4 },
+      { label: t.weekday_th, value: 5 }, { label: t.weekday_fr, value: 6 }, { label: t.weekday_sa, value: 7 },
+      { label: t.weekday_su, value: 1 }
+    ];
+  });
+  
+  isDaily = computed(() => this.reminderDays().size === 7);
 
   /**
    * Computed Signal für die Optionen des Auto-Lock-Timeouts.
@@ -239,5 +258,77 @@ export class SettingsComponent {
   updateTimeout(event: Event) {
     const timeout = parseInt((event.target as HTMLSelectElement).value, 10);
     this.dataService.lockSettings.update(s => ({...s, timeout}));
+  }
+  
+  // --- Erinnerungs-Einstellungen ---
+  openReminderModal() {
+    this.reminderTime.set('08:00');
+    this.reminderDays.set(new Set());
+    this.showReminderModal.set(true);
+  }
+
+  closeReminderModal() {
+    this.showReminderModal.set(false);
+  }
+
+  toggleDay(dayValue: number) {
+    this.reminderDays.update(days => {
+      if (days.has(dayValue)) {
+        days.delete(dayValue);
+      } else {
+        days.add(dayValue);
+      }
+      return new Set(days);
+    });
+  }
+
+  toggleDaily() {
+    this.reminderDays.update(days => {
+      if (days.size === 7) {
+        return new Set(); // Alle abwählen
+      } else {
+        return new Set([1, 2, 3, 4, 5, 6, 7]); // Alle anwählen
+      }
+    });
+  }
+
+  async saveReminder() {
+    const days = Array.from(this.reminderDays());
+    if (days.length === 0) {
+        this.toastService.showError(this.t().reminderErrorNoDays);
+        return;
+    }
+    
+    // Berechtigungen anfordern, bevor die erste Erinnerung gespeichert wird
+    const hasPermission = await this.notificationService.requestPermissions();
+    if (!hasPermission) {
+        return; // Der NotificationService zeigt bereits einen Toast an
+    }
+
+    const newReminder: Omit<Reminder, 'id'> = {
+      time: this.reminderTime(),
+      days: days,
+    };
+    this.dataService.addReminder(newReminder);
+    this.closeReminderModal();
+  }
+  
+  formatReminderDays(days: number[]): string {
+    if (days.length === 7) return this.t().daily;
+    if (days.length === 0) return '';
+    
+    const t = this.t();
+    const dayMap: { [key: number]: string } = {
+        2: t.weekday_mo, 3: t.weekday_tu, 4: t.weekday_we, 5: t.weekday_th,
+        6: t.weekday_fr, 7: t.weekday_sa, 1: t.weekday_su
+    };
+    
+    const displayOrder = [2, 3, 4, 5, 6, 7, 1];
+    
+    return days
+      .slice()
+      .sort((a, b) => displayOrder.indexOf(a) - displayOrder.indexOf(b))
+      .map(d => dayMap[d])
+      .join(', ');
   }
 }

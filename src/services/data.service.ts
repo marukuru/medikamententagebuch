@@ -8,6 +8,7 @@ import {
   Preparation,
   DiaryEntry,
   CrudEntity,
+  Reminder,
 } from '../models';
 import { TranslationService } from './translation.service';
 
@@ -42,6 +43,7 @@ export class DataService {
   activeIngredients = signal<ActiveIngredient[]>([]);
   preparations = signal<Preparation[]>([]);
   diaryEntries = signal<DiaryEntry[]>([]);
+  reminders = signal<Reminder[]>([]);
 
   // --- Computed Signals ---
   // Abgeleitete Daten, die sich automatisch aktualisieren, wenn die Quell-Signale sich ändern.
@@ -129,6 +131,7 @@ export class DataService {
       this.activeIngredients.set(parsedData.activeIngredients || []);
       this.preparations.set(parsedData.preparations || []);
       this.diaryEntries.set(parsedData.diaryEntries || []);
+      this.reminders.set(parsedData.reminders || []);
     } else {
       // Wenn keine Daten vorhanden sind, werden die Standard-Stimmungen und -Effekte geladen.
       this.moods.set(this.translationService.defaultMoods());
@@ -150,6 +153,7 @@ export class DataService {
       activeIngredients: this.activeIngredients(),
       preparations: this.preparations(),
       diaryEntries: this.diaryEntries(),
+      reminders: this.reminders(),
     };
     localStorage.setItem('medikamententagebuch', JSON.stringify(data));
   }
@@ -165,6 +169,14 @@ export class DataService {
   }
   deleteDiaryEntry(id: string) {
     this.diaryEntries.update(entries => entries.filter(e => e.id !== id));
+  }
+
+  // Erinnerungen
+  addReminder(reminder: Omit<Reminder, 'id'>) {
+    this.reminders.update(reminders => [...reminders, { ...reminder, id: this.generateId() }]);
+  }
+  deleteReminder(id: string) {
+    this.reminders.update(reminders => reminders.filter(r => r.id !== id));
   }
 
   // Generische CRUD Methoden für Einstellungs-Entitäten
@@ -235,6 +247,7 @@ export class DataService {
       activeIngredients: this.activeIngredients(),
       preparations: this.preparations(),
       diaryEntries: this.diaryEntries(),
+      reminders: this.reminders(),
     }, null, 2);
   }
   
@@ -273,6 +286,7 @@ export class DataService {
       this.activeIngredients.set(data.activeIngredients || []);
       this.preparations.set(data.preparations || []);
       this.diaryEntries.set(data.diaryEntries || []);
+      this.reminders.set(data.reminders || []);
       return true;
     } catch (e) {
       console.error('Error importing data', e);
@@ -293,5 +307,6 @@ export class DataService {
     this.activeIngredients.set([]);
     this.preparations.set([]);
     this.diaryEntries.set([]);
+    this.reminders.set([]);
   }
 }
