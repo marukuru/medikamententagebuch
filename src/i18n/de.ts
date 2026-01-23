@@ -38,6 +38,13 @@ export const LANG_DE = {
     cancel: 'Abbrechen',
     confirmDeleteButton: 'Ja, löschen',
     dosageLabelWithData: 'Dosierung: {{amount}} {{unit}}',
+    // Search and Filter
+    searchPlaceholder: 'Suche nach Präparat, Notiz, etc...',
+    filterAll: 'Alle',
+    filter7days: 'Letzte 7 Tage',
+    filter30days: 'Letzte 30 Tage',
+    noFilterResults: 'Keine Einträge gefunden',
+    noFilterResultsDescription: 'Versuchen Sie, Ihre Suche oder Filter anzupassen.',
 
     // Statistics Page
     statisticsTitle: 'Statistik',

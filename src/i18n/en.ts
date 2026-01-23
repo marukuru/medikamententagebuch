@@ -38,6 +38,13 @@ export const LANG_EN = {
     cancel: 'Cancel',
     confirmDeleteButton: 'Yes, delete',
     dosageLabelWithData: 'Dosage: {{amount}} {{unit}}',
+    // Search and Filter
+    searchPlaceholder: 'Search by preparation, note, etc...',
+    filterAll: 'All',
+    filter7days: 'Last 7 days',
+    filter30days: 'Last 30 days',
+    noFilterResults: 'No entries found',
+    noFilterResultsDescription: 'Try adjusting your search or filters.',
 
     // Statistics Page
     statisticsTitle: 'Statistics',
