@@ -8,6 +8,8 @@ Eine App zur Erfassung der Einnahme von Medizin und deren Auswirkungen. Verwalte
 - **Statistiken:** Visualisieren Sie, welche Präparate am häufigsten verwendet werden und wie sie sich auf Stimmungen und Effekte auswirken.
 - **Anpassbar:** Verwalten Sie Ihre eigenen Stimmungen, Effekte, Hersteller, Präparate und mehr.
 - **Daten-Hoheit:** Exportieren und importieren Sie Ihre gesamten Daten als JSON-Datei.
+- **Sicherheit:** Schützen Sie Ihre Daten mit einer PIN-Sperre und biometrischer Authentifizierung (Fingerabdruck).
+- **Mehrsprachig:** Verfügbar in Deutsch und Englisch.
 - **Cross-Platform:** Läuft im Webbrowser und als native Android-App.
 - **Dark Mode:** Wechseln Sie zwischen hellem und dunklem Design.
 
