@@ -9,6 +9,11 @@ export type EffectPerception = 'positive' | 'negative' | 'neutral';
 export type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredient' | 'Preparation';
 
 /**
+ * Definiert die möglichen Seiten/Ansichten der Anwendung.
+ */
+export type Page = 'diary' | 'stats' | 'settings' | 'info';
+
+/**
  * Repräsentiert eine Stimmung mit einer Beschreibung und einem zugehörigen Emoji.
  */
 export interface Mood {

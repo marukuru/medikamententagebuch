@@ -1,9 +1,10 @@
-import { Injectable, inject, effect } from '@angular/core';
+import { Injectable, inject, effect, NgZone } from '@angular/core';
 import { DataService } from './data.service';
 import { Capacitor } from '@capacitor/core';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { TranslationService } from './translation.service';
 import { ToastService } from './toast.service';
+import { UiService } from './ui.service';
 
 /**
  * NotificationService verwaltet die Planung und Synchronisierung von
@@ -14,6 +15,8 @@ export class NotificationService {
     private dataService = inject(DataService);
     private translationService = inject(TranslationService);
     private toastService = inject(ToastService);
+    private uiService = inject(UiService);
+    private zone = inject(NgZone);
     
     // Hält die IDs der `setTimeout`-Aufrufe für die Web-Implementierung
     private webTimeoutIds: number[] = [];
@@ -64,14 +67,26 @@ export class NotificationService {
     }
     
     /**
-     * Zeigt eine Web-Benachrichtigung an.
+     * Zeigt eine Web-Benachrichtigung an und fügt einen Klick-Handler hinzu.
      */
     private showWebNotification(): void {
         const t = this.translationService.translations();
-        new Notification(t.notificationTitle, {
+        const notification = new Notification(t.notificationTitle, {
             body: t.notificationBody,
             icon: 'icon.svg'
         });
+
+        // Handler für Klick-Events auf die Benachrichtigung
+        notification.onclick = () => {
+            this.zone.run(() => {
+                // Fokussiert das Fenster/Tab der App
+                window.focus(); 
+                console.log('Web notification tapped, opening diary entry form.');
+                // Löst die Navigation und das Öffnen des Formulars über den UiService aus
+                this.uiService.navigateToPage.set('diary');
+                this.uiService.requestDiaryFormOpen.set(true);
+            });
+        };
     }
 
     /**
@@ -111,7 +126,10 @@ export class NotificationService {
                             schedule: { on: { weekday: day, hour, minute }, repeats: true },
                             largeIcon: 'ic_launcher', // Das Haupt-App-Icon (farbig)
                             smallIcon: 'ic_stat_pill', // Das monochrome Statusleisten-Icon
-                            sound: 'default'
+                            sound: 'default',
+                            extra: {
+                                action: 'open_entry_form'
+                            }
                         });
                     }
                 }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal, effect, Renderer2, Inject, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, effect, Renderer2, Inject, inject, NgZone } from '@angular/core';
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DiaryListComponent } from './components/diary-list.component';
@@ -12,11 +12,9 @@ import { TranslationService } from './services/translation.service';
 import { ToastComponent } from './components/toast.component';
 import { LockService } from './services/lock.service';
 import { NotificationService } from './services/notification.service';
-
-/**
- * Definiert die möglichen Seiten/Ansichten der Anwendung.
- */
-type Page = 'diary' | 'stats' | 'settings' | 'info';
+import { Capacitor } from '@capacitor/core';
+import { LocalNotifications, ActionPerformed } from '@capacitor/local-notifications';
+import { Page } from './models';
 
 /**
  * AppComponent ist die Wurzelkomponente der Anwendung.
@@ -44,7 +42,11 @@ export class AppComponent {
   currentPage = signal<Page>('diary'); // Die aktuell angezeigte Seite
   menuOpen = signal(false); // Zustand des Kebab-Menüs in der Kopfzeile
 
-  constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document) {
+  constructor(
+    private renderer: Renderer2, 
+    @Inject(DOCUMENT) private document: Document,
+    private zone: NgZone
+    ) {
     // Dieser `effect` reagiert auf Änderungen des Theme-Signals im DataService.
     // Er fügt die 'dark'-Klasse zum <html>-Element hinzu oder entfernt sie,
     // um das Dark-Mode-Styling von Tailwind CSS zu aktivieren/deaktivieren.
@@ -61,6 +63,37 @@ export class AppComponent {
     // um die korrekte Sprache für Barrierefreiheit und Browserfunktionen anzugeben.
     effect(() => {
       this.renderer.setAttribute(this.document.documentElement, 'lang', this.translationService.language());
+    });
+
+    // Dieser `effect` reagiert auf Navigationsanfragen aus dem UiService.
+    effect(() => {
+      const page = this.uiService.navigateToPage();
+      if (page) {
+        this.navigate(page);
+        this.uiService.navigateToPage.set(null); // Den Auslöser zurücksetzen
+      }
+    }, { allowSignalWrites: true });
+
+    if (Capacitor.isNativePlatform()) {
+      this.setupNotificationListener();
+    }
+  }
+
+  /**
+   * Richtet einen Listener ein, der auf das Antippen von Benachrichtigungen reagiert.
+   */
+  private setupNotificationListener() {
+    LocalNotifications.addListener('localNotificationActionPerformed', (action: ActionPerformed) => {
+      // action.actionId ist 'tap', wenn der Benachrichtigungstext angetippt wurde
+      const extraData = action.notification.extra;
+      if (action.actionId === 'tap' && extraData?.action === 'open_entry_form') {
+        // Muss in der Angular-Zone ausgeführt werden, um die Change Detection auszulösen
+        this.zone.run(() => {
+          console.log('Reminder notification tapped, opening diary entry form.');
+          this.uiService.navigateToPage.set('diary');
+          this.uiService.requestDiaryFormOpen.set(true);
+        });
+      }
     });
   }
 

@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { DataService } from './data.service';
-import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, CrudEntity, EffectPerception } from '../models';
+import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, CrudEntity, EffectPerception, Page } from '../models';
 import { TranslationService, TranslationKey } from './translation.service';
 import { ToastService } from './toast.service';
 
@@ -33,6 +33,16 @@ export class UiService {
      */
     formStack = signal<FormState[]>([]);
     
+    /**
+     * Signal, um das Öffnen des Tagebuchformulars von außen anzufordern (z.B. per Benachrichtigung).
+     */
+    requestDiaryFormOpen = signal(false);
+
+    /**
+     * Signal, um eine Navigation zu einer bestimmten Seite anzufordern.
+     */
+    navigateToPage = signal<Page | null>(null);
+
     /**
      * Ein Computed Signal, das immer das oberste (aktive) Formular aus dem Stack zurückgibt.
      */

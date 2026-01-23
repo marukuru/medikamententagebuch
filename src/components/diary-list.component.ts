@@ -1,9 +1,10 @@
-import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { DataService } from '../services/data.service';
 import { DiaryEntry, Preparation, Manufacturer, ActiveIngredient } from '../models';
 import { DiaryEntryFormComponent } from './diary-entry-form.component';
 import { TranslationService } from '../services/translation.service';
+import { UiService } from '../services/ui.service';
 
 /**
  * DiaryListComponent zeigt die Liste aller Tagebucheinträge an.
@@ -20,6 +21,7 @@ import { TranslationService } from '../services/translation.service';
 export class DiaryListComponent {
   dataService = inject(DataService);
   translationService = inject(TranslationService);
+  uiService = inject(UiService);
   t = this.translationService.translations;
 
   // --- UI-Zustandssignale ---
@@ -92,6 +94,19 @@ export class DiaryListComponent {
     return this.visibleCount() < this.filteredEntries().length;
   });
 
+  constructor() {
+    effect(() => {
+      if (this.uiService.requestDiaryFormOpen()) {
+        // Sicherstellen, dass das Formular nicht bereits angezeigt wird
+        if (!this.showForm()) {
+          this.addEntry();
+        }
+        // Den Auslöser immer zurücksetzen, damit er nicht erneut feuert
+        this.uiService.requestDiaryFormOpen.set(false);
+      }
+    }, { allowSignalWrites: true });
+  }
+
   /**
    * Hilfsmethode, um die vollständigen Details (Präparat, Hersteller, Wirkstoff)
    * zu einer Präparat-ID zu erhalten.
@@ -162,7 +177,7 @@ export class DiaryListComponent {
     this.visibleCount.set(this.initialLoadCount); // Paginierung zurücksetzen
   }
 
-  setDateFilter(filter: 'all' | '7d' | '30d') {
+setDateFilter(filter: 'all' | '7d' | '30d') {
     this.dateFilter.set(filter);
     this.visibleCount.set(this.initialLoadCount); // Paginierung bei Filteränderung zurücksetzen
   }
