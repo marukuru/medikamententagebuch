@@ -191,6 +191,12 @@ export class SettingsComponent {
 
   closePinModal() {
     this.showPinModal.set(false);
+    // If the user was creating a new PIN but cancelled the process,
+    // and no PIN exists yet, we must revert the 'enable lock' toggle
+    // to its correct 'off' state.
+    if (this.pinModalMode() === 'create' && !this.dataService.lockSettings().pin) {
+      this.dataService.lockSettings.update(s => ({ ...s, isEnabled: false }));
+    }
   }
 
   savePin() {
