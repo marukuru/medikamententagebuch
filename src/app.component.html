@@ -1,4 +1,4 @@
-<div class="min-h-screen w-full" (click)="closeMenu()">
+<div class="min-h-screen w-full flex flex-col" (click)="closeMenu()">
   <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-30 shadow-md border-b border-slate-200 dark:border-slate-700 pt-[env(safe-area-inset-top,0rem)]">
     <div class="max-w-7xl mx-auto pl-[calc(1rem+env(safe-area-inset-left,0rem))] pr-[calc(1rem+env(safe-area-inset-right,0rem))] sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
@@ -35,7 +35,7 @@
       </div>
     </div>
   </header>
-  <main class="pb-[env(safe-area-inset-bottom,0rem)]">
+  <main class="flex-grow pb-[env(safe-area-inset-bottom,0rem)]">
     @switch (currentPage()) {
       @case ('diary') { <diary-list /> }
       @case ('stats') { <statistics /> }
