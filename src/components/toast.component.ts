@@ -2,6 +2,10 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../services/toast.service';
 
+/**
+ * ToastComponent ist eine reine Präsentationskomponente, die die
+ * im ToastService verwalteten Benachrichtigungen auf der UI darstellt.
+ */
 @Component({
   selector: 'toast-notifications',
   standalone: true,
@@ -12,6 +16,11 @@ import { ToastService } from '../services/toast.service';
 export class ToastComponent {
   toastService = inject(ToastService);
 
+  /**
+   * Gibt die entsprechende Font-Awesome-Icon-Klasse für einen Toast-Typ zurück.
+   * @param type Der Typ des Toasts.
+   * @returns Die CSS-Klasse für das Icon.
+   */
   getIconClass(type: 'success' | 'error' | 'info'): string {
     switch (type) {
       case 'success': return 'fa-solid fa-check-circle';
@@ -20,6 +29,11 @@ export class ToastComponent {
     }
   }
 
+  /**
+   * Gibt die entsprechende Tailwind-CSS-Hintergrundklasse für einen Toast-Typ zurück.
+   * @param type Der Typ des Toasts.
+   * @returns Die CSS-Klasse für den Hintergrund.
+   */
   getContainerClass(type: 'success' | 'error' | 'info'): string {
     switch (type) {
       case 'success': return 'bg-green-600';

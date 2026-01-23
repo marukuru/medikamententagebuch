@@ -10,6 +10,11 @@ import { Language, TranslationService } from '../services/translation.service';
 import { ToastService } from '../services/toast.service';
 import { LockService } from '../services/lock.service';
 
+/**
+ * SettingsComponent ist eine umfassende Seite zur Verwaltung aller App-Einstellungen.
+ * Dies umfasst die Stammdaten (Stimmungen, Effekte etc.), Design, Sprache,
+ * Sicherheit und Datenverwaltung (Import/Export/Reset).
+ */
 @Component({
   selector: 'settings',
   standalone: true,
@@ -25,19 +30,22 @@ export class SettingsComponent {
   lockService = inject(LockService);
   t = this.translationService.translations;
 
-  // Confirmation Modals State
+  // --- Zustandssignale für Bestätigungsdialoge ---
   itemToDelete = signal<{ type: CrudEntity, id: string, name: string } | null>(null);
   importFileContent = signal<string | null>(null);
   showResetConfirmStep1 = signal(false);
   showResetConfirmStep2 = signal(false);
 
-  // PIN Modal State
+  // --- Zustandssignale für das PIN-Modal ---
   showPinModal = signal(false);
   pinModalMode = signal<'create' | 'change'>('create');
   pinEntry = signal('');
   pinConfirm = signal('');
   pinError = signal<string | null>(null);
 
+  /**
+   * Computed Signal für die Optionen des Auto-Lock-Timeouts.
+   */
   timeoutOptions = computed(() => {
     const t = this.t();
     return [
@@ -48,6 +56,10 @@ export class SettingsComponent {
     ];
   });
 
+  /**
+   * Computed Signal, das die Konfiguration für die CRUD-Abschnitte (Stimmungen, Effekte etc.)
+   * generiert, um Duplikation im Template zu vermeiden.
+   */
   entityConfigs = computed(() => {
     const t = this.t();
     return [
@@ -60,6 +72,7 @@ export class SettingsComponent {
     ];
   });
   
+  // --- CRUD-Aktionen ---
   openCreateForm(type: CrudEntity) {
     this.uiService.openCreateForm(type);
   }
@@ -84,11 +97,13 @@ export class SettingsComponent {
     this.itemToDelete.set(null);
   }
 
+  // --- Datenverwaltung ---
   async exportData() {
     const data = this.dataService.exportData();
     const fileName = `medikamententagebuch_backup_${new Date().toISOString().slice(0,19).replace('T','_').replace(/:/g,'-')}.json`;
 
     if (Capacitor.isNativePlatform()) {
+      // Native (Android/iOS): Dateisystem-Plugin verwenden
       try {
         await Filesystem.writeFile({
           path: fileName,
@@ -102,7 +117,7 @@ export class SettingsComponent {
         this.toastService.showError(this.translationService.t('backupSavedError'));
       }
     } else {
-      // Web fallback
+      // Web-Fallback: Download über einen Blob-Link
       const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -116,6 +131,7 @@ export class SettingsComponent {
   }
 
   triggerImport() {
+    // Klickt programmatisch auf das versteckte file-Input-Element
     document.getElementById('import-file')?.click();
   }
 
@@ -124,10 +140,11 @@ export class SettingsComponent {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
+        // Zeigt das Bestätigungsmodal an, bevor der eigentliche Import stattfindet
         this.importFileContent.set(e.target?.result as string);
       };
       reader.readAsText(file);
-      (event.target as HTMLInputElement).value = '';
+      (event.target as HTMLInputElement).value = ''; // Input zurücksetzen, um selbe Datei erneut wählen zu können
     }
   }
 
@@ -140,7 +157,7 @@ export class SettingsComponent {
     } else {
       this.toastService.showSuccess(this.translationService.t('importSuccess'));
     }
-    this.importFileContent.set(null);
+    this.importFileContent.set(null); // Modal schließen
   }
 
   cancelImport() {
@@ -167,14 +184,16 @@ export class SettingsComponent {
     this.showResetConfirmStep2.set(false);
   }
 
+  // --- Sprach- und Designeinstellungen ---
   setLanguage(lang: Language) {
     this.translationService.setLanguage(lang);
   }
 
-  // --- Lock Settings ---
+  // --- Sicherheitseinstellungen ---
   toggleLock(event: Event) {
     const enabled = (event.target as HTMLInputElement).checked;
     if (enabled && !this.dataService.lockSettings().pin) {
+      // Wenn Sperre aktiviert wird aber keine PIN existiert, öffne das PIN-Erstellungs-Modal
       this.openPinModal('create');
     } else {
       this.dataService.lockSettings.update(s => ({ ...s, isEnabled: enabled }));
@@ -191,9 +210,8 @@ export class SettingsComponent {
 
   closePinModal() {
     this.showPinModal.set(false);
-    // If the user was creating a new PIN but cancelled the process,
-    // and no PIN exists yet, we must revert the 'enable lock' toggle
-    // to its correct 'off' state.
+    // Wichtig: Wenn der Benutzer das Erstellen einer neuen PIN abbricht,
+    // muss der "Sperre aktivieren"-Schalter zurückgesetzt werden.
     if (this.pinModalMode() === 'create' && !this.dataService.lockSettings().pin) {
       this.dataService.lockSettings.update(s => ({ ...s, isEnabled: false }));
     }

@@ -1,12 +1,13 @@
 <div class="p-4 md:p-6">
   <div class="max-w-4xl mx-auto">
+    <!-- Seitentitel -->
     <h1 class="text-2xl md:text-3xl font-bold text-primary-600 dark:text-primary-400 mb-6 flex items-center gap-3">
       <span class="text-3xl md:text-4xl">📊</span>
       <span>{{ t().statisticsTitle }}</span>
     </h1>
 
     <div class="space-y-8">
-      <!-- Top Präparate -->
+      <!-- Karte: Top Präparate -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
             <span class="text-3xl">💊</span>
@@ -14,7 +15,7 @@
         </h2>
         @if(topPreparations().length > 0) {
             <ol class="list-decimal list-inside space-y-2">
-                @for(stat of topPreparations(); track stat.prep.id; let i = $index) {
+                @for(stat of topPreparations(); track stat.prep.id) {
                 <li>
                     <span>
                         @if (stat.man) {<span>{{ stat.man.name }} - </span>}
@@ -30,11 +31,11 @@
         }
       </div>
 
-      <!-- Stimmung -->
+      <!-- Karte: Stimmungen & Präparate -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
             <span class="text-3xl">🙆</span>
-            <span>{{ t().moods }}</span>
+            <span>{{ t().moodsAndPreparations }}</span>
         </h2>
         <div class="space-y-6">
           @for(stat of moodStats(); track stat.moodName) {
@@ -57,13 +58,14 @@
                 }
             </div>
           }
+          <!-- Nachricht, wenn es überhaupt keine Stimmungs-Statistiken gibt -->
            @if(moodStats().length === 0) {
              <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForStatistic }}</p>
           }
         </div>
       </div>
       
-      <!-- Positive Effekte -->
+      <!-- Karte: Positive Effekte -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
             <span class="text-3xl">😊</span>
@@ -92,7 +94,7 @@
         </div>
       </div>
 
-      <!-- Negative Effekte -->
+      <!-- Karte: Negative Effekte -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
             <span class="text-3xl">😟</span>

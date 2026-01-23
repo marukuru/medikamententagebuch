@@ -4,25 +4,46 @@ import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, Crud
 import { TranslationService, TranslationKey } from './translation.service';
 import { ToastService } from './toast.service';
 
+/**
+ * Definiert den Zustand eines einzelnen Formulars im Stack.
+ * Beinhaltet den Typ der Entität, optional das zu bearbeitende Element
+ * und die aktuellen Werte des Formulars.
+ */
 export interface FormState {
   type: CrudEntity;
-  item?: any; // For editing
+  item?: any; // Für den Bearbeitungsmodus
   formValues: Partial<any>;
 }
 
+/**
+ * Der UiService verwaltet den Zustand der Benutzeroberfläche, der nicht direkt
+ * mit den Kerndaten zusammenhängt. Hauptsächlich ist dies die Verwaltung von
+ * modalen Formularen, insbesondere der generischen CRUD-Formulare in den Einstellungen.
+ */
 @Injectable({ providedIn: 'root' })
 export class UiService {
     dataService = inject(DataService);
     translationService = inject(TranslationService);
     toastService = inject(ToastService);
 
+    /**
+     * Ein Stack, der die Kette von geöffneten Formularen verwaltet.
+     * Dies ermöglicht das Öffnen eines "Unterformulars" (z.B. "Hersteller anlegen"
+     * aus dem "Präparat anlegen"-Formular) und die Rückkehr zum vorherigen Zustand.
+     */
     formStack = signal<FormState[]>([]);
+    
+    /**
+     * Ein Computed Signal, das immer das oberste (aktive) Formular aus dem Stack zurückgibt.
+     */
     currentForm = computed(() => {
         const stack = this.formStack();
         return stack[stack.length - 1];
     });
     
-    // Form Models
+    // --- Signale für die einzelnen Formular-Modelle ---
+    // Jedes Formular hat sein eigenes Signal, um die Daten zu halten.
+    // Dies ist an `[(ngModel)]` im Template gebunden.
     moodForm = signal<Partial<Mood>>({});
     effectForm = signal<Partial<Effect>>({});
     manufacturerForm = signal<Partial<Manufacturer>>({});
@@ -40,9 +61,12 @@ export class UiService {
     });
 
     constructor() {
+        // Dieser `effect` reagiert auf Änderungen im `currentForm` Signal.
+        // Er sorgt dafür, dass das korrekte Formular-Signal (z.B. `moodForm`)
+        // mit den Werten des aktuellen Formulars aus dem Stack befüllt wird.
         effect(() => {
             const form = this.currentForm();
-            this.resetForms();
+            this.resetForms(); // Zuerst alle Formulare zurücksetzen
             if(form) {
                 switch(form.type) {
                     case 'Mood': this.moodForm.set(form.formValues); break;
@@ -56,34 +80,56 @@ export class UiService {
         }, { allowSignalWrites: true });
     }
 
+    /**
+     * Öffnet ein neues Hauptformular und ersetzt den aktuellen Stack.
+     * @param type Der Typ der Entität, die erstellt werden soll.
+     */
     openCreateForm(type: CrudEntity) {
         this.formStack.set([{ type, formValues: {} }]);
     }
 
+    /**
+     * Öffnet ein Hauptformular im Bearbeitungsmodus.
+     * @param type Der Typ der Entität.
+     * @param item Das zu bearbeitende Objekt.
+     */
     openEditForm(type: CrudEntity, item: any) {
         this.formStack.set([{ type, item: { ...item }, formValues: { ...item } }]);
     }
     
+    /**
+     * Öffnet ein Unterformular (z.B. Hersteller erstellen aus dem Präparat-Formular).
+     * Speichert den Zustand des aktuellen Formulars und legt ein neues Formular oben auf den Stack.
+     * @param subFormType Der Typ des zu öffnenden Unterformulars.
+     */
     openSubCreateForm(subFormType: CrudEntity) {
         this.formStack.update(stack => {
             const currentFormState = stack[stack.length - 1]!;
+            // Aktuelle (möglicherweise geänderte) Werte aus dem Formular-Signal sichern
             let currentFormValues;
             switch(currentFormState.type) {
                 case 'Preparation': currentFormValues = this.preparationForm(); break;
                 default: currentFormValues = {};
             }
             
-            const newStack = stack.slice(0, -1);
-            newStack.push({ ...currentFormState, formValues: currentFormValues });
-            newStack.push({ type: subFormType, formValues: {} });
+            const newStack = stack.slice(0, -1); // Letztes Element entfernen
+            newStack.push({ ...currentFormState, formValues: currentFormValues }); // Aktualisiertes Element wieder hinzufügen
+            newStack.push({ type: subFormType, formValues: {} }); // Neues Unterformular hinzufügen
             return newStack;
         });
     }
 
+    /**
+     * Schließt das oberste Formular, indem es vom Stack entfernt wird.
+     */
     cancelForm() {
         this.formStack.update(stack => stack.slice(0, -1));
     }
 
+    /**
+     * Speichert das aktuelle Formular. Ruft entweder `handleUpdate` oder `handleCreate` auf.
+     * Bei Erfolg wird das Formular vom Stack entfernt.
+     */
     saveForm() {
         const form = this.currentForm();
         if (!form) return;
@@ -104,6 +150,11 @@ export class UiService {
         this.toastService.showError(this.translationService.t(key));
     }
 
+    /**
+     * Logik zum Erstellen einer neuen Entität. Enthält Validierung (z.B. auf Duplikate).
+     * @param type Der Typ der zu erstellenden Entität.
+     * @returns `true` bei Erfolg, `false` bei Validierungsfehlern.
+     */
     private handleCreate(type: CrudEntity): boolean {
         switch (type) {
             case 'Mood': {
@@ -183,6 +234,12 @@ export class UiService {
         return true;
     }
   
+    /**
+     * Logik zum Aktualisieren einer bestehenden Entität.
+     * @param type Der Typ der zu aktualisierenden Entität.
+     * @param id Die ID des zu aktualisierenden Objekts.
+     * @returns `true` bei Erfolg, `false` bei Validierungsfehlern.
+     */
     private handleUpdate(type: CrudEntity, id: string): boolean {
         switch (type) {
             case 'Mood': {
@@ -262,6 +319,9 @@ export class UiService {
         return true;
     }
 
+    /**
+     * Setzt alle Formular-Signale auf leere Objekte zurück.
+     */
     private resetForms() {
         this.moodForm.set({});
         this.effectForm.set({});

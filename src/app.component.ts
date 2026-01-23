@@ -12,8 +12,16 @@ import { TranslationService } from './services/translation.service';
 import { ToastComponent } from './components/toast.component';
 import { LockService } from './services/lock.service';
 
+/**
+ * Definiert die möglichen Seiten/Ansichten der Anwendung.
+ */
 type Page = 'diary' | 'stats' | 'settings' | 'info';
 
+/**
+ * AppComponent ist die Wurzelkomponente der Anwendung.
+ * Sie verwaltet das Hauptlayout, die Navigation zwischen den Seiten
+ * und die globalen UI-Zustände wie das Theme oder das Menü.
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -25,14 +33,18 @@ export class AppComponent {
   dataService = inject(DataService);
   uiService = inject(UiService);
   translationService = inject(TranslationService);
-  lockService = inject(LockService); // Initialize LockService
+  // LockService hier initialisieren, um die App-Sperrlogik beim Start zu aktivieren
+  lockService = inject(LockService);
   t = this.translationService.translations;
   
-  currentPage = signal<Page>('diary');
-  menuOpen = signal(false);
+  // --- UI-Zustandssignale ---
+  currentPage = signal<Page>('diary'); // Die aktuell angezeigte Seite
+  menuOpen = signal(false); // Zustand des Kebab-Menüs in der Kopfzeile
 
   constructor(private renderer: Renderer2, @Inject(DOCUMENT) private document: Document) {
-    // Effect to apply theme to document
+    // Dieser `effect` reagiert auf Änderungen des Theme-Signals im DataService.
+    // Er fügt die 'dark'-Klasse zum <html>-Element hinzu oder entfernt sie,
+    // um das Dark-Mode-Styling von Tailwind CSS zu aktivieren/deaktivieren.
     effect(() => {
       const currentTheme = this.dataService.theme();
       if (currentTheme === 'dark') {
@@ -42,34 +54,37 @@ export class AppComponent {
       }
     });
 
-    // Effect to set document language
+    // Dieser `effect` setzt das `lang`-Attribut des <html>-Elements,
+    // um die korrekte Sprache für Barrierefreiheit und Browserfunktionen anzugeben.
     effect(() => {
       this.renderer.setAttribute(this.document.documentElement, 'lang', this.translationService.language());
     });
   }
 
+  /**
+   * Navigiert zu einer bestimmten Seite und schließt das Menü.
+   * @param page Die Seite, zu der navigiert werden soll.
+   */
   navigate(page: Page) {
     this.currentPage.set(page);
     this.menuOpen.set(false);
   }
 
+  /**
+   * Schaltet den Zustand des Kebab-Menüs um (offen/geschlossen).
+   */
   toggleMenu() {
     this.menuOpen.update(open => !open);
   }
 
-  // Close kebab menu when clicking/touching outside.
+  /**
+   * Schließt das Kebab-Menü. Diese Methode wird durch einen Klick auf den
+   * Haupt-Container der App ausgelöst, um das Menü zu schließen, wenn man
+   * außerhalb davon klickt.
+   */
   closeMenu(): void {
-    // If menuOpen is a function (used in template as menuOpen()), call toggleMenu() to close.
-    if (typeof (this as any).menuOpen === 'function') {
-      if ((this as any).menuOpen()) {
-        (this as any).toggleMenu();
-      }
-      return;
-    }
-
-    // Fallback: if there's a boolean property named `menuOpen`, set it to false.
-    if (typeof (this as any).menuOpen === 'boolean') {
-      (this as any).menuOpen = false;
+    if (this.menuOpen()) {
+        this.menuOpen.set(false);
     }
   }
 }

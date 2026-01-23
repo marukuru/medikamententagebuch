@@ -1,12 +1,15 @@
+<!-- Hauptcontainer für die Tagebuchliste mit Padding -->
 <div class="p-4 md:p-6 relative">
   <div class="max-w-4xl mx-auto">
+    <!-- Seitentitel -->
     <h1 class="text-2xl md:text-3xl font-bold text-primary-600 dark:text-primary-400 mb-6 flex items-center gap-3">
       <span class="text-3xl md:text-4xl">💊</span>
       <span>{{ t().diaryListTitle }}</span>
     </h1>
 
-    <!-- Search & Filter Controls -->
+    <!-- Bedienelemente für Suche & Filter -->
     <div class="mb-6 space-y-4">
+      <!-- Suchfeld -->
       <div class="relative">
         <input 
           type="text" 
@@ -15,6 +18,7 @@
           [placeholder]="t().searchPlaceholder"
           class="w-full p-3 pl-10 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md bg-white dark:bg-slate-700 shadow-sm">
         <i class="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+        <!-- Button zum Leeren des Suchfelds, nur sichtbar, wenn ein Suchbegriff vorhanden ist -->
         @if (searchTerm()) {
           <button (click)="clearSearchTerm()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
             <i class="fa fa-times-circle"></i>
@@ -22,6 +26,7 @@
         }
       </div>
 
+      <!-- Filter-Buttons -->
       <div class="flex flex-wrap gap-2">
         <button (click)="setDateFilter('all')" [class.bg-primary-600]="dateFilter() === 'all'" [class.text-white]="dateFilter() === 'all'" class="px-4 py-1.5 rounded-full text-sm font-medium bg-slate-200 dark:bg-slate-700 hover:bg-primary-500 hover:text-white transition-colors">
           {{ t().filterAll }}
@@ -35,26 +40,32 @@
       </div>
     </div>
 
+    <!-- Bedingte Anzeige basierend auf der Anzahl der Einträge -->
     @if (dataService.diaryEntries().length === 0) {
+      <!-- Fall: Keine Einträge in der gesamten App -->
       <div class="text-center py-16 px-6 bg-slate-100 dark:bg-slate-800 rounded-lg">
         <p class="text-5xl mb-4">📝</p>
         <h2 class="text-xl font-semibold text-slate-700 dark:text-slate-300">{{ t().noEntriesYet }}</h2>
         <p class="text-slate-500 dark:text-slate-400 mt-2">{{ t().noEntriesYetDescription }}</p>
       </div>
     } @else if (filteredEntries().length === 0) {
+      <!-- Fall: Einträge vorhanden, aber keine Treffer mit aktuellem Filter/Suche -->
        <div class="text-center py-16 px-6 bg-slate-100 dark:bg-slate-800 rounded-lg">
         <p class="text-5xl mb-4">🧐</p>
         <h2 class="text-xl font-semibold text-slate-700 dark:text-slate-300">{{ t().noFilterResults }}</h2>
         <p class="text-slate-500 dark:text-slate-400 mt-2">{{ t().noFilterResultsDescription }}</p>
       </div>
     } @else {
+      <!-- Fall: Gefilterte Einträge werden angezeigt -->
       <div class="space-y-4">
         @for (entry of paginatedEntries(); track entry.id) {
+          <!-- Details für das Präparat werden einmal pro Eintrag geholt -->
           @let details = getPreparationDetails(entry.preparationId);
           <div (click)="viewEntry(entry)" class="bg-white dark:bg-slate-800 rounded-xl shadow-md hover:shadow-lg transition-shadow cursor-pointer p-4 border border-slate-200 dark:border-slate-700">
             <div class="flex justify-between items-start">
               <div>
                 <p class="font-semibold text-slate-800 dark:text-slate-200">{{ entry.datetime | date:'dd.MM.yyyy, HH:mm' }}</p>
+                <!-- Präparat-Details, falls vorhanden -->
                 @if (details.prep) {
                   <p class="text-sm text-slate-600 dark:text-slate-400">
                     @if (details.man) {
@@ -69,18 +80,22 @@
                     }
                   </p>
                 } @else {
+                  <!-- Nur Dosierung anzeigen, wenn kein Präparat verknüpft ist -->
                   @if (entry.dosage) {
                     <p class="text-sm text-slate-600 dark:text-slate-400">
                       {{ t().dosageLabelWithData.replace('{amount}', entry.dosage.amount.toString()).replace('{unit}', entry.dosage.unit) }}
                     </p>
                   }
                 }
+                <!-- Gekürzte Notiz, falls vorhanden -->
                  @if(entry.note) {
                     <p class="text-sm text-slate-500 dark:text-slate-400 italic mt-1">"{{ entry.note }}"</p>
                 }
               </div>
+              <!-- Stimmungs-Emoji -->
               <div class="text-3xl">{{ entry.mood.emoji }}</div>
             </div>
+            <!-- Effekte-Emojis, falls vorhanden -->
             @if (entry.effects.length > 0) {
               <div class="mt-2 text-xl flex flex-wrap gap-2">
                 @for (effect of entry.effects; track effect.id) {
@@ -90,6 +105,7 @@
             }
           </div>
         }
+        <!-- "Mehr laden"-Button, wenn es mehr Einträge gibt als angezeigt werden -->
         @if(hasMoreEntries()) {
           <div class="text-center pt-4">
             <button (click)="loadMore()" class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors">
@@ -101,18 +117,18 @@
     }
   </div>
 
-  <!-- FAB -->
+  <!-- FAB (Floating Action Button) zum Hinzufügen eines neuen Eintrags -->
   <button (click)="addEntry()" class="fixed bg-primary-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-3xl hover:bg-primary-700 transition-transform hover:scale-110 bottom-[calc(1.5rem+env(safe-area-inset-bottom,0rem))] right-[calc(1.5rem+env(safe-area-inset-right,0rem))]">
     +
   </button>
 </div>
 
-<!-- Add/Edit Form Modal -->
+<!-- Modal für das Hinzufügen/Bearbeiten eines Eintrags -->
 @if (showForm()) {
   <diary-entry-form [entryToEdit]="editingEntry()" (close)="closeForm()" />
 }
 
-<!-- Detail View Modal -->
+<!-- Modal für die Detailansicht eines Eintrags -->
 @if (showDetail(); as entry) {
   @let details = getPreparationDetails(entry.preparationId);
   <div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-40 px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="showDetail.set(null)">
@@ -172,6 +188,7 @@
           </div>
         }
 
+        <!-- Aktionsbuttons am Ende des Modals -->
         <div class="flex justify-end flex-wrap gap-2 pt-4 border-t border-slate-200 dark:border-slate-700 mt-6">
            <button (click)="showDetail.set(null)" class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
             🔙 {{ t().close }}
@@ -188,7 +205,7 @@
   </div>
 }
 
-<!-- Delete Confirmation Modal -->
+<!-- Modal zur Bestätigung des Löschens -->
 @if (entryToDeleteId()) {
   <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="cancelDelete()">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">

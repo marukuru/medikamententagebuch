@@ -1,14 +1,19 @@
+<!-- Container, der die Toasts am unteren rechten Rand des Bildschirms positioniert -->
 <div class="fixed bottom-0 right-0 p-4 md:p-6 space-y-3 z-[100] w-full max-w-md pb-[calc(1rem+env(safe-area-inset-bottom,0rem))] pr-[calc(1.5rem+env(safe-area-inset-right,0rem))]">
+  <!-- Iteriert über das `toasts`-Signal aus dem Service und rendert für jeden Toast eine Benachrichtigung -->
   @for (toast of toastService.toasts(); track toast.id) {
     <div 
       [class]="getContainerClass(toast.type)"
       class="flex items-start p-4 rounded-lg shadow-lg text-white animate-fade-in-up">
+      <!-- Icon basierend auf dem Toast-Typ -->
       <div class="flex-shrink-0 pt-0.5">
         <i [class]="getIconClass(toast.type)" class="text-xl"></i>
       </div>
+      <!-- Toast-Nachricht -->
       <div class="ml-3 flex-1">
         <p class="text-sm font-medium">{{ toast.message }}</p>
       </div>
+      <!-- Schließen-Button -->
       <div class="ml-4 flex-shrink-0 flex">
         <button (click)="toastService.remove(toast.id)" class="inline-flex rounded-md text-white/80 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
           <span class="sr-only">Close</span>

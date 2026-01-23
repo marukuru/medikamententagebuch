@@ -7,6 +7,10 @@ import { UiService } from '../services/ui.service';
 import { TranslationService } from '../services/translation.service';
 import { ToastService } from '../services/toast.service';
 
+/**
+ * DiaryEntryFormComponent ist ein modales Formular zum Erstellen und Bearbeiten
+ * von Tagebucheinträgen.
+ */
 @Component({
   selector: 'diary-entry-form',
   standalone: true,
@@ -20,13 +24,31 @@ export class DiaryEntryFormComponent {
   translationService = inject(TranslationService);
   toastService = inject(ToastService);
   t = this.translationService.translations;
+
+  // --- Inputs & Outputs ---
+  /**
+   * Nimmt einen optionalen Eintrag entgegen. Wenn dieser gesetzt ist,
+   * befindet sich das Formular im Bearbeitungsmodus.
+   */
   entryToEdit = input<DiaryEntry | null>(null);
+  /**
+   * Event, das ausgelöst wird, wenn das Formular geschlossen werden soll.
+   */
   close = output();
 
+  // --- UI-Zustand ---
+  /**
+   * Signal, das verfolgt, ob das Formular ungespeicherte Änderungen hat.
+   */
   isDirty = signal(false);
+  /**
+   * Signal, das die Sichtbarkeit des "Änderungen verwerfen?"-Dialogs steuert.
+   */
   showCancelConfirm = signal(false);
 
-  // Form fields
+  // --- Formularfelder als Signale ---
+  // Die Verwendung von Signalen für Formularfelder ermöglicht eine reaktive
+  // und einfache Zustandsverwaltung innerhalb der Komponente.
   formDate = signal(''); // YYYY-MM-DD
   formTime = signal(''); // HH:mm
   formMoodId = signal<string | undefined>(undefined);
@@ -36,6 +58,9 @@ export class DiaryEntryFormComponent {
   formDosageUnit = signal('');
   formNote = signal('');
 
+  /**
+   * Ein Computed Signal, das die Präparate für das Dropdown-Menü formatiert und sortiert.
+   */
   preparationsForDropdown = computed(() => {
     return this.dataService.preparations()
         .map(prep => ({
@@ -46,9 +71,13 @@ export class DiaryEntryFormComponent {
   });
 
   constructor() {
+    // Dieser `effect` wird ausgeführt, wenn sich `entryToEdit` ändert.
+    // Er initialisiert das Formular entweder mit den Daten des Eintrags
+    // oder setzt es auf die Standardwerte zurück.
     effect(() => {
         const entry = this.entryToEdit();
         if (entry) {
+            // Bearbeitungsmodus: Formular mit Eintragsdaten füllen
             const entryDate = new Date(entry.datetime);
             this.formDate.set(this.formatDateForInput(entryDate));
             this.formTime.set(this.formatTimeForInput(entryDate));
@@ -59,13 +88,16 @@ export class DiaryEntryFormComponent {
             this.formDosageUnit.set(entry.dosage?.unit ?? '');
             this.formNote.set(entry.note || '');
         } else {
+            // Erstellungsmodus: Formular zurücksetzen
             this.resetForm();
         }
     }, { allowSignalWrites: true });
 
+    // Dieser `effect` füllt automatisch die Dosierung aus, wenn ein Präparat
+    // mit einer Standard-Dosierung ausgewählt wird.
     effect(() => {
       const prepId = this.formPreparationId();
-      if (this.entryToEdit()) return; // Don't overwrite if editing
+      if (this.entryToEdit()) return; // Nicht überschreiben, wenn ein Eintrag bearbeitet wird
 
       const prep = this.dataService.preparations().find(p => p.id === prepId);
       if(prep && prep.dosageId) {
@@ -92,6 +124,9 @@ export class DiaryEntryFormComponent {
     }
   }
   
+  /**
+   * Markiert das Formular als "geändert", wenn ein Feld bearbeitet wird.
+   */
   fieldChanged() {
     this.isDirty.set(true);
   }
@@ -109,10 +144,13 @@ export class DiaryEntryFormComponent {
     this.isDirty.set(false);
   }
 
+  /**
+   * Validiert die Formulardaten und speichert den Eintrag (entweder neu oder aktualisiert).
+   */
   save() {
+    // Validierung: Stimmung ist ein Pflichtfeld
     const moodId = this.formMoodId();
     const mood = this.dataService.moods().find(m => m.id === moodId);
-
     if (!mood) {
       this.toastService.showError(this.translationService.t('moodIsRequired'));
       return;
@@ -120,7 +158,7 @@ export class DiaryEntryFormComponent {
 
     const dosageAmount = this.formDosageAmount();
     const dosageUnit = this.formDosageUnit().trim();
-
+    // Validierung: Wenn eines der Dosierungsfelder ausgefüllt ist, muss das andere auch ausgefüllt sein
     if ((dosageAmount !== null && !dosageUnit) || (dosageAmount === null && dosageUnit)) {
         this.toastService.showError(this.translationService.t('dosageFieldsIncomplete'));
         return;
@@ -130,6 +168,7 @@ export class DiaryEntryFormComponent {
     const newDatetime = new Date(`${this.formDate()}T${this.formTime()}`).toISOString();
 
     if (this.entryToEdit()) {
+      // Bestehenden Eintrag aktualisieren
       const updatedEntry: DiaryEntry = {
         ...this.entryToEdit()!,
         datetime: newDatetime,
@@ -146,6 +185,7 @@ export class DiaryEntryFormComponent {
       }
       this.dataService.updateDiaryEntry(updatedEntry);
     } else {
+      // Neuen Eintrag erstellen
       const newEntry: Omit<DiaryEntry, 'id'> = {
         datetime: newDatetime,
         mood: mood,
@@ -157,14 +197,16 @@ export class DiaryEntryFormComponent {
       if (dosageAmount !== null && dosageUnit) {
         (newEntry as DiaryEntry).dosage = { id: '', amount: dosageAmount, unit: dosageUnit };
       }
-
       this.dataService.addDiaryEntry(newEntry);
     }
     
     this.close.emit();
   }
 
-
+  /**
+   * Behandelt den Klick auf den "Abbrechen"-Button.
+   * Zeigt bei ungespeicherten Änderungen eine Bestätigung an.
+   */
   cancel() {
     if (this.isDirty()) {
       this.showCancelConfirm.set(true);
@@ -177,21 +219,33 @@ export class DiaryEntryFormComponent {
     this.uiService.openCreateForm('Preparation');
   }
 
+  /**
+   * Bestätigt das Verwerfen von Änderungen und schließt das Formular.
+   */
   confirmClose() {
     this.showCancelConfirm.set(false);
     this.close.emit();
   }
 
+  /**
+   * Bricht den Schließvorgang ab und kehrt zum Formular zurück.
+   */
   abortClose() {
     this.showCancelConfirm.set(false);
   }
 
+  /**
+   * Formatiert den Namen eines Präparats für die Anzeige im Dropdown.
+   * @param prep Das Präparat-Objekt.
+   * @returns Ein formatierter String, z.B. "Hersteller - Name (Wirkstoff)".
+   */
   formatPreparation(prep: Preparation): string {
     const man = this.dataService.manufacturers().find((m) => m.id === prep.manufacturerId);
     const ai = this.dataService.activeIngredients().find((a) => a.id === prep.activeIngredientId);
     return `${man ? man.name + ' - ' : ''}${prep.name}${ai ? ` (${ai.amount} ${ai.unit})` : ''}`;
   }
 
+  // --- Private Hilfsmethoden ---
   private formatDateForInput(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');

@@ -1,9 +1,12 @@
+<!-- Modal-Hintergrund, der bei Klick das Formular schließt (nach Bestätigung) -->
 <div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="cancel()">
+  <!-- eigentlicher Modal-Inhalt, (click) verhindert, dass Klicks hier das Modal schließen -->
   <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+    <!-- Titel: "Eintrag bearbeiten" oder "Neuer Eintrag" -->
     <h2 class="text-xl md:text-2xl font-bold text-primary-600 dark:text-primary-400 mb-6">{{ entryToEdit() ? t().editEntryTitle : t().newEntryTitle }}</h2>
     
     <form (ngSubmit)="save()" class="space-y-4">
-      <!-- Datum & Uhrzeit -->
+      <!-- Sektion: Datum & Uhrzeit -->
       <div>
         <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ t().dateTimeLabel }}</label>
         <div class="flex gap-2">
@@ -12,7 +15,7 @@
         </div>
       </div>
 
-      <!-- Stimmung -->
+      <!-- Sektion: Stimmungsauswahl -->
       <div>
         <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ t().moodLabel }}</label>
         <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
@@ -24,6 +27,7 @@
                 [class.bg-slate-200]="formMoodId() === mood.id"
                 [class.dark:bg-slate-600]="formMoodId() === mood.id"
                 class="cursor-pointer text-center p-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                <!-- Das Radio-Input ist unsichtbar, das Label agiert als klickbarer Button -->
                 <input type="radio" name="mood" [value]="mood.id" [(ngModel)]="formMoodId" class="sr-only">
                 <span class="text-3xl">{{ mood.emoji }}</span>
                 <span class="block text-xs mt-1">{{ mood.description }}</span>
@@ -32,7 +36,7 @@
         </div>
       </div>
 
-      <!-- Präparat -->
+      <!-- Sektion: Präparat-Auswahl -->
       <div>
         <label for="preparation" class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().preparationLabel }}</label>
         <div class="flex items-center gap-2 mt-1">
@@ -44,13 +48,14 @@
               </option>
             }
           </select>
+          <!-- Button, um direkt aus diesem Formular ein neues Präparat zu erstellen -->
           <button type="button" (click)="openCreatePreparationForm()" [title]="t().addNewPreparationTitle" class="flex-shrink-0 w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
             <i class="fa fa-plus"></i>
           </button>
         </div>
       </div>
       
-      <!-- Dosierung -->
+      <!-- Sektion: Dosierung -->
       <div>
         <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ t().dosageLabel }}</label>
         <div class="flex gap-2">
@@ -59,7 +64,7 @@
         </div>
       </div>
       
-      <!-- Effekte -->
+      <!-- Sektion: Effekte (Mehrfachauswahl) -->
       <div>
         <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ t().effectsLabel }}</label>
         <div class="flex flex-wrap gap-2">
@@ -78,13 +83,13 @@
         </div>
       </div>
       
-      <!-- Notiz -->
+      <!-- Sektion: Notiz -->
        <div>
         <label for="note" class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().noteLabel }}</label>
         <input type="text" id="note" name="note" [(ngModel)]="formNote" (input)="fieldChanged()" maxlength="160" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
       </div>
 
-      <!-- Actions -->
+      <!-- Aktionsbuttons: Abbrechen und Speichern -->
       <div class="flex justify-end flex-wrap gap-2 pt-4 border-t border-slate-200 dark:border-slate-700 mt-6">
         <button type="button" (click)="cancel()" class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">{{ t().cancel }}</button>
         <button type="submit" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors">{{ t().save }}</button>
@@ -93,7 +98,7 @@
   </div>
 </div>
 
-<!-- Cancel Confirmation Modal -->
+<!-- Bestätigungsmodal für das Verwerfen von Änderungen -->
 @if (showCancelConfirm()) {
   <div class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[60] px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">

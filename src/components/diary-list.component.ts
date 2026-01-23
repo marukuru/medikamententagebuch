@@ -5,6 +5,11 @@ import { DiaryEntry, Preparation, Manufacturer, ActiveIngredient } from '../mode
 import { DiaryEntryFormComponent } from './diary-entry-form.component';
 import { TranslationService } from '../services/translation.service';
 
+/**
+ * DiaryListComponent zeigt die Liste aller Tagebucheinträge an.
+ * Bietet Funktionen zum Hinzufügen, Bearbeiten, Anzeigen und Löschen von Einträgen,
+ * sowie Such- und Filterfunktionen.
+ */
 @Component({
   selector: 'diary-list',
   standalone: true,
@@ -17,21 +22,26 @@ export class DiaryListComponent {
   translationService = inject(TranslationService);
   t = this.translationService.translations;
 
-  showForm = signal(false);
-  showDetail = signal<DiaryEntry | null>(null);
-  editingEntry = signal<DiaryEntry | null>(null);
-  entryToDeleteId = signal<string | null>(null);
+  // --- UI-Zustandssignale ---
+  showForm = signal(false); // Steuert die Sichtbarkeit des Formulars für neue/bearbeitete Einträge
+  showDetail = signal<DiaryEntry | null>(null); // Hält den Eintrag, der in der Detailansicht gezeigt wird
+  editingEntry = signal<DiaryEntry | null>(null); // Hält den Eintrag, der gerade bearbeitet wird
+  entryToDeleteId = signal<string | null>(null); // Hält die ID des Eintrags, für den die Löschbestätigung angezeigt wird
 
-  // Search & Filter
-  searchTerm = signal('');
-  dateFilter = signal<'all' | '7d' | '30d'>('all');
+  // --- Suche & Filter ---
+  searchTerm = signal(''); // Der aktuelle Suchbegriff
+  dateFilter = signal<'all' | '7d' | '30d'>('all'); // Der aktive Datumsfilter
 
+  /**
+   * Ein Computed Signal, das die Tagebucheinträge basierend auf dem aktuellen
+   * Suchbegriff und Datumsfilter filtert.
+   */
   filteredEntries = computed(() => {
     const term = this.searchTerm().toLowerCase();
     const filter = this.dateFilter();
     const allEntries = this.dataService.sortedDiaryEntries();
 
-    // 1. Apply date filter
+    // 1. Datumsfilter anwenden
     const dateFiltered = allEntries.filter(entry => {
       if (filter === 'all') return true;
       const entryDate = new Date(entry.datetime);
@@ -42,13 +52,14 @@ export class DiaryListComponent {
       return true;
     });
 
-    // 2. Apply search term filter
+    // 2. Suchbegriff-Filter anwenden
     if (!term) {
       return dateFiltered;
     }
 
     return dateFiltered.filter(entry => {
       const details = this.getPreparationDetails(entry.preparationId);
+      // Erstellt einen durchsuchbaren Text aus allen relevanten Eintragsdaten
       const searchCorpus = [
         entry.note || '',
         entry.mood.description,
@@ -62,19 +73,31 @@ export class DiaryListComponent {
   });
 
 
-  // Pagination
-  private initialLoadCount = 50;
-  private subsequentLoadCount = 10;
-  visibleCount = signal(this.initialLoadCount);
+  // --- Paginierung ---
+  private initialLoadCount = 50; // Anzahl der Einträge, die initial geladen werden
+  private subsequentLoadCount = 10; // Anzahl der Einträge, die bei "Mehr laden" nachgeladen werden
+  visibleCount = signal(this.initialLoadCount); // Die Anzahl der aktuell sichtbaren Einträge
   
+  /**
+   * Ein Computed Signal, das die paginierte Liste der Einträge zurückgibt.
+   */
   paginatedEntries = computed(() => {
     return this.filteredEntries().slice(0, this.visibleCount());
   });
   
+  /**
+   * Ein Computed Signal, das anzeigt, ob es noch mehr Einträge zum Laden gibt.
+   */
   hasMoreEntries = computed(() => {
     return this.visibleCount() < this.filteredEntries().length;
   });
 
+  /**
+   * Hilfsmethode, um die vollständigen Details (Präparat, Hersteller, Wirkstoff)
+   * zu einer Präparat-ID zu erhalten.
+   * @param prepId Die ID des Präparats.
+   * @returns Ein Objekt mit den zugehörigen Entitäten.
+   */
   getPreparationDetails(prepId?: string): { prep: Preparation | undefined, man: Manufacturer | undefined, ai: ActiveIngredient | undefined } {
     if (!prepId) return { prep: undefined, man: undefined, ai: undefined };
     const prep = this.dataService.preparations().find(p => p.id === prepId);
@@ -84,6 +107,7 @@ export class DiaryListComponent {
     return { prep, man, ai };
   }
 
+  // --- Aktionsmethoden ---
   addEntry() {
     this.editingEntry.set(null);
     this.showForm.set(true);
@@ -91,7 +115,7 @@ export class DiaryListComponent {
 
   editEntry(entry: DiaryEntry) {
     this.editingEntry.set(entry);
-    this.showDetail.set(null);
+    this.showDetail.set(null); // Detailansicht schließen, falls offen
     this.showForm.set(true);
   }
 
@@ -104,7 +128,7 @@ export class DiaryListComponent {
     this.editingEntry.set(null);
   }
   
-  // New delete flow
+  // --- Löschvorgang ---
   requestDeleteConfirmation(id: string) {
     this.entryToDeleteId.set(id);
   }
@@ -118,7 +142,7 @@ export class DiaryListComponent {
     if (!id) return;
 
     this.dataService.deleteDiaryEntry(id);
-    this.showDetail.set(null);
+    this.showDetail.set(null); // Detailansicht schließen, falls der gelöschte Eintrag angezeigt wurde
     this.entryToDeleteId.set(null);
   }
 
@@ -126,20 +150,20 @@ export class DiaryListComponent {
     this.visibleCount.update(count => count + this.subsequentLoadCount);
   }
 
-  // --- Filter and Search Handlers ---
+  // --- Event Handler für Filter und Suche ---
   onSearchTermChange(event: Event) {
     const term = (event.target as HTMLInputElement).value;
     this.searchTerm.set(term);
-    this.visibleCount.set(this.initialLoadCount); // Reset pagination
+    this.visibleCount.set(this.initialLoadCount); // Paginierung bei neuer Suche zurücksetzen
   }
 
   clearSearchTerm() {
     this.searchTerm.set('');
-    this.visibleCount.set(this.initialLoadCount); // Reset pagination
+    this.visibleCount.set(this.initialLoadCount); // Paginierung zurücksetzen
   }
 
   setDateFilter(filter: 'all' | '7d' | '30d') {
     this.dateFilter.set(filter);
-    this.visibleCount.set(this.initialLoadCount); // Reset pagination
+    this.visibleCount.set(this.initialLoadCount); // Paginierung bei Filteränderung zurücksetzen
   }
 }
