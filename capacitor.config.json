@@ -1,5 +1,11 @@
 {
   "appId": "com.medikamententagebuch.app",
   "appName": "Medikamententagebuch",
-  "webDir": "www/browser"
+  "webDir": "www/browser",
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_pill",
+      "iconColor": "#3b82f6"
+    }
+  }
 }

@@ -42,6 +42,14 @@ jobs:
       - name: Sync Capacitor project
         run: npx cap sync android
 
+      - name: Copy custom Android resources
+        run: |
+          if [ -d "android-resources" ]; then
+            echo "Copying custom Android resources..."
+            mkdir -p android/app/src/main/res/
+            cp -r android-resources/* android/app/src/main/res/
+          fi
+
       - name: Decode Keystore
         run: |
           echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > android/app/my-release-key.jks

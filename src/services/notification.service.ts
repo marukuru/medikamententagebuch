@@ -109,7 +109,8 @@ export class NotificationService {
                             title: t.notificationTitle,
                             body: t.notificationBody,
                             schedule: { on: { weekday: day, hour, minute }, repeats: true },
-                            smallIcon: 'ic_stat_icon_config_material',
+                            largeIcon: 'ic_launcher', // Das Haupt-App-Icon (farbig)
+                            smallIcon: 'ic_stat_pill', // Das monochrome Statusleisten-Icon
                             sound: 'default'
                         });
                     }
