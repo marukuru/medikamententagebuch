@@ -114,7 +114,7 @@
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
       <h3 class="text-xl font-bold mb-4">{{ t().confirmDeleteItemTitle }}</h3>
       <p class="text-slate-600 dark:text-slate-400 mb-6">{{ t().confirmDeleteItemMessage.replace('{{name}}', item.name) }}</p>
-      <div class="flex justify-center gap-4">
+      <div class="flex justify-center flex-wrap gap-2">
         <button (click)="cancelDeleteItem()" class="px-6 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
           {{ t().cancel }}
         </button>
@@ -132,7 +132,7 @@
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
       <h3 class="text-xl font-bold mb-4">{{ t().confirmImportTitle }}</h3>
       <p class="text-slate-600 dark:text-slate-400 mb-6">{{ t().confirmImportMessage }}</p>
-      <div class="flex justify-center gap-4">
+      <div class="flex justify-center flex-wrap gap-2">
         <button (click)="cancelImport()" class="px-6 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
           {{ t().cancel }}
         </button>
@@ -150,7 +150,7 @@
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
       <h3 class="text-xl font-bold mb-4 text-red-600">{{ t().resetWarningTitle }}</h3>
       <p class="text-slate-600 dark:text-slate-400 mb-6">{{ t().resetWarningMessage }}</p>
-      <div class="flex justify-center gap-4">
+      <div class="flex justify-center flex-wrap gap-2">
         <button (click)="cancelReset()" class="px-6 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
           {{ t().cancel }}
         </button>
@@ -168,7 +168,7 @@
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-sm text-center" (click)="$event.stopPropagation()">
       <h3 class="text-xl font-bold mb-4 text-red-600">{{ t().finalConfirmationTitle }}</h3>
       <p class="text-slate-600 dark:text-slate-400 mb-6">{{ t().finalConfirmationMessage }}</p>
-      <div class="flex justify-center gap-4">
+      <div class="flex justify-center flex-wrap gap-2">
         <button (click)="cancelReset()" class="px-6 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
           {{ t().cancel }}
         </button>
