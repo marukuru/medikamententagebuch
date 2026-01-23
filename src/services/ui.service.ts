@@ -2,6 +2,7 @@ import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { DataService } from './data.service';
 import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, CrudEntity, EffectPerception } from '../models';
 import { TranslationService, TranslationKey } from './translation.service';
+import { ToastService } from './toast.service';
 
 export interface FormState {
   type: CrudEntity;
@@ -13,6 +14,7 @@ export interface FormState {
 export class UiService {
     dataService = inject(DataService);
     translationService = inject(TranslationService);
+    toastService = inject(ToastService);
 
     formStack = signal<FormState[]>([]);
     currentForm = computed(() => {
@@ -98,8 +100,8 @@ export class UiService {
         }
     }
 
-    private showAlert(key: TranslationKey) {
-        alert(this.translationService.t(key));
+    private showErrorToast(key: TranslationKey) {
+        this.toastService.showError(this.translationService.t(key));
     }
 
     private handleCreate(type: CrudEntity): boolean {
@@ -110,7 +112,7 @@ export class UiService {
                 const description = formValues.description.trim();
                 if (!description) return false;
                 if (this.dataService.moods().some(m => m.description.toLowerCase() === description.toLowerCase())) {
-                    this.showAlert('duplicateMoodError');
+                    this.showErrorToast('duplicateMoodError');
                     return false;
                 }
                 this.dataService.addItem(this.dataService.moods, { ...formValues, description } as Omit<Mood, 'id'>);
@@ -122,7 +124,7 @@ export class UiService {
                 const description = formValues.description.trim();
                 if (!description) return false;
                 if (this.dataService.effects().some(e => e.description.toLowerCase() === description.toLowerCase())) {
-                    this.showAlert('duplicateEffectError');
+                    this.showErrorToast('duplicateEffectError');
                     return false;
                 }
                 this.dataService.addItem(this.dataService.effects, { ...formValues, description } as Omit<Effect, 'id'>);
@@ -134,7 +136,7 @@ export class UiService {
                 const name = formValues.name.trim();
                 if (!name) return false;
                 if (this.dataService.manufacturers().some(m => m.name.toLowerCase() === name.toLowerCase())) {
-                    this.showAlert('duplicateManufacturerError');
+                    this.showErrorToast('duplicateManufacturerError');
                     return false;
                 }
                 this.dataService.addItem(this.dataService.manufacturers, { ...formValues, name } as Omit<Manufacturer, 'id'>);
@@ -146,7 +148,7 @@ export class UiService {
                 const unit = formValues.unit.trim();
                 if (!unit) return false;
                 if (this.dataService.dosages().some(d => d.amount === formValues.amount && d.unit.toLowerCase() === unit.toLowerCase())) {
-                    this.showAlert('duplicateDosageError');
+                    this.showErrorToast('duplicateDosageError');
                     return false;
                 }
                 this.dataService.addItem(this.dataService.dosages, { ...formValues, unit } as Omit<Dosage, 'id'>);
@@ -159,7 +161,7 @@ export class UiService {
                 const unit = formValues.unit.trim();
                 if (!amount || !unit) return false;
                 if (this.dataService.activeIngredients().some(ai => ai.amount.toLowerCase() === amount.toLowerCase() && ai.unit.toLowerCase() === unit.toLowerCase())) {
-                    this.showAlert('duplicateActiveIngredientError');
+                    this.showErrorToast('duplicateActiveIngredientError');
                     return false;
                 }
                 this.dataService.addItem(this.dataService.activeIngredients, { ...formValues, amount, unit } as Omit<ActiveIngredient, 'id'>);
@@ -171,7 +173,7 @@ export class UiService {
                 const name = formValues.name.trim();
                 if (!name) return false;
                 if (this.dataService.preparations().some(p => p.name.toLowerCase() === name.toLowerCase() && p.manufacturerId === formValues.manufacturerId && p.activeIngredientId === formValues.activeIngredientId)) {
-                    this.showAlert('duplicatePreparationError');
+                    this.showErrorToast('duplicatePreparationError');
                     return false;
                 }
                 this.dataService.addItem(this.dataService.preparations, { ...formValues, name } as Omit<Preparation, 'id'>);
@@ -189,7 +191,7 @@ export class UiService {
                 const description = formValues.description.trim();
                 if (!description) return false;
                 if (this.dataService.moods().some(m => m.id !== id && m.description.toLowerCase() === description.toLowerCase())) {
-                    this.showAlert('duplicateMoodError');
+                    this.showErrorToast('duplicateMoodError');
                     return false;
                 }
                 this.dataService.updateItem(this.dataService.moods, { ...formValues, id, description } as Mood);
@@ -201,7 +203,7 @@ export class UiService {
                 const description = formValues.description.trim();
                 if (!description) return false;
                 if (this.dataService.effects().some(e => e.id !== id && e.description.toLowerCase() === description.toLowerCase())) {
-                    this.showAlert('duplicateEffectError');
+                    this.showErrorToast('duplicateEffectError');
                     return false;
                 }
                 this.dataService.updateItem(this.dataService.effects, { ...formValues, id, description } as Effect);
@@ -213,7 +215,7 @@ export class UiService {
                 const name = formValues.name.trim();
                 if (!name) return false;
                 if (this.dataService.manufacturers().some(m => m.id !== id && m.name.toLowerCase() === name.toLowerCase())) {
-                    this.showAlert('duplicateManufacturerError');
+                    this.showErrorToast('duplicateManufacturerError');
                     return false;
                 }
                 this.dataService.updateItem(this.dataService.manufacturers, { ...formValues, id, name } as Manufacturer);
@@ -225,7 +227,7 @@ export class UiService {
                 const unit = formValues.unit.trim();
                 if (!unit) return false;
                 if (this.dataService.dosages().some(d => d.id !== id && d.amount === formValues.amount && d.unit.toLowerCase() === unit.toLowerCase())) {
-                    this.showAlert('duplicateDosageError');
+                    this.showErrorToast('duplicateDosageError');
                     return false;
                 }
                 this.dataService.updateItem(this.dataService.dosages, { ...formValues, id, unit } as Dosage);
@@ -238,7 +240,7 @@ export class UiService {
                 const unit = formValues.unit.trim();
                 if (!amount || !unit) return false;
                 if (this.dataService.activeIngredients().some(ai => ai.id !== id && ai.amount.toLowerCase() === amount.toLowerCase() && ai.unit.toLowerCase() === unit.toLowerCase())) {
-                    this.showAlert('duplicateActiveIngredientError');
+                    this.showErrorToast('duplicateActiveIngredientError');
                     return false;
                 }
                 this.dataService.updateItem(this.dataService.activeIngredients, { ...formValues, id, amount, unit } as ActiveIngredient);
@@ -250,7 +252,7 @@ export class UiService {
                 const name = formValues.name.trim();
                 if (!name) return false;
                 if (this.dataService.preparations().some(p => p.id !== id && p.name.toLowerCase() === name.toLowerCase() && p.manufacturerId === formValues.manufacturerId && p.activeIngredientId === formValues.activeIngredientId)) {
-                    this.showAlert('duplicatePreparationError');
+                    this.showErrorToast('duplicatePreparationError');
                     return false;
                 }
                 this.dataService.updateItem(this.dataService.preparations, { ...formValues, id, name } as Preparation);

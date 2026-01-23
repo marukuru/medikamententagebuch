@@ -15,16 +15,16 @@
                 @if (menuOpen()) {
                     <div class="absolute right-0 mt-2 w-56 origin-top-right bg-white dark:bg-slate-800 divide-y divide-slate-100 dark:divide-slate-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" (click)="$event.stopPropagation()">
                         <div class="py-1">
-                            <a (click)="navigate('diary')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                            <a (click)="navigate('diary')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover-bg-slate-700">
                                 <span class="w-6 text-center">💊</span> {{ t().diary }}
                             </a>
-                             <a (click)="navigate('stats')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                             <a (click)="navigate('stats')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover-bg-slate-700">
                                 <span class="w-6 text-center">📊</span> {{ t().statistics }}
                             </a>
-                             <a (click)="navigate('settings')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                             <a (click)="navigate('settings')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover-bg-slate-700">
                                 <span class="w-6 text-center">⚙️</span> {{ t().settings }}
                             </a>
-                            <a (click)="navigate('info')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                            <a (click)="navigate('info')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover-bg-slate-700">
                                 <span class="w-6 text-center">ℹ️</span> {{ t().info }}
                             </a>
                         </div>
@@ -117,3 +117,4 @@
     </div>
   </div>
 }
+<toast-notifications></toast-notifications>

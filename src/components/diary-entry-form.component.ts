@@ -5,6 +5,7 @@ import { DataService } from '../services/data.service';
 import { DiaryEntry, Preparation } from '../models';
 import { UiService } from '../services/ui.service';
 import { TranslationService } from '../services/translation.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'diary-entry-form',
@@ -17,6 +18,7 @@ export class DiaryEntryFormComponent {
   dataService = inject(DataService);
   uiService = inject(UiService);
   translationService = inject(TranslationService);
+  toastService = inject(ToastService);
   t = this.translationService.translations;
   entryToEdit = input<DiaryEntry | null>(null);
   close = output();
@@ -112,7 +114,7 @@ export class DiaryEntryFormComponent {
     const mood = this.dataService.moods().find(m => m.id === moodId);
 
     if (!mood) {
-      alert(this.translationService.t('moodIsRequired'));
+      this.toastService.showError(this.translationService.t('moodIsRequired'));
       return;
     }
 
@@ -120,7 +122,7 @@ export class DiaryEntryFormComponent {
     const dosageUnit = this.formDosageUnit().trim();
 
     if ((dosageAmount !== null && !dosageUnit) || (dosageAmount === null && dosageUnit)) {
-        alert(this.translationService.t('dosageFieldsIncomplete'));
+        this.toastService.showError(this.translationService.t('dosageFieldsIncomplete'));
         return;
     }
 

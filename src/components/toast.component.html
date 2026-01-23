@@ -1,0 +1,20 @@
+<div class="fixed bottom-0 right-0 p-4 md:p-6 space-y-3 z-[100] w-full max-w-md pb-[calc(1rem+env(safe-area-inset-bottom,0rem))] pr-[calc(1.5rem+env(safe-area-inset-right,0rem))]">
+  @for (toast of toastService.toasts(); track toast.id) {
+    <div 
+      [class]="getContainerClass(toast.type)"
+      class="flex items-start p-4 rounded-lg shadow-lg text-white animate-fade-in-up">
+      <div class="flex-shrink-0 pt-0.5">
+        <i [class]="getIconClass(toast.type)" class="text-xl"></i>
+      </div>
+      <div class="ml-3 flex-1">
+        <p class="text-sm font-medium">{{ toast.message }}</p>
+      </div>
+      <div class="ml-4 flex-shrink-0 flex">
+        <button (click)="toastService.remove(toast.id)" class="inline-flex rounded-md text-white/80 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
+          <span class="sr-only">Close</span>
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+    </div>
+  }
+</div>

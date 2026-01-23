@@ -8,13 +8,14 @@ import { InfoComponent } from './components/info.component';
 import { DataService } from './services/data.service';
 import { UiService } from './services/ui.service';
 import { TranslationService } from './services/translation.service';
+import { ToastComponent } from './components/toast.component';
 
 type Page = 'diary' | 'stats' | 'settings' | 'info';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule, DiaryListComponent, StatisticsComponent, SettingsComponent, InfoComponent],
+  imports: [CommonModule, FormsModule, DiaryListComponent, StatisticsComponent, SettingsComponent, InfoComponent, ToastComponent],
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

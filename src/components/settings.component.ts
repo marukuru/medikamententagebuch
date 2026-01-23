@@ -7,6 +7,7 @@ import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { UiService } from '../services/ui.service';
 import { Language, TranslationService } from '../services/translation.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'settings',
@@ -19,6 +20,7 @@ export class SettingsComponent {
   dataService = inject(DataService);
   uiService = inject(UiService);
   translationService = inject(TranslationService);
+  toastService = inject(ToastService);
   t = this.translationService.translations;
 
   // Confirmation Modals State
@@ -75,10 +77,10 @@ export class SettingsComponent {
           directory: Directory.Documents,
           encoding: Encoding.UTF8,
         });
-        alert(this.translationService.t('backupSavedSuccess').replace('{{fileName}}', fileName));
+        this.toastService.showSuccess(this.translationService.t('backupSavedSuccess').replace('{{fileName}}', fileName), 10000);
       } catch (e) {
         console.error('Unable to write file', e);
-        alert(this.translationService.t('backupSavedError'));
+        this.toastService.showError(this.translationService.t('backupSavedError'));
       }
     } else {
       // Web fallback
@@ -115,9 +117,9 @@ export class SettingsComponent {
     if (!content) return;
     const success = this.dataService.importData(content);
     if (!success) {
-      alert(this.translationService.t('importFailed'));
+      this.toastService.showError(this.translationService.t('importFailed'));
     } else {
-      alert(this.translationService.t('importSuccess'));
+      this.toastService.showSuccess(this.translationService.t('importSuccess'));
     }
     this.importFileContent.set(null);
   }
@@ -138,7 +140,7 @@ export class SettingsComponent {
   confirmReset() {
     this.dataService.resetToDefaults();
     this.showResetConfirmStep2.set(false);
-    alert(this.translationService.t('appResetSuccess'));
+    this.toastService.showSuccess(this.translationService.t('appResetSuccess'));
   }
 
   cancelReset() {
