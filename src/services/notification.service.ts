@@ -14,6 +14,9 @@ export class NotificationService {
     private dataService = inject(DataService);
     private translationService = inject(TranslationService);
     private toastService = inject(ToastService);
+    
+    // Hält die IDs der `setTimeout`-Aufrufe für die Web-Implementierung
+    private webTimeoutIds: number[] = [];
 
     constructor() {
         // Dieser `effect` wird immer dann ausgeführt, wenn sich die Erinnerungen im DataService ändern.
@@ -27,21 +30,48 @@ export class NotificationService {
 
     /**
      * Fordert die Berechtigung zum Senden von Benachrichtigungen an.
+     * Funktioniert sowohl für native Plattformen (Capacitor) als auch für den Webbrowser.
      * @returns `true`, wenn die Berechtigung erteilt wurde, andernfalls `false`.
      */
     async requestPermissions(): Promise<boolean> {
-        if (!Capacitor.isNativePlatform()) return true; // Im Web immer "erfolgreich"
-
-        let status = await LocalNotifications.checkPermissions();
-        if (status.display === 'granted') {
+        if (Capacitor.isNativePlatform()) {
+            let status = await LocalNotifications.checkPermissions();
+            if (status.display === 'granted') {
+                return true;
+            }
+            status = await LocalNotifications.requestPermissions();
+            if (status.display === 'denied') {
+                this.toastService.showError(this.translationService.t('notificationPermissionDenied'));
+                return false;
+            }
+            return status.display === 'granted';
+        } else {
+            // Web Notifications API Implementierung
+            if (typeof Notification === 'undefined') {
+                console.error('Web Notifications API not supported in this browser.');
+                return false;
+            }
+            if (Notification.permission === 'granted') {
+                return true;
+            }
+            const permission = await Notification.requestPermission();
+            if (permission !== 'granted') {
+                this.toastService.showError(this.translationService.t('notificationPermissionDenied'));
+                return false;
+            }
             return true;
         }
-        status = await LocalNotifications.requestPermissions();
-        if (status.display === 'denied') {
-            this.toastService.showError(this.translationService.t('notificationPermissionDenied'));
-            return false;
-        }
-        return true;
+    }
+    
+    /**
+     * Zeigt eine Web-Benachrichtigung an.
+     */
+    private showWebNotification(): void {
+        const t = this.translationService.translations();
+        new Notification(t.notificationTitle, {
+            body: t.notificationBody,
+            icon: 'icon.svg'
+        });
     }
 
     /**
@@ -50,58 +80,87 @@ export class NotificationService {
      * basierend auf den aktuellen Daten geplant.
      */
     async syncNotifications(): Promise<void> {
-        if (!Capacitor.isNativePlatform()) return;
+        if (Capacitor.isNativePlatform()) {
+            // --- Native Implementierung ---
+            const reminders = this.dataService.reminders();
+            const t = this.translationService.translations();
+            const status = await LocalNotifications.checkPermissions();
 
-        const reminders = this.dataService.reminders();
-        const t = this.translationService.translations();
-        const status = await LocalNotifications.checkPermissions();
-
-        // Wenn keine Berechtigung vorliegt, brechen wir ab. Wir fragen hier nicht erneut,
-        // da dies nur als Reaktion auf eine Datenänderung im Hintergrund geschieht.
-        if (status.display !== 'granted') {
-            console.log('Notification permission not granted. Skipping sync.');
-            return;
-        }
-
-        try {
-            // Alle zuvor geplanten Benachrichtigungen löschen, um Duplikate zu vermeiden
-            const pending = await LocalNotifications.getPending();
-            if (pending.notifications.length > 0) {
-                await LocalNotifications.cancel(pending);
+            if (status.display !== 'granted') {
+                console.log('Notification permission not granted. Skipping sync.');
+                return;
             }
 
-            if (reminders.length === 0) return;
+            try {
+                const pending = await LocalNotifications.getPending();
+                if (pending.notifications.length > 0) {
+                    await LocalNotifications.cancel(pending);
+                }
 
-            // Für jede Erinnerung und jeden ausgewählten Tag eine neue Benachrichtigung planen
-            const notificationsToSchedule = [];
+                if (reminders.length === 0) return;
+
+                const notificationsToSchedule = [];
+                for (const reminder of reminders) {
+                    const [hour, minute] = reminder.time.split(':').map(Number);
+                    for (const day of reminder.days) {
+                        const notificationId = parseInt(reminder.id.substring(0, 6), 36) + day;
+                        notificationsToSchedule.push({
+                            id: notificationId,
+                            title: t.notificationTitle,
+                            body: t.notificationBody,
+                            schedule: { on: { weekday: day, hour, minute }, repeats: true },
+                            smallIcon: 'ic_stat_icon_config_material',
+                            sound: 'default'
+                        });
+                    }
+                }
+                
+                await LocalNotifications.schedule({ notifications: notificationsToSchedule });
+                console.log('Successfully scheduled native notifications:', notificationsToSchedule.length);
+            } catch (error) {
+                console.error('Error syncing native notifications:', error);
+            }
+        } else {
+            // --- Web Implementierung mit setTimeout ---
+            this.webTimeoutIds.forEach(clearTimeout);
+            this.webTimeoutIds = [];
+            
+            if (typeof Notification === 'undefined' || Notification.permission !== 'granted') {
+                console.log('Web notification permission not granted. Skipping web sync.');
+                return;
+            }
+
+            const reminders = this.dataService.reminders();
+            const now = new Date();
+
             for (const reminder of reminders) {
                 const [hour, minute] = reminder.time.split(':').map(Number);
                 for (const day of reminder.days) {
-                    // Erstellt eine eindeutige numerische ID für jede geplante Benachrichtigung
-                    const notificationId = parseInt(reminder.id.substring(0, 6), 36) + day;
-                    notificationsToSchedule.push({
-                        id: notificationId,
-                        title: t.notificationTitle,
-                        body: t.notificationBody,
-                        schedule: {
-                            on: {
-                                weekday: day,
-                                hour: hour,
-                                minute: minute,
-                            },
-                            repeats: true, // Die Benachrichtigung wird wöchentlich wiederholt
-                        },
-                        smallIcon: 'ic_stat_icon_config_material',
-                        sound: 'default'
-                    });
+                    // Capacitor weekday: 1=Sun, ..., 7=Sat | JS Date weekday: 0=Sun, ..., 6=Sat
+                    const jsDay = day - 1; 
+
+                    const nextNotificationDate = new Date(now.getTime());
+                    nextNotificationDate.setHours(hour, minute, 0, 0);
+
+                    let dayDifference = jsDay - now.getDay();
+                    if (dayDifference < 0 || (dayDifference === 0 && nextNotificationDate.getTime() <= now.getTime())) {
+                        dayDifference += 7;
+                    }
+                    
+                    nextNotificationDate.setDate(now.getDate() + dayDifference);
+                    const delay = nextNotificationDate.getTime() - now.getTime();
+                    
+                    if (delay > 0) {
+                        const timeoutId = setTimeout(() => {
+                            this.showWebNotification();
+                            // Nach kurzer Verzögerung neu synchronisieren, um die nächste Benachrichtigung zu planen.
+                            setTimeout(() => this.syncNotifications(), 1000);
+                        }, delay);
+                        this.webTimeoutIds.push(timeoutId as any);
+                    }
                 }
             }
-            
-            await LocalNotifications.schedule({ notifications: notificationsToSchedule });
-            console.log('Successfully scheduled notifications:', notificationsToSchedule.length);
-
-        } catch (error) {
-            console.error('Error syncing notifications:', error);
+            console.log(`Scheduled ${this.webTimeoutIds.length} web notifications.`);
         }
     }
 }
