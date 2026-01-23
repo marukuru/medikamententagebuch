@@ -1,52 +1,56 @@
-<div class="min-h-screen w-full flex flex-col" (click)="closeMenu()">
-  <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-30 shadow-md border-b border-slate-200 dark:border-slate-700 pt-[env(safe-area-inset-top,0rem)]">
-    <div class="max-w-7xl mx-auto pl-[calc(1rem+env(safe-area-inset-left,0rem))] pr-[calc(1rem+env(safe-area-inset-right,0rem))] sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <div class="flex items-center">
-          <span class="text-2xl mr-2">💊</span>
-          <span class="font-bold text-xl text-primary-600 dark:text-primary-400">{{ t().appName }}</span>
-        </div>
-        <div class="flex items-center">
-            <!-- Kebab Menu -->
-            <div class="relative">
-                <button (click)="$event.stopPropagation(); toggleMenu()" class="text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400">
-                    <i class="fas fa-ellipsis-v text-xl"></i>
-                </button>
-                @if (menuOpen()) {
-                    <div class="absolute right-0 mt-2 w-56 origin-top-right bg-white dark:bg-slate-800 divide-y divide-slate-100 dark:divide-slate-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" (click)="$event.stopPropagation()">
-                        <div class="py-1">
-                            <a (click)="navigate('diary')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover-bg-slate-700">
-                                <span class="w-6 text-center">💊</span> {{ t().diary }}
-                            </a>
-                             <a (click)="navigate('stats')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover-bg-slate-700">
-                                <span class="w-6 text-center">📊</span> {{ t().statistics }}
-                            </a>
-                             <a (click)="navigate('settings')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover-bg-slate-700">
-                                <span class="w-6 text-center">⚙️</span> {{ t().settings }}
-                            </a>
-                            <a (click)="navigate('info')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover-bg-slate-700">
-                                <span class="w-6 text-center">ℹ️</span> {{ t().info }}
-                            </a>
-                        </div>
-                    </div>
-                }
-            </div>
+@if (lockService.isLocked()) {
+  <lock-screen />
+} @else {
+  <div class="min-h-screen w-full flex flex-col" (click)="closeMenu()">
+    <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-30 shadow-md border-b border-slate-200 dark:border-slate-700 pt-[env(safe-area-inset-top,0rem)]">
+      <div class="max-w-7xl mx-auto pl-[calc(1rem+env(safe-area-inset-left,0rem))] pr-[calc(1rem+env(safe-area-inset-right,0rem))] sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center">
+            <span class="text-2xl mr-2">💊</span>
+            <span class="font-bold text-xl text-primary-600 dark:text-primary-400">{{ t().appName }}</span>
+          </div>
+          <div class="flex items-center">
+              <!-- Kebab Menu -->
+              <div class="relative">
+                  <button (click)="$event.stopPropagation(); toggleMenu()" class="text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400">
+                      <i class="fas fa-ellipsis-v text-xl"></i>
+                  </button>
+                  @if (menuOpen()) {
+                      <div class="absolute right-0 mt-2 w-56 origin-top-right bg-white dark:bg-slate-800 divide-y divide-slate-100 dark:divide-slate-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" (click)="$event.stopPropagation()">
+                          <div class="py-1">
+                              <a (click)="navigate('diary')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover-bg-slate-700">
+                                  <span class="w-6 text-center">💊</span> {{ t().diary }}
+                              </a>
+                              <a (click)="navigate('stats')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover-bg-slate-700">
+                                  <span class="w-6 text-center">📊</span> {{ t().statistics }}
+                              </a>
+                              <a (click)="navigate('settings')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover-bg-slate-700">
+                                  <span class="w-6 text-center">⚙️</span> {{ t().settings }}
+                              </a>
+                              <a (click)="navigate('info')" class="cursor-pointer flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover-bg-slate-700">
+                                  <span class="w-6 text-center">ℹ️</span> {{ t().info }}
+                              </a>
+                          </div>
+                      </div>
+                  }
+              </div>
+          </div>
         </div>
       </div>
-    </div>
-  </header>
-  <main class="flex-grow pb-[env(safe-area-inset-bottom,0rem)]">
-    @switch (currentPage()) {
-      @case ('diary') { <diary-list /> }
-      @case ('stats') { <statistics /> }
-      @case ('settings') { <settings /> }
-      @case ('info') { <info /> }
-    }
-  </main>
-</div>
+    </header>
+    <main class="flex-grow pb-[env(safe-area-inset-bottom,0rem)]">
+      @switch (currentPage()) {
+        @case ('diary') { <diary-list /> }
+        @case ('stats') { <statistics /> }
+        @case ('settings') { <settings /> }
+        @case ('info') { <info /> }
+      }
+    </main>
+  </div>
+}
 
 <!-- Generic Form Modal -->
-@if(uiService.currentForm(); as form) {
+@if(!lockService.isLocked() && uiService.currentForm(); as form) {
   <div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="uiService.cancelForm()">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
         <h2 class="text-xl md:text-2xl font-bold text-primary-600 dark:text-primary-400 mb-6">{{ form.item ? t().editTitle : t().createTitle }}</h2>

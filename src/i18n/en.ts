@@ -146,6 +146,30 @@ export const LANG_EN = {
     lightTheme: 'Light',
     darkTheme: 'Dark',
 
+    // Security Settings
+    security: 'Security',
+    enableAppLock: 'Enable App Lock',
+    changePin: 'Change PIN',
+    change: 'Change',
+    autoLock: 'Auto-lock',
+    timeoutImmediately: 'Immediately',
+    timeout1Minute: 'After 1 minute',
+    timeout5Minutes: 'After 5 minutes',
+    timeout15Minutes: 'After 15 minutes',
+    createPinTitle: 'Create PIN',
+    changePinTitle: 'Change PIN',
+    pinLabel: '4-digit PIN',
+    pinConfirmLabel: 'Confirm PIN',
+    pinErrorLength: 'PIN must be 4 digits.',
+    pinErrorMismatch: 'PINs do not match.',
+    pinSetSuccess: 'PIN successfully set!',
+
+    // Lock Screen
+    pinPromptTitle: 'App Locked',
+    pinPromptMessage: 'Please enter your PIN',
+    biometricReason: 'Unlock App',
+    biometricError: 'Biometric authentication failed.',
+
     // Duplicate Errors
     duplicateMoodError: 'A mood with this description already exists.',
     duplicateEffectError: 'An effect with this description already exists.',
@@ -169,7 +193,7 @@ export const LANG_EN = {
     { id: '4', emoji: '😌', description: 'Physically relaxing', perception: 'positive' },
     { id: '5', emoji: '🧘', description: 'Mentally relaxing', perception: 'positive' },
     { id: '6', emoji: '🤸', description: 'Invigorating', perception: 'positive' },
-    { id: '7', emoji: '🙂‍↕️', description: 'Calming', perception: 'positive' },
+    { id: '7', emoji: '😌', description: 'Calming', perception: 'positive' },
     { id: '8', emoji: '🫠', description: 'Stoned', perception: 'negative' },
     { id: '9', emoji: '👍', description: 'Motivating', perception: 'positive' },
     { id: '10', emoji: '🤢', description: 'Nauseous', perception: 'negative' },

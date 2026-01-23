@@ -11,6 +11,12 @@ import {
 } from '../models';
 import { TranslationService } from './translation.service';
 
+export interface LockSettings {
+  isEnabled: boolean;
+  pin: string | null;
+  timeout: number; // in milliseconds
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -18,6 +24,7 @@ export class DataService {
   private translationService = inject(TranslationService);
 
   theme = signal<'light' | 'dark'>('light');
+  lockSettings = signal<LockSettings>({ isEnabled: false, pin: null, timeout: 0 });
   moods = signal<Mood[]>([]);
   effects = signal<Effect[]>([]);
   manufacturers = signal<Manufacturer[]>([]);
@@ -79,6 +86,7 @@ export class DataService {
     if (data) {
       const parsedData = JSON.parse(data);
       this.theme.set(parsedData.theme || 'light');
+      this.lockSettings.set(parsedData.lockSettings || { isEnabled: false, pin: null, timeout: 0 });
       this.moods.set(parsedData.moods || this.translationService.defaultMoods());
       this.effects.set(parsedData.effects || this.translationService.defaultEffects());
       this.manufacturers.set(parsedData.manufacturers || []);
@@ -95,6 +103,7 @@ export class DataService {
   private saveToLocalStorage() {
     const data = {
       theme: this.theme(),
+      lockSettings: this.lockSettings(),
       moods: this.moods(),
       effects: this.effects(),
       manufacturers: this.manufacturers(),
@@ -161,9 +170,11 @@ export class DataService {
   
   // Data Export/Import
   exportData(): string {
+    const { pin, ...safeLockSettings } = this.lockSettings(); // Exclude PIN from export
     return JSON.stringify({
       theme: this.theme(),
       language: this.translationService.language(),
+      lockSettings: safeLockSettings,
       moods: this.moods(),
       effects: this.effects(),
       manufacturers: this.manufacturers(),
@@ -181,6 +192,20 @@ export class DataService {
       if (data.language && (data.language === 'en' || data.language === 'de')) {
         this.translationService.setLanguage(data.language);
       }
+      
+      // Safely import lock settings. The lock is only enabled if it was enabled in the backup
+      // AND a PIN already exists on the current device. This prevents lockouts.
+      const importedSettings = data.lockSettings || {};
+      const currentPin = this.lockSettings().pin;
+
+      const shouldBeEnabled = importedSettings.isEnabled === true && !!currentPin;
+
+      this.lockSettings.set({
+        isEnabled: shouldBeEnabled,
+        pin: shouldBeEnabled ? currentPin : null,
+        timeout: importedSettings.timeout ?? 0,
+      });
+
       this.moods.set(data.moods || []);
       this.effects.set(data.effects || []);
       this.manufacturers.set(data.manufacturers || []);
@@ -197,6 +222,7 @@ export class DataService {
 
   resetToDefaults() {
     this.theme.set('light');
+    this.lockSettings.set({ isEnabled: false, pin: null, timeout: 0 });
     this.moods.set(this.translationService.defaultMoods());
     this.effects.set(this.translationService.defaultEffects());
     this.manufacturers.set([]);

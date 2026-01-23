@@ -8,6 +8,7 @@ import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { UiService } from '../services/ui.service';
 import { Language, TranslationService } from '../services/translation.service';
 import { ToastService } from '../services/toast.service';
+import { LockService } from '../services/lock.service';
 
 @Component({
   selector: 'settings',
@@ -21,6 +22,7 @@ export class SettingsComponent {
   uiService = inject(UiService);
   translationService = inject(TranslationService);
   toastService = inject(ToastService);
+  lockService = inject(LockService);
   t = this.translationService.translations;
 
   // Confirmation Modals State
@@ -28,6 +30,23 @@ export class SettingsComponent {
   importFileContent = signal<string | null>(null);
   showResetConfirmStep1 = signal(false);
   showResetConfirmStep2 = signal(false);
+
+  // PIN Modal State
+  showPinModal = signal(false);
+  pinModalMode = signal<'create' | 'change'>('create');
+  pinEntry = signal('');
+  pinConfirm = signal('');
+  pinError = signal<string | null>(null);
+
+  timeoutOptions = computed(() => {
+    const t = this.t();
+    return [
+      { value: 0, label: t.timeoutImmediately },
+      { value: 60000, label: t.timeout1Minute },
+      { value: 300000, label: t.timeout5Minutes },
+      { value: 900000, label: t.timeout15Minutes },
+    ];
+  });
 
   entityConfigs = computed(() => {
     const t = this.t();
@@ -150,5 +169,51 @@ export class SettingsComponent {
 
   setLanguage(lang: Language) {
     this.translationService.setLanguage(lang);
+  }
+
+  // --- Lock Settings ---
+  toggleLock(event: Event) {
+    const enabled = (event.target as HTMLInputElement).checked;
+    if (enabled && !this.dataService.lockSettings().pin) {
+      this.openPinModal('create');
+    } else {
+      this.dataService.lockSettings.update(s => ({ ...s, isEnabled: enabled }));
+    }
+  }
+
+  openPinModal(mode: 'create' | 'change') {
+    this.pinModalMode.set(mode);
+    this.pinEntry.set('');
+    this.pinConfirm.set('');
+    this.pinError.set(null);
+    this.showPinModal.set(true);
+  }
+
+  closePinModal() {
+    this.showPinModal.set(false);
+  }
+
+  savePin() {
+    const pin = this.pinEntry();
+    const confirm = this.pinConfirm();
+    const t = this.t();
+
+    if (pin.length !== 4) {
+      this.pinError.set(t.pinErrorLength);
+      return;
+    }
+    if (pin !== confirm) {
+      this.pinError.set(t.pinErrorMismatch);
+      return;
+    }
+
+    this.dataService.lockSettings.update(s => ({ ...s, pin: pin, isEnabled: true }));
+    this.toastService.showSuccess(t.pinSetSuccess);
+    this.closePinModal();
+  }
+
+  updateTimeout(event: Event) {
+    const timeout = parseInt((event.target as HTMLSelectElement).value, 10);
+    this.dataService.lockSettings.update(s => ({...s, timeout}));
   }
 }

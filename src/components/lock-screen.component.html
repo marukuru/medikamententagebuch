@@ -1,0 +1,61 @@
+<div class="fixed inset-0 bg-slate-100 dark:bg-slate-900 z-[999] flex flex-col justify-center items-center p-8 text-center">
+  <div class="w-full max-w-xs">
+    <img src="icon.svg" class="h-20 w-20 mx-auto mb-6" alt="App Icon">
+    <h1 class="text-xl font-bold text-slate-800 dark:text-slate-200 mb-2">{{ t().pinPromptTitle }}</h1>
+    <p class="text-slate-500 dark:text-slate-400 mb-6">{{ t().pinPromptMessage }}</p>
+
+    <!-- PIN Dots -->
+    <div class="flex justify-center items-center gap-4 h-8 mb-6" [class.animate-shake]="error()">
+      @for(filled of pinDots(); track $index) {
+        <div class="w-4 h-4 rounded-full border-2" 
+             [class.bg-primary-500]="filled"
+             [class.border-primary-500]="filled"
+             [class.bg-transparent]="!filled"
+             [class.border-slate-400]="!filled"
+             [class.dark:border-slate-600]="!filled"
+             [class.border-red-500]="error()"
+             [class.bg-red-500]="error() && filled">
+        </div>
+      }
+    </div>
+
+    <!-- Keypad -->
+    <div class="grid grid-cols-3 gap-4">
+      @for(i of [1, 2, 3, 4, 5, 6, 7, 8, 9]; track i) {
+        <button (click)="onKeyPress(i.toString())" class="aspect-square rounded-full bg-slate-200/80 dark:bg-slate-800/80 text-2xl font-semibold hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+          {{ i }}
+        </button>
+      }
+      
+      <div class="aspect-square flex justify-center items-center">
+        @if (lockService.isBiometricsAvailable()) {
+          <button (click)="onBiometrics()" class="w-full h-full rounded-full flex justify-center items-center text-slate-500 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+            <i class="fa-solid fa-fingerprint text-3xl"></i>
+          </button>
+        }
+      </div>
+
+      <button (click)="onKeyPress('0')" class="aspect-square rounded-full bg-slate-200/80 dark:bg-slate-800/80 text-2xl font-semibold hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+        0
+      </button>
+
+      <div class="aspect-square flex justify-center items-center">
+        <button (click)="onDelete()" class="w-full h-full rounded-full flex justify-center items-center text-slate-500 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+          <i class="fa-solid fa-delete-left text-2xl"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .animate-shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  @keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+  }
+</style>

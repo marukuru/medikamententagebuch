@@ -5,17 +5,19 @@ import { DiaryListComponent } from './components/diary-list.component';
 import { StatisticsComponent } from './components/statistics.component';
 import { SettingsComponent } from './components/settings.component';
 import { InfoComponent } from './components/info.component';
+import { LockScreenComponent } from './components/lock-screen.component';
 import { DataService } from './services/data.service';
 import { UiService } from './services/ui.service';
 import { TranslationService } from './services/translation.service';
 import { ToastComponent } from './components/toast.component';
+import { LockService } from './services/lock.service';
 
 type Page = 'diary' | 'stats' | 'settings' | 'info';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule, DiaryListComponent, StatisticsComponent, SettingsComponent, InfoComponent, ToastComponent],
+  imports: [CommonModule, FormsModule, DiaryListComponent, StatisticsComponent, SettingsComponent, InfoComponent, ToastComponent, LockScreenComponent],
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -23,6 +25,7 @@ export class AppComponent {
   dataService = inject(DataService);
   uiService = inject(UiService);
   translationService = inject(TranslationService);
+  lockService = inject(LockService); // Initialize LockService
   t = this.translationService.translations;
   
   currentPage = signal<Page>('diary');

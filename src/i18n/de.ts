@@ -146,6 +146,30 @@ export const LANG_DE = {
     lightTheme: 'Hell',
     darkTheme: 'Dunkel',
 
+    // Security Settings
+    security: 'Sicherheit',
+    enableAppLock: 'App-Sperre aktivieren',
+    changePin: 'PIN ändern',
+    change: 'Ändern',
+    autoLock: 'Automatisch sperren',
+    timeoutImmediately: 'Sofort',
+    timeout1Minute: 'Nach 1 Minute',
+    timeout5Minutes: 'Nach 5 Minuten',
+    timeout15Minutes: 'Nach 15 Minuten',
+    createPinTitle: 'PIN erstellen',
+    changePinTitle: 'PIN ändern',
+    pinLabel: '4-stellige PIN',
+    pinConfirmLabel: 'PIN bestätigen',
+    pinErrorLength: 'Die PIN muss 4-stellig sein.',
+    pinErrorMismatch: 'Die PINs stimmen nicht überein.',
+    pinSetSuccess: 'PIN erfolgreich festgelegt!',
+    
+    // Lock Screen
+    pinPromptTitle: 'App gesperrt',
+    pinPromptMessage: 'Bitte geben Sie Ihre PIN ein',
+    biometricReason: 'App entsperren',
+    biometricError: 'Biometrische Authentifizierung fehlgeschlagen.',
+
     // Duplicate Errors
     duplicateMoodError: 'Eine Stimmung mit dieser Beschreibung existiert bereits.',
     duplicateEffectError: 'Ein Effekt mit dieser Beschreibung existiert bereits.',
@@ -169,7 +193,7 @@ export const LANG_DE = {
     { id: '4', emoji: '😌', description: 'Körperlich entspannend', perception: 'positive' },
     { id: '5', emoji: '🧘', description: 'Geistig entspannt', perception: 'positive' },
     { id: '6', emoji: '🤸', description: 'Belebend', perception: 'positive' },
-    { id: '7', emoji: '🙂‍↕️', description: 'Beruhigend', perception: 'positive' },
+    { id: '7', emoji: '😌', description: 'Beruhigend', perception: 'positive' },
     { id: '8', emoji: '🫠', description: 'Verballert', perception: 'negative' },
     { id: '9', emoji: '👍', description: 'Motivierend', perception: 'positive' },
     { id: '10', emoji: '🤢', description: 'Unwohl', perception: 'negative' },
