@@ -17,6 +17,7 @@ export class LockService {
   isBiometricsAvailable = signal(false);
   
   private backgroundedAt: number | null = null;
+  private isVerifyingBiometrics = false;
 
   constructor() {
     this.isLocked.set(this.dataService.lockSettings().isEnabled);
@@ -41,6 +42,8 @@ export class LockService {
   }
 
   async handleAppResume(): Promise<void> {
+    if (this.isVerifyingBiometrics) return;
+
     const settings = this.dataService.lockSettings();
     if (!settings.isEnabled || !this.backgroundedAt) return;
     
@@ -73,6 +76,7 @@ export class LockService {
     if (!Capacitor.isNativePlatform() || !this.isBiometricsAvailable()) {
         return false;
     }
+    this.isVerifyingBiometrics = true;
     try {
         await NativeBiometric.verifyIdentity({
             reason: this.translationService.t('biometricReason'),
@@ -85,6 +89,8 @@ export class LockService {
         // The plugin might reject on user cancellation. For now, we show a toast on any failure.
         this.toastService.showError(this.translationService.t('biometricError'));
         return false;
+    } finally {
+        this.isVerifyingBiometrics = false;
     }
   }
 }
