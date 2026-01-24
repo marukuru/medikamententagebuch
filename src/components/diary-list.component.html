@@ -28,13 +28,28 @@
 
       <!-- Filter-Buttons -->
       <div class="flex flex-wrap gap-2">
-        <button (click)="setDateFilter('all')" [class.bg-primary-600]="dateFilter() === 'all'" [class.text-white]="dateFilter() === 'all'" class="px-4 py-1.5 rounded-full text-sm font-medium bg-slate-200 dark:bg-slate-700 hover:bg-primary-500 hover:text-white transition-colors">
+        <button (click)="setDateFilter('all')"
+                [class.bg-primary-600]="dateFilter() === 'all'"
+                [class.text-white]="dateFilter() === 'all'"
+                [class.bg-slate-200]="dateFilter() !== 'all'"
+                [class.dark:bg-slate-700]="dateFilter() !== 'all'"
+                class="px-4 py-1.5 rounded-full text-sm font-medium hover:bg-primary-500 hover:text-white transition-colors">
           {{ t().filterAll }}
         </button>
-        <button (click)="setDateFilter('7d')" [class.bg-primary-600]="dateFilter() === '7d'" [class.text-white]="dateFilter() === '7d'" class="px-4 py-1.5 rounded-full text-sm font-medium bg-slate-200 dark:bg-slate-700 hover:bg-primary-500 hover:text-white transition-colors">
+        <button (click)="setDateFilter('7d')"
+                [class.bg-primary-600]="dateFilter() === '7d'"
+                [class.text-white]="dateFilter() === '7d'"
+                [class.bg-slate-200]="dateFilter() !== '7d'"
+                [class.dark:bg-slate-700]="dateFilter() !== '7d'"
+                class="px-4 py-1.5 rounded-full text-sm font-medium hover:bg-primary-500 hover:text-white transition-colors">
           {{ t().filter7days }}
         </button>
-        <button (click)="setDateFilter('30d')" [class.bg-primary-600]="dateFilter() === '30d'" [class.text-white]="dateFilter() === '30d'" class="px-4 py-1.5 rounded-full text-sm font-medium bg-slate-200 dark:bg-slate-700 hover:bg-primary-500 hover:text-white transition-colors">
+        <button (click)="setDateFilter('30d')"
+                [class.bg-primary-600]="dateFilter() === '30d'"
+                [class.text-white]="dateFilter() === '30d'"
+                [class.bg-slate-200]="dateFilter() !== '30d'"
+                [class.dark:bg-slate-700]="dateFilter() !== '30d'"
+                class="px-4 py-1.5 rounded-full text-sm font-medium hover:bg-primary-500 hover:text-white transition-colors">
           {{ t().filter30days }}
         </button>
       </div>
