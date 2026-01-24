@@ -116,7 +116,7 @@ export const LANG_EN = {
     // Generic CRUD Form
     editTitle: 'Edit',
     createTitle: 'Create',
-    formEmojiPlaceholder: 'Emoji',
+    formEmojiPlaceholder: 'Select emoji...',
     formDescriptionPlaceholder: 'Description',
     formPerceptionLabel: 'Perception',
     formPerceptionNone: '(none)',
@@ -135,6 +135,14 @@ export const LANG_EN = {
     addNewManufacturerTitle: 'Add new manufacturer',
     addNewActiveIngredientTitle: 'Add new active ingredient',
     addNewDosageTitle: 'Add new standard dosage',
+    changeEmoji: 'Change emoji',
+    emojiPickerTitle: 'Select Emoji',
+    emojiCatSmileys: 'Smileys & People',
+    emojiCatAnimals: 'Animals & Nature',
+    emojiCatFood: 'Food & Drink',
+    emojiCatActivities: 'Activities',
+    emojiCatObjects: 'Objects',
+    emojiCatSymbols: 'Symbols',
 
     // Language Settings
     language: 'Language',

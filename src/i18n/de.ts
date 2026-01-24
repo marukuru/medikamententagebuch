@@ -116,7 +116,7 @@ export const LANG_DE = {
     // Generic CRUD Form
     editTitle: 'Bearbeiten',
     createTitle: 'Anlegen',
-    formEmojiPlaceholder: 'Emoji',
+    formEmojiPlaceholder: 'Emoji auswählen...',
     formDescriptionPlaceholder: 'Beschreibung',
     formPerceptionLabel: 'Wahrnehmung',
     formPerceptionNone: '(keine)',
@@ -135,6 +135,14 @@ export const LANG_DE = {
     addNewManufacturerTitle: 'Neuen Hersteller anlegen',
     addNewActiveIngredientTitle: 'Neuen Wirkstoffgehalt anlegen',
     addNewDosageTitle: 'Neue Standard-Dosierung anlegen',
+    changeEmoji: 'Emoji ändern',
+    emojiPickerTitle: 'Emoji auswählen',
+    emojiCatSmileys: 'Smileys & Personen',
+    emojiCatAnimals: 'Tiere & Natur',
+    emojiCatFood: 'Essen & Trinken',
+    emojiCatActivities: 'Aktivitäten',
+    emojiCatObjects: 'Objekte',
+    emojiCatSymbols: 'Symbole',
     
     // Language Settings
     language: 'Sprache',

@@ -15,6 +15,7 @@ import { NotificationService } from './services/notification.service';
 import { Capacitor } from '@capacitor/core';
 import { LocalNotifications, ActionPerformed } from '@capacitor/local-notifications';
 import { Page } from './models';
+import { EmojiPickerComponent } from './components/emoji-picker.component';
 
 /**
  * AppComponent ist die Wurzelkomponente der Anwendung.
@@ -24,7 +25,7 @@ import { Page } from './models';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule, DiaryListComponent, StatisticsComponent, SettingsComponent, InfoComponent, ToastComponent, LockScreenComponent],
+  imports: [CommonModule, FormsModule, DiaryListComponent, StatisticsComponent, SettingsComponent, InfoComponent, ToastComponent, LockScreenComponent, EmojiPickerComponent],
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -41,6 +42,10 @@ export class AppComponent {
   // --- UI-Zustandssignale ---
   currentPage = signal<Page>('diary'); // Die aktuell angezeigte Seite
   menuOpen = signal(false); // Zustand des Kebab-Menüs in der Kopfzeile
+
+  // --- Emoji Picker State ---
+  showEmojiPicker = signal(false);
+  emojiTargetField = signal<'mood' | 'effect' | null>(null);
 
   constructor(
     private renderer: Renderer2, 
@@ -122,5 +127,26 @@ export class AppComponent {
     if (this.menuOpen()) {
         this.menuOpen.set(false);
     }
+  }
+
+  // --- Emoji Picker Methods ---
+  openEmojiPicker(target: 'mood' | 'effect') {
+    this.emojiTargetField.set(target);
+    this.showEmojiPicker.set(true);
+  }
+
+  closeEmojiPicker() {
+    this.showEmojiPicker.set(false);
+    this.emojiTargetField.set(null);
+  }
+
+  onEmojiSelected(emoji: string) {
+    const target = this.emojiTargetField();
+    if (target === 'mood') {
+      this.uiService.moodForm.update(form => ({...form, emoji}));
+    } else if (target === 'effect') {
+      this.uiService.effectForm.update(form => ({...form, emoji}));
+    }
+    this.closeEmojiPicker();
   }
 }

@@ -1,0 +1,27 @@
+<!-- Modal-Hintergrund für den Emoji-Picker -->
+<div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-[60] px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="closePicker()">
+  <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-4 w-full max-w-sm max-h-[80vh] flex flex-col" (click)="$event.stopPropagation()">
+    <!-- Header des Modals -->
+    <div class="flex justify-between items-center mb-4 flex-shrink-0">
+      <h3 class="text-xl font-bold">{{ t().emojiPickerTitle }}</h3>
+      <button (click)="closePicker()" class="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-2xl">&times;</button>
+    </div>
+    <!-- Scrollbarer Container für die Emoji-Liste -->
+    <div class="overflow-y-auto pr-2">
+      @for (category of categories; track category.nameKey) {
+        <section>
+          <!-- Kategorien-Titel -->
+          <h4 class="text-sm font-bold text-slate-500 dark:text-slate-400 my-2 sticky top-0 bg-white dark:bg-slate-800 py-1">{{ getCategoryName(category.nameKey) }}</h4>
+          <!-- Grid-Layout für die Emojis -->
+          <div class="grid grid-cols-8 gap-1">
+            @for (emoji of category.emojis; track emoji) {
+              <button (click)="selectEmoji(emoji)" class="text-2xl rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 aspect-square flex items-center justify-center transition-colors">
+                {{ emoji }}
+              </button>
+            }
+          </div>
+        </section>
+      }
+    </div>
+  </div>
+</div>
