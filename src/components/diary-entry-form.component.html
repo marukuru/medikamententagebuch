@@ -17,7 +17,12 @@
 
       <!-- Sektion: Stimmungsauswahl -->
       <div>
-        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ t().moodLabel }}</label>
+        <div class="flex items-center justify-between mb-1">
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().moodLabel }}</label>
+          <button type="button" (click)="openCreateMoodForm()" [title]="t().addNewMoodTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
+            <i class="fa fa-plus text-xs"></i>
+          </button>
+        </div>
         <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
             @for(mood of dataService.moods(); track mood.id) {
             <label 

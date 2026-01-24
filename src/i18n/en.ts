@@ -116,6 +116,7 @@ export const LANG_EN = {
     addNewSymptomTitle: 'Add new symptom',
     addNewActivityTitle: 'Add new activity',
     addNewEffectTitle: 'Add new effect',
+    addNewMoodTitle: 'Add new mood',
     dosageAmountPlaceholder: 'Amount',
     dosageUnitPlaceholder: 'Unit (e.g. mg)',
     save: 'Save',

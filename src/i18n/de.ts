@@ -117,6 +117,7 @@ export const LANG_DE = {
     addNewSymptomTitle: 'Neues Symptom anlegen',
     addNewActivityTitle: 'Neue Aktivität anlegen',
     addNewEffectTitle: 'Neuen Effekt anlegen',
+    addNewMoodTitle: 'Neue Stimmung anlegen',
     dosageAmountPlaceholder: 'Menge',
     dosageUnitPlaceholder: 'Einheit (z.B. mg)',
     save: 'Speichern',

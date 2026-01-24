@@ -269,6 +269,10 @@ export class DiaryEntryFormComponent {
     this.uiService.openCreateForm('Effect');
   }
 
+  openCreateMoodForm() {
+    this.uiService.openCreateForm('Mood');
+  }
+
   /**
    * Bestätigt das Verwerfen von Änderungen und schließt das Formular.
    */
