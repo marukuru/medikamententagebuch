@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal, effect, Renderer2, Inject, inject, NgZone } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, effect, Renderer2, Inject, inject, NgZone, computed } from '@angular/core';
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DiaryListComponent } from './components/diary-list.component';
@@ -46,6 +46,26 @@ export class AppComponent {
   // --- Emoji Picker State ---
   showEmojiPicker = signal(false);
   emojiTargetField = signal<'mood' | 'effect' | 'symptom' | 'activity' | null>(null);
+
+  /**
+   * Ein Computed Signal, das den Titel und das Emoji der aktuellen Seite zurückgibt.
+   */
+  currentPageInfo = computed(() => {
+    const page = this.currentPage();
+    const t = this.t();
+    switch (page) {
+      case 'diary':
+        return { title: t.diaryListTitle, emoji: '💊' };
+      case 'stats':
+        return { title: t.statisticsTitle, emoji: '📊' };
+      case 'settings':
+        return { title: t.settingsTitle, emoji: '⚙️' };
+      case 'info':
+        return { title: t.info, emoji: 'ℹ️' };
+      default: // Sollte nicht eintreten
+        return { title: t.appName, emoji: '💊' };
+    }
+  });
 
   constructor(
     private renderer: Renderer2, 

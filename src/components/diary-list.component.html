@@ -1,12 +1,6 @@
 <!-- Hauptcontainer für die Tagebuchliste mit Padding -->
 <div class="p-4 md:p-6 relative">
   <div class="max-w-4xl mx-auto">
-    <!-- Seitentitel -->
-    <h1 class="text-2xl md:text-3xl font-bold text-primary-600 dark:text-primary-400 mb-6 flex items-center gap-3">
-      <span class="text-3xl md:text-4xl">💊</span>
-      <span>{{ t().diaryListTitle }}</span>
-    </h1>
-
     <!-- Akkordeon für Suche & Filter -->
     <div class="mb-6">
       <button (click)="toggleFilters()" class="w-full flex justify-between items-center text-left font-semibold text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 py-2 transition-colors">
