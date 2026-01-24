@@ -29,6 +29,7 @@ export class DiaryListComponent {
   showDetail = signal<DiaryEntry | null>(null); // Hält den Eintrag, der in der Detailansicht gezeigt wird
   editingEntry = signal<DiaryEntry | null>(null); // Hält den Eintrag, der gerade bearbeitet wird
   entryToDeleteId = signal<string | null>(null); // Hält die ID des Eintrags, für den die Löschbestätigung angezeigt wird
+  showFilters = signal(false); // Steuert die Sichtbarkeit des Filter-Akkordeons
 
   // --- Suche & Filter ---
   searchTerm = signal(''); // Der aktuelle Suchbegriff
@@ -139,6 +140,10 @@ export class DiaryListComponent {
   }
 
   // --- Aktionsmethoden ---
+  toggleFilters() {
+    this.showFilters.update(v => !v);
+  }
+
   addEntry() {
     this.editingEntry.set(null);
     this.showForm.set(true);

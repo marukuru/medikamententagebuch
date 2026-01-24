@@ -41,6 +41,7 @@ export const LANG_EN = {
     confirmDeleteButton: 'Yes, delete',
     dosageLabelWithData: 'Dosage: {{amount}} {{unit}}',
     // Search and Filter
+    searchAndFilter: 'Search & Filter',
     searchPlaceholder: 'Search by preparation, note, etc...',
     filterAll: 'All',
     filter7days: 'Last 7 days',
