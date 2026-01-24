@@ -1,0 +1,1103 @@
+{
+  "theme": "light",
+  "language": "de",
+  "lockSettings": {
+    "isEnabled": false,
+    "timeout": 0
+  },
+  "moduleSettings": {
+    "showDosage": true,
+    "showSymptoms": true,
+    "showActivities": true,
+    "showEffects": true,
+    "showNote": true
+  },
+  "moods": [
+    { "id": "mood-1", "description": "Lausig", "emoji": "💩" },
+    { "id": "mood-2", "description": "Traurig", "emoji": "😥" },
+    { "id": "mood-3", "description": "Schlecht", "emoji": "🥺" },
+    { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+    { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+    { "id": "mood-6", "description": "Prima", "emoji": "☺️" }
+  ],
+  "effects": [
+    { "id": "eff-1", "description": "Schläfrig", "emoji": "😴", "perception": "positive" },
+    { "id": "eff-2", "description": "Schmerzlindernd", "emoji": "😌", "perception": "positive" },
+    { "id": "eff-3", "description": "Schmerzverstärkend", "emoji": "🤕", "perception": "negative" },
+    { "id": "eff-4", "description": "Körperlich entspannend", "emoji": "😌", "perception": "positive" },
+    { "id": "eff-5", "description": "Geistig entspannt", "emoji": "🧘", "perception": "positive" },
+    { "id": "eff-6", "description": "Belebend", "emoji": "🤸", "perception": "positive" },
+    { "id": "eff-7", "description": "Beruhigend", "emoji": "😌", "perception": "positive" },
+    { "id": "eff-8", "description": "Verballert", "emoji": "🫠", "perception": "negative" },
+    { "id": "eff-9", "description": "Motivierend", "emoji": "👍", "perception": "positive" },
+    { "id": "eff-10", "description": "Unwohl", "emoji": "🤢", "perception": "negative" },
+    { "id": "eff-11", "description": "Ängstlich", "emoji": "😨", "perception": "negative" },
+    { "id": "eff-12", "description": "Fokussierend", "emoji": "🤔", "perception": "positive" },
+    { "id": "eff-13", "description": "Kreativ", "emoji": "🎨", "perception": "positive" }
+  ],
+  "symptoms": [
+    { "id": "symp-1", "description": "Kopfschmerzen", "emoji": "🤯" },
+    { "id": "symp-2", "description": "Übelkeit", "emoji": "🤢" },
+    { "id": "symp-3", "description": "Schwindel", "emoji": "😵" },
+    { "id": "symp-4", "description": "Müdigkeit", "emoji": "🥱" },
+    { "id": "symp-5", "description": "Rückenschmerzen", "emoji": "😫" },
+    { "id": "symp-6", "description": "Nervosität", "emoji": "😬" },
+    { "id": "symp-7", "description": "Appetitlosigkeit", "emoji": "🤐" },
+    { "id": "symp-8", "description": "Gelenkschmerzen", "emoji": "🦴" }
+  ],
+  "activities": [
+    { "id": "act-1", "description": "Arbeit", "emoji": "💼" },
+    { "id": "act-2", "description": "Entspannen", "emoji": "🧘" },
+    { "id": "act-3", "description": "Familie", "emoji": "👨‍👩‍👧‍👦" },
+    { "id": "act-4", "description": "Freunde", "emoji": "👥" },
+    { "id": "act-5", "description": "Sport", "emoji": "🤸" },
+    { "id": "act-6", "description": "Einkaufen", "emoji": "🛒" },
+    { "id": "act-7", "description": "Lesen", "emoji": "📖" }
+  ],
+  "manufacturers": [
+    { "id": "man-1", "name": "Ratiopharm" },
+    { "id": "man-2", "name": "Hexal" },
+    { "id": "man-3", "name": "Bayer" },
+    { "id": "man-4", "name": "Stada" }
+  ],
+  "dosages": [
+    { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+    { "id": "dos-2", "amount": 0.5, "unit": "Tabletten" },
+    { "id": "dos-3", "amount": 20, "unit": "Tropfen" },
+    { "id": "dos-4", "amount": 1, "unit": "Kapsel" }
+  ],
+  "activeIngredients": [
+    { "id": "ai-1", "amount": "400", "unit": "mg" },
+    { "id": "ai-2", "amount": "500", "unit": "mg" },
+    { "id": "ai-3", "amount": "10", "unit": "mg" },
+    { "id": "ai-4", "amount": "50", "unit": "mg" }
+  ],
+  "preparations": [
+    { "id": "prep-1", "name": "Ibuprofen", "manufacturerId": "man-1", "activeIngredientId": "ai-1", "dosageId": "dos-1" },
+    { "id": "prep-2", "name": "Paracetamol", "manufacturerId": "man-2", "activeIngredientId": "ai-2", "dosageId": "dos-1" },
+    { "id": "prep-3", "name": "Aspirin", "manufacturerId": "man-3", "activeIngredientId": "ai-2", "dosageId": "dos-2" },
+    { "id": "prep-4", "name": "Citalopram", "manufacturerId": "man-4", "activeIngredientId": "ai-3", "dosageId": "dos-1" },
+    { "id": "prep-5", "name": "Sertralin", "manufacturerId": "man-1", "activeIngredientId": "ai-4", "dosageId": "dos-4" },
+    { "id": "prep-6", "name": "Novalgin", "manufacturerId": "man-2", "activeIngredientId": "ai-2", "dosageId": "dos-3" }
+  ],
+  "diaryEntries": [
+    {
+      "id": "demo-entry-100",
+      "datetime": "2024-08-25T08:15:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [
+        { "id": "eff-7", "description": "Beruhigend", "emoji": "😌", "perception": "positive" },
+        { "id": "eff-12", "description": "Fokussierend", "emoji": "🤔", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-1"],
+      "note": "Start in den Arbeitstag."
+    },
+    {
+      "id": "demo-entry-99",
+      "datetime": "2024-08-24T18:30:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-1",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [
+        { "id": "eff-2", "description": "Schmerzlindernd", "emoji": "😌", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-1"],
+      "activityIds": ["act-2"],
+      "note": "Leichte Kopfschmerzen nach der Arbeit."
+    },
+    {
+      "id": "demo-entry-98",
+      "datetime": "2024-08-23T22:05:00.000Z",
+      "mood": { "id": "mood-3", "description": "Schlecht", "emoji": "🥺" },
+      "preparationId": "prep-6",
+      "dosage": { "id": "dos-3", "amount": 20, "unit": "Tropfen" },
+      "effects": [
+        { "id": "eff-1", "description": "Schläfrig", "emoji": "😴", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-5", "symp-8"],
+      "activityIds": [],
+      "note": "Starke Gelenkschmerzen, hoffe ich kann schlafen."
+    },
+    {
+      "id": "demo-entry-97",
+      "datetime": "2024-08-22T09:00:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-4"],
+      "note": "Treffen mit Freunden."
+    },
+    {
+      "id": "demo-entry-96",
+      "datetime": "2024-08-21T14:20:00.000Z",
+      "mood": { "id": "mood-2", "description": "Traurig", "emoji": "😥" },
+      "effects": [],
+      "symptomIds": ["symp-4", "symp-7"],
+      "activityIds": ["act-2"]
+    },
+    {
+      "id": "demo-entry-95",
+      "datetime": "2024-08-20T19:45:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-2",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [
+        { "id": "eff-2", "description": "Schmerzlindernd", "emoji": "😌", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-1"],
+      "activityIds": ["act-3"],
+      "note": "Spannungskopfschmerz."
+    },
+    {
+      "id": "demo-entry-94",
+      "datetime": "2024-08-19T08:10:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [
+        { "id": "eff-6", "description": "Belebend", "emoji": "🤸", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-1", "act-5"]
+    },
+    {
+      "id": "demo-entry-93",
+      "datetime": "2024-08-18T16:00:00.000Z",
+      "mood": { "id": "mood-1", "description": "Lausig", "emoji": "💩" },
+      "preparationId": "prep-3",
+      "dosage": { "id": "dos-2", "amount": 0.5, "unit": "Tabletten" },
+      "effects": [
+        { "id": "eff-10", "description": "Unwohl", "emoji": "🤢", "perception": "negative" }
+      ],
+      "symptomIds": ["symp-1", "symp-2"],
+      "activityIds": [],
+      "note": "Migräneanfall."
+    },
+    {
+      "id": "demo-entry-92",
+      "datetime": "2024-08-17T12:30:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-6"]
+    },
+    {
+      "id": "demo-entry-91",
+      "datetime": "2024-08-16T21:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-1",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [
+        { "id": "eff-4", "description": "Körperlich entspannend", "emoji": "😌", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-5"],
+      "activityIds": ["act-2", "act-7"]
+    },
+    {
+      "id": "demo-entry-90",
+      "datetime": "2024-08-15T08:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [
+        { "id": "eff-9", "description": "Motivierend", "emoji": "👍", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-1"],
+      "note": "Motiviert für die Arbeit."
+    },
+    {
+      "id": "demo-entry-89",
+      "datetime": "2024-08-14T15:15:00.000Z",
+      "mood": { "id": "mood-3", "description": "Schlecht", "emoji": "🥺" },
+      "effects": [
+        { "id": "eff-11", "description": "Ängstlich", "emoji": "😨", "perception": "negative" }
+      ],
+      "symptomIds": ["symp-6"],
+      "activityIds": [],
+      "note": "Wichtiger Termin stand an."
+    },
+    {
+      "id": "demo-entry-88",
+      "datetime": "2024-08-13T18:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-2",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-1"],
+      "activityIds": ["act-3"]
+    },
+    {
+      "id": "demo-entry-87",
+      "datetime": "2024-08-12T09:30:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [
+        { "id": "eff-13", "description": "Kreativ", "emoji": "🎨", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-1"],
+      "note": "Guter Flow bei der Arbeit."
+    },
+    {
+      "id": "demo-entry-86",
+      "datetime": "2024-08-11T20:45:00.000Z",
+      "mood": { "id": "mood-2", "description": "Traurig", "emoji": "😥" },
+      "preparationId": "prep-6",
+      "dosage": { "id": "dos-3", "amount": 20, "unit": "Tropfen" },
+      "effects": [
+        { "id": "eff-5", "description": "Geistig entspannt", "emoji": "🧘", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-5"],
+      "activityIds": ["act-2"]
+    },
+    {
+      "id": "demo-entry-85",
+      "datetime": "2024-08-10T11:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-4", "act-5"]
+    },
+    {
+      "id": "demo-entry-84",
+      "datetime": "2024-08-09T17:20:00.000Z",
+      "mood": { "id": "mood-3", "description": "Schlecht", "emoji": "🥺" },
+      "preparationId": "prep-1",
+      "dosage": { "id": "dos-2", "amount": 0.5, "unit": "Tabletten" },
+      "effects": [
+        { "id": "eff-2", "description": "Schmerzlindernd", "emoji": "😌", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-1", "symp-3"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-83",
+      "datetime": "2024-08-08T08:25:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-4"],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-82",
+      "datetime": "2024-08-07T13:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-3"],
+      "note": "Mittagessen mit der Familie."
+    },
+    {
+      "id": "demo-entry-81",
+      "datetime": "2024-08-06T23:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "effects": [
+        { "id": "eff-1", "description": "Schläfrig", "emoji": "😴", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-7"]
+    },
+    {
+      "id": "demo-entry-80",
+      "datetime": "2024-08-05T09:10:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [
+        { "id": "eff-12", "description": "Fokussierend", "emoji": "🤔", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-1"],
+      "note": "Konzentriert bei der Arbeit."
+    },
+    {
+      "id": "demo-entry-79",
+      "datetime": "2024-08-04T19:00:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-2", "act-4"],
+      "note": "Schöner Abend."
+    },
+    {
+      "id": "demo-entry-78",
+      "datetime": "2024-08-03T16:45:00.000Z",
+      "mood": { "id": "mood-1", "description": "Lausig", "emoji": "💩" },
+      "preparationId": "prep-2",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [
+        { "id": "eff-3", "description": "Schmerzverstärkend", "emoji": "🤕", "perception": "negative" }
+      ],
+      "symptomIds": ["symp-1", "symp-2"],
+      "activityIds": [],
+      "note": "Paracetamol hat nicht geholfen."
+    },
+    {
+      "id": "demo-entry-77",
+      "datetime": "2024-08-02T10:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-76",
+      "datetime": "2024-08-01T20:15:00.000Z",
+      "mood": { "id": "mood-3", "description": "Schlecht", "emoji": "🥺" },
+      "preparationId": "prep-1",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [
+        { "id": "eff-2", "description": "Schmerzlindernd", "emoji": "😌", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-8"],
+      "activityIds": ["act-2"]
+    },
+    {
+      "id": "demo-entry-75",
+      "datetime": "2024-07-31T08:05:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"],
+      "note": "Bereit für die Woche."
+    },
+    {
+      "id": "demo-entry-74",
+      "datetime": "2024-07-30T17:30:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-6",
+      "dosage": { "id": "dos-3", "amount": 20, "unit": "Tropfen" },
+      "effects": [
+        { "id": "eff-4", "description": "Körperlich entspannend", "emoji": "😌", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-5"],
+      "activityIds": ["act-2"]
+    },
+    {
+      "id": "demo-entry-73",
+      "datetime": "2024-07-29T14:00:00.000Z",
+      "mood": { "id": "mood-2", "description": "Traurig", "emoji": "😥" },
+      "effects": [],
+      "symptomIds": ["symp-7"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-72",
+      "datetime": "2024-07-28T21:45:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-3", "act-4"]
+    },
+    {
+      "id": "demo-entry-71",
+      "datetime": "2024-07-27T09:45:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [
+        { "id": "eff-6", "description": "Belebend", "emoji": "🤸", "perception": "positive" },
+        { "id": "eff-9", "description": "Motivierend", "emoji": "👍", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-5"],
+      "note": "Morgensport."
+    },
+    {
+      "id": "demo-entry-70",
+      "datetime": "2024-07-26T18:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-3",
+      "dosage": { "id": "dos-2", "amount": 0.5, "unit": "Tabletten" },
+      "effects": [],
+      "symptomIds": ["symp-1"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-69",
+      "datetime": "2024-07-25T12:00:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-3"]
+    },
+    {
+      "id": "demo-entry-68",
+      "datetime": "2024-07-24T08:15:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-67",
+      "datetime": "2024-07-23T22:30:00.000Z",
+      "mood": { "id": "mood-3", "description": "Schlecht", "emoji": "🥺" },
+      "preparationId": "prep-1",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [
+        { "id": "eff-1", "description": "Schläfrig", "emoji": "😴", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-1"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-66",
+      "datetime": "2024-07-22T19:20:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "effects": [],
+      "symptomIds": ["symp-4"],
+      "activityIds": ["act-2"]
+    },
+    {
+      "id": "demo-entry-65",
+      "datetime": "2024-07-21T09:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-6"]
+    },
+    {
+      "id": "demo-entry-64",
+      "datetime": "2024-07-20T15:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-4"]
+    },
+    {
+      "id": "demo-entry-63",
+      "datetime": "2024-07-19T18:30:00.000Z",
+      "mood": { "id": "mood-2", "description": "Traurig", "emoji": "😥" },
+      "preparationId": "prep-2",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-1"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-62",
+      "datetime": "2024-07-18T08:40:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-61",
+      "datetime": "2024-07-17T20:00:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-3", "act-2"],
+      "note": "Entspannter Familienabend."
+    },
+    {
+      "id": "demo-entry-60",
+      "datetime": "2024-07-16T16:10:00.000Z",
+      "mood": { "id": "mood-1", "description": "Lausig", "emoji": "💩" },
+      "preparationId": "prep-6",
+      "dosage": { "id": "dos-3", "amount": 20, "unit": "Tropfen" },
+      "effects": [
+        { "id": "eff-2", "description": "Schmerzlindernd", "emoji": "😌", "perception": "positive" },
+        { "id": "eff-8", "description": "Verballert", "emoji": "🫠", "perception": "negative" }
+      ],
+      "symptomIds": ["symp-5", "symp-8"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-59",
+      "datetime": "2024-07-15T09:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-58",
+      "datetime": "2024-07-14T14:45:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-7"]
+    },
+    {
+      "id": "demo-entry-57",
+      "datetime": "2024-07-13T19:00:00.000Z",
+      "mood": { "id": "mood-3", "description": "Schlecht", "emoji": "🥺" },
+      "preparationId": "prep-1",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-1", "symp-6"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-56",
+      "datetime": "2024-07-12T08:20:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [
+        { "id": "eff-12", "description": "Fokussierend", "emoji": "🤔", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-55",
+      "datetime": "2024-07-11T21:15:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-4"]
+    },
+    {
+      "id": "demo-entry-54",
+      "datetime": "2024-07-10T17:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "effects": [],
+      "symptomIds": ["symp-4"],
+      "activityIds": ["act-2"]
+    },
+    {
+      "id": "demo-entry-53",
+      "datetime": "2024-07-09T09:30:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [
+        { "id": "eff-13", "description": "Kreativ", "emoji": "🎨", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-1"],
+      "note": "Produktiver Vormittag."
+    },
+    {
+      "id": "demo-entry-52",
+      "datetime": "2024-07-08T18:45:00.000Z",
+      "mood": { "id": "mood-2", "description": "Traurig", "emoji": "😥" },
+      "preparationId": "prep-1",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-1"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-51",
+      "datetime": "2024-07-07T13:30:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-3", "act-5"]
+    },
+    {
+      "id": "demo-entry-50",
+      "datetime": "2024-07-06T08:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-49",
+      "datetime": "2024-07-05T20:20:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-2",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-1"],
+      "activityIds": ["act-2"]
+    },
+    {
+      "id": "demo-entry-48",
+      "datetime": "2024-07-04T16:00:00.000Z",
+      "mood": { "id": "mood-3", "description": "Schlecht", "emoji": "🥺" },
+      "effects": [],
+      "symptomIds": ["symp-4", "symp-6"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-47",
+      "datetime": "2024-07-03T09:15:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [
+        { "id": "eff-6", "description": "Belebend", "emoji": "🤸", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-1", "act-4"]
+    },
+    {
+      "id": "demo-entry-46",
+      "datetime": "2024-07-02T22:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-6",
+      "dosage": { "id": "dos-3", "amount": 20, "unit": "Tropfen" },
+      "effects": [
+        { "id": "eff-1", "description": "Schläfrig", "emoji": "😴", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-5"],
+      "activityIds": ["act-7"]
+    },
+    {
+      "id": "demo-entry-45",
+      "datetime": "2024-07-01T11:30:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-6"]
+    },
+    {
+      "id": "demo-entry-44",
+      "datetime": "2024-06-30T19:45:00.000Z",
+      "mood": { "id": "mood-1", "description": "Lausig", "emoji": "💩" },
+      "preparationId": "prep-3",
+      "dosage": { "id": "dos-2", "amount": 0.5, "unit": "Tabletten" },
+      "effects": [
+        { "id": "eff-10", "description": "Unwohl", "emoji": "🤢", "perception": "negative" }
+      ],
+      "symptomIds": ["symp-1", "symp-2", "symp-3"],
+      "activityIds": [],
+      "note": "Sehr starker Migräneanfall."
+    },
+    {
+      "id": "demo-entry-43",
+      "datetime": "2024-06-29T08:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-42",
+      "datetime": "2024-06-28T17:20:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-5"]
+    },
+    {
+      "id": "demo-entry-41",
+      "datetime": "2024-06-27T21:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-1",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-8"],
+      "activityIds": ["act-2"]
+    },
+    {
+      "id": "demo-entry-40",
+      "datetime": "2024-06-26T09:05:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-39",
+      "datetime": "2024-06-25T18:15:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-3", "act-4"],
+      "note": "Grillparty mit Freunden und Familie."
+    },
+    {
+      "id": "demo-entry-38",
+      "datetime": "2024-06-24T15:30:00.000Z",
+      "mood": { "id": "mood-2", "description": "Traurig", "emoji": "😥" },
+      "effects": [
+        { "id": "eff-11", "description": "Ängstlich", "emoji": "😨", "perception": "negative" }
+      ],
+      "symptomIds": ["symp-6"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-37",
+      "datetime": "2024-06-23T10:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-2",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-1"],
+      "activityIds": ["act-7"]
+    },
+    {
+      "id": "demo-entry-36",
+      "datetime": "2024-06-22T08:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [
+        { "id": "eff-7", "description": "Beruhigend", "emoji": "😌", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-35",
+      "datetime": "2024-06-21T21:45:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "effects": [],
+      "symptomIds": ["symp-4"],
+      "activityIds": ["act-2"]
+    },
+    {
+      "id": "demo-entry-34",
+      "datetime": "2024-06-20T17:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-4", "act-5"]
+    },
+    {
+      "id": "demo-entry-33",
+      "datetime": "2024-06-19T12:30:00.000Z",
+      "mood": { "id": "mood-3", "description": "Schlecht", "emoji": "🥺" },
+      "preparationId": "prep-1",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-1"],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-32",
+      "datetime": "2024-06-18T09:00:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-31",
+      "datetime": "2024-06-17T20:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-3"]
+    },
+    {
+      "id": "demo-entry-30",
+      "datetime": "2024-06-16T18:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-3",
+      "dosage": { "id": "dos-2", "amount": 0.5, "unit": "Tabletten" },
+      "effects": [
+        { "id": "eff-2", "description": "Schmerzlindernd", "emoji": "😌", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-1"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-29",
+      "datetime": "2024-06-15T08:10:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-4"],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-28",
+      "datetime": "2024-06-14T22:10:00.000Z",
+      "mood": { "id": "mood-1", "description": "Lausig", "emoji": "💩" },
+      "preparationId": "prep-6",
+      "dosage": { "id": "dos-3", "amount": 20, "unit": "Tropfen" },
+      "effects": [
+        { "id": "eff-1", "description": "Schläfrig", "emoji": "😴", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-5"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-27",
+      "datetime": "2024-06-13T14:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-6", "act-7"]
+    },
+    {
+      "id": "demo-entry-26",
+      "datetime": "2024-06-12T09:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-25",
+      "datetime": "2024-06-11T19:30:00.000Z",
+      "mood": { "id": "mood-2", "description": "Traurig", "emoji": "😥" },
+      "effects": [],
+      "symptomIds": ["symp-7"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-24",
+      "datetime": "2024-06-10T16:20:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-1",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-8"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-23",
+      "datetime": "2024-06-09T08:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-22",
+      "datetime": "2024-06-08T20:50:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-3"],
+      "note": "Wochenende!"
+    },
+    {
+      "id": "demo-entry-21",
+      "datetime": "2024-06-07T18:00:00.000Z",
+      "mood": { "id": "mood-3", "description": "Schlecht", "emoji": "🥺" },
+      "preparationId": "prep-2",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-1"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-20",
+      "datetime": "2024-06-06T09:20:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [
+        { "id": "eff-12", "description": "Fokussierend", "emoji": "🤔", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-19",
+      "datetime": "2024-06-05T14:10:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-2"]
+    },
+    {
+      "id": "demo-entry-18",
+      "datetime": "2024-06-04T21:30:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "effects": [],
+      "symptomIds": ["symp-4"],
+      "activityIds": ["act-7"]
+    },
+    {
+      "id": "demo-entry-17",
+      "datetime": "2024-06-03T08:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-16",
+      "datetime": "2024-06-02T19:00:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-4"]
+    },
+    {
+      "id": "demo-entry-15",
+      "datetime": "2024-06-01T15:00:00.000Z",
+      "mood": { "id": "mood-1", "description": "Lausig", "emoji": "💩" },
+      "preparationId": "prep-1",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-1", "symp-2"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-14",
+      "datetime": "2024-05-31T09:00:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"],
+      "note": "Letzter Arbeitstag der Woche!"
+    },
+    {
+      "id": "demo-entry-13",
+      "datetime": "2024-05-30T18:45:00.000Z",
+      "mood": { "id": "mood-3", "description": "Schlecht", "emoji": "🥺" },
+      "preparationId": "prep-6",
+      "dosage": { "id": "dos-3", "amount": 20, "unit": "Tropfen" },
+      "effects": [
+        { "id": "eff-2", "description": "Schmerzlindernd", "emoji": "😌", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-5"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-12",
+      "datetime": "2024-05-29T13:15:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-6"]
+    },
+    {
+      "id": "demo-entry-11",
+      "datetime": "2024-05-28T08:20:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-10",
+      "datetime": "2024-05-27T20:30:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-2", "act-3"]
+    },
+    {
+      "id": "demo-entry-9",
+      "datetime": "2024-05-26T16:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-2",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": ["symp-1"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-8",
+      "datetime": "2024-05-25T10:00:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-5"]
+    },
+    {
+      "id": "demo-entry-7",
+      "datetime": "2024-05-24T18:00:00.000Z",
+      "mood": { "id": "mood-2", "description": "Traurig", "emoji": "😥" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-6",
+      "datetime": "2024-05-23T08:10:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "preparationId": "prep-4",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-5",
+      "datetime": "2024-05-22T21:00:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "preparationId": "prep-1",
+      "dosage": { "id": "dos-1", "amount": 1, "unit": "Tablette" },
+      "effects": [
+        { "id": "eff-2", "description": "Schmerzlindernd", "emoji": "😌", "perception": "positive" }
+      ],
+      "symptomIds": ["symp-8"],
+      "activityIds": ["act-7"]
+    },
+    {
+      "id": "demo-entry-4",
+      "datetime": "2024-05-21T17:30:00.000Z",
+      "mood": { "id": "mood-4", "description": "Okay", "emoji": "😐" },
+      "effects": [],
+      "symptomIds": ["symp-4"],
+      "activityIds": []
+    },
+    {
+      "id": "demo-entry-3",
+      "datetime": "2024-05-20T09:00:00.000Z",
+      "mood": { "id": "mood-6", "description": "Prima", "emoji": "☺️" },
+      "preparationId": "prep-5",
+      "dosage": { "id": "dos-4", "amount": 1, "unit": "Kapsel" },
+      "effects": [
+        { "id": "eff-9", "description": "Motivierend", "emoji": "👍", "perception": "positive" }
+      ],
+      "symptomIds": [],
+      "activityIds": ["act-1"]
+    },
+    {
+      "id": "demo-entry-2",
+      "datetime": "2024-05-19T19:15:00.000Z",
+      "mood": { "id": "mood-3", "description": "Schlecht", "emoji": "🥺" },
+      "effects": [],
+      "symptomIds": ["symp-6"],
+      "activityIds": ["act-3"]
+    },
+    {
+      "id": "demo-entry-1",
+      "datetime": "2024-05-18T14:45:00.000Z",
+      "mood": { "id": "mood-5", "description": "Gut", "emoji": "🙂" },
+      "effects": [],
+      "symptomIds": [],
+      "activityIds": ["act-4"]
+    }
+  ],
+  "reminders": [],
+  "customEmojis": []
+}
