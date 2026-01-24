@@ -8,8 +8,13 @@ import '@angular/compiler';
 
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideZoneChangeDetection } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
 
 import { AppComponent } from './app.component';
+
+// Registriert die deutschen Lokalisierungsdaten, damit die DatePipe sie verwenden kann.
+registerLocaleData(localeDe);
 
 // `bootstrapApplication` startet die Angular-Anwendung.
 // Es nimmt die Wurzelkomponente (AppComponent) als Argument.

@@ -180,7 +180,7 @@
       </div>
 
       <div class="space-y-4">
-        <p><strong>{{ t().date }}:</strong> {{ entry.datetime | date:'fullDate' }} {{ t().atTime }} {{ entry.datetime | date:'shortTime' }}</p>
+        <p><strong>{{ t().date }}:</strong> {{ entry.datetime | date:'fullDate':undefined:translationService.language() }} {{ t().atTime }} {{ entry.datetime | date:'shortTime':undefined:translationService.language() }}</p>
         <div class="flex items-center gap-3">
           <strong>{{ t().mood }}:</strong> 
           <span class="text-2xl">{{ entry.mood.emoji }}</span>
