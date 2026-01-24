@@ -67,11 +67,11 @@
         <!-- Der Inhalt des Formulars wird dynamisch basierend auf dem `form.type` gerendert -->
         @switch(form.type) {
             @case('Mood') {
-                <input type="text" [(ngModel)]="uiService.moodForm().emoji" name="emoji" [placeholder]="t().formEmojiPlaceholder" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                <input type="text" [(ngModel)]="uiService.moodForm().emoji" name="emoji" [placeholder]="t().formEmojiPlaceholder" required maxlength="1" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
                 <input type="text" [(ngModel)]="uiService.moodForm().description" name="description" [placeholder]="t().formDescriptionPlaceholder" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
             }
             @case('Effect') {
-                <input type="text" [(ngModel)]="uiService.effectForm().emoji" name="emoji" [placeholder]="t().formEmojiPlaceholder" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                <input type="text" [(ngModel)]="uiService.effectForm().emoji" name="emoji" [placeholder]="t().formEmojiPlaceholder" required maxlength="1" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
                 <input type="text" [(ngModel)]="uiService.effectForm().description" name="description" [placeholder]="t().formDescriptionPlaceholder" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
                 <label class="block">
                   <span class="text-sm mb-1 inline-block">{{ t().formPerceptionLabel }}</span>
