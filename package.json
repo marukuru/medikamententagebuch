@@ -19,8 +19,7 @@
     "@capacitor/filesystem": "^8.0.0",
     "@capacitor/local-notifications": "^6.0.0",
     "capacitor-native-biometric": "^4.2.2",
-    "tailwindcss": "latest",
-    "zone.js": "^0.16.0"
+    "tailwindcss": "latest"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^21.1.0",

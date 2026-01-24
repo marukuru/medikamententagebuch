@@ -1,13 +1,12 @@
 // --- App-Einstiegspunkt ---
 
-// zone.js wird für die automatische Change Detection von Angular benötigt.
-import 'zone.js';
 // Der Angular-Compiler wird für das Just-in-Time (JIT) Kompilieren benötigt,
 // was in dieser Konfiguration im Browser geschieht.
 import '@angular/compiler';
 
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideZoneChangeDetection } from '@angular/core';
+// FIX: Replaced deprecated `provideExperimentalZonelessChangeDetection` with `provideZonelessChangeDetection`.
+import { provideZonelessChangeDetection } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 
@@ -21,8 +20,8 @@ registerLocaleData(localeDe);
 bootstrapApplication(AppComponent, {
   // `providers` konfiguriert die Dependency Injection für die Anwendung.
   providers: [
-    // `provideZoneChangeDetection` aktiviert die standardmäßige, auf zone.js basierende
+    // `provideZonelessChangeDetection` aktiviert die neue, zoneless
     // Change Detection Strategie von Angular.
-    provideZoneChangeDetection(),
+    provideZonelessChangeDetection(),
   ],
 }).catch((err) => console.error(err)); // Fehler beim Starten der App werden in der Konsole ausgegeben.
