@@ -265,6 +265,10 @@ export class DiaryEntryFormComponent {
     this.uiService.openCreateForm('Activity');
   }
 
+  openCreateEffectForm() {
+    this.uiService.openCreateForm('Effect');
+  }
+
   /**
    * Bestätigt das Verwerfen von Änderungen und schließt das Formular.
    */

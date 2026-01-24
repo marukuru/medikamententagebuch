@@ -115,6 +115,7 @@ export const LANG_EN = {
     addNewPreparationTitle: 'Add new preparation',
     addNewSymptomTitle: 'Add new symptom',
     addNewActivityTitle: 'Add new activity',
+    addNewEffectTitle: 'Add new effect',
     dosageAmountPlaceholder: 'Amount',
     dosageUnitPlaceholder: 'Unit (e.g. mg)',
     save: 'Save',

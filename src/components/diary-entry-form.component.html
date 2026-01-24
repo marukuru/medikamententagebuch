@@ -90,7 +90,12 @@
       
       <!-- Sektion: Effekte (Mehrfachauswahl) -->
       <div>
-        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ t().effectsLabel }}</label>
+        <div class="flex items-center justify-between mb-1">
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().effectsLabel }}</label>
+          <button type="button" (click)="openCreateEffectForm()" [title]="t().addNewEffectTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
+            <i class="fa fa-plus text-xs"></i>
+          </button>
+        </div>
         <div class="flex flex-wrap gap-2">
           @for(effect of dataService.effects(); track effect.id) {
             <button type="button" 
