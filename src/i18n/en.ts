@@ -167,6 +167,14 @@ export const LANG_EN = {
     german: 'German',
     english: 'English',
 
+    // Module Settings
+    settingsModulesTitle: 'Modules',
+    moduleDosage: 'Dosage',
+    moduleSymptoms: 'Symptoms',
+    moduleActivities: 'Activities',
+    moduleEffects: 'Effects',
+    moduleNote: 'Note',
+
     // Design Settings
     design: 'Appearance',
     lightTheme: 'Light',

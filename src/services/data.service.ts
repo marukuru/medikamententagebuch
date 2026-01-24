@@ -24,6 +24,17 @@ export interface LockSettings {
 }
 
 /**
+ * Definiert die Struktur für die Einstellungen der sichtbaren Module.
+ */
+export interface ModuleSettings {
+  showDosage: boolean;
+  showSymptoms: boolean;
+  showActivities: boolean;
+  showEffects: boolean;
+  showNote: boolean;
+}
+
+/**
  * Der DataService ist der zentrale "Single Source of Truth" für alle Anwendungsdaten.
  * Er verwaltet den Zustand mithilfe von Angular Signals und kümmert sich um die
  * Persistenz der Daten im Local Storage.
@@ -38,6 +49,13 @@ export class DataService {
   // Jeder Teil des Anwendungszustands wird in einem eigenen Signal gehalten.
   theme = signal<'light' | 'dark'>('light');
   lockSettings = signal<LockSettings>({ isEnabled: false, pin: null, timeout: 0 });
+  moduleSettings = signal<ModuleSettings>({
+    showDosage: true,
+    showSymptoms: true,
+    showActivities: true,
+    showEffects: true,
+    showNote: true,
+  });
   moods = signal<Mood[]>([]);
   effects = signal<Effect[]>([]);
   symptoms = signal<Symptom[]>([]);
@@ -129,6 +147,7 @@ export class DataService {
       const parsedData = JSON.parse(data);
       this.theme.set(parsedData.theme || 'light');
       this.lockSettings.set(parsedData.lockSettings || { isEnabled: false, pin: null, timeout: 0 });
+      this.moduleSettings.set(parsedData.moduleSettings || { showDosage: true, showSymptoms: true, showActivities: true, showEffects: true, showNote: true });
       this.moods.set(parsedData.moods || this.translationService.defaultMoods());
       this.effects.set(parsedData.effects || this.translationService.defaultEffects());
       this.symptoms.set(parsedData.symptoms || this.translationService.defaultSymptoms());
@@ -156,6 +175,7 @@ export class DataService {
     const data = {
       theme: this.theme(),
       lockSettings: this.lockSettings(),
+      moduleSettings: this.moduleSettings(),
       moods: this.moods(),
       effects: this.effects(),
       symptoms: this.symptoms(),
@@ -279,6 +299,7 @@ export class DataService {
       theme: this.theme(),
       language: this.translationService.language(),
       lockSettings: safeLockSettings,
+      moduleSettings: this.moduleSettings(),
       moods: this.moods(),
       effects: this.effects(),
       symptoms: this.symptoms(),
@@ -321,6 +342,7 @@ export class DataService {
         timeout: importedSettings.timeout ?? 0,
       });
 
+      this.moduleSettings.set(data.moduleSettings || { showDosage: true, showSymptoms: true, showActivities: true, showEffects: true, showNote: true });
       this.moods.set(data.moods || []);
       this.effects.set(data.effects || []);
       this.symptoms.set(data.symptoms || []);
@@ -345,6 +367,7 @@ export class DataService {
   resetToDefaults() {
     this.theme.set('light');
     this.lockSettings.set({ isEnabled: false, pin: null, timeout: 0 });
+    this.moduleSettings.set({ showDosage: true, showSymptoms: true, showActivities: true, showEffects: true, showNote: true });
     this.moods.set(this.translationService.defaultMoods());
     this.effects.set(this.translationService.defaultEffects());
     this.symptoms.set(this.translationService.defaultSymptoms());

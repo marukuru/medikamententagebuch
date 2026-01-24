@@ -42,28 +42,30 @@
       </div>
 
       <!-- Sektion: Symptome (Mehrfachauswahl) -->
-      <div>
-        <div class="flex items-center justify-between mb-1">
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().symptomsLabel }}</label>
-          <button type="button" (click)="openCreateSymptomForm()" [title]="t().addNewSymptomTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
-            <i class="fa fa-plus text-xs"></i>
-          </button>
-        </div>
-        <div class="flex flex-wrap gap-2">
-          @for(symptom of dataService.symptoms(); track symptom.id) {
-            <button type="button" 
-                    (click)="toggleSymptom(symptom.id)"
-                    [class.bg-primary-500]="isSymptomSelected(symptom.id)"
-                    [class.text-white]="isSymptomSelected(symptom.id)"
-                    [class.bg-slate-100]="!isSymptomSelected(symptom.id)"
-                    [class.dark:bg-slate-700]="!isSymptomSelected(symptom.id)"
-                    class="px-3 py-1 rounded-full text-sm flex items-center gap-2 transition-colors">
-              <span>{{symptom.emoji}}</span>
-              <span>{{symptom.description}}</span>
+      @if (dataService.moduleSettings().showSymptoms) {
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().symptomsLabel }}</label>
+            <button type="button" (click)="openCreateSymptomForm()" [title]="t().addNewSymptomTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
+              <i class="fa fa-plus text-xs"></i>
             </button>
-          }
+          </div>
+          <div class="flex flex-wrap gap-2">
+            @for(symptom of dataService.symptoms(); track symptom.id) {
+              <button type="button" 
+                      (click)="toggleSymptom(symptom.id)"
+                      [class.bg-primary-500]="isSymptomSelected(symptom.id)"
+                      [class.text-white]="isSymptomSelected(symptom.id)"
+                      [class.bg-slate-100]="!isSymptomSelected(symptom.id)"
+                      [class.dark:bg-slate-700]="!isSymptomSelected(symptom.id)"
+                      class="px-3 py-1 rounded-full text-sm flex items-center gap-2 transition-colors">
+                <span>{{symptom.emoji}}</span>
+                <span>{{symptom.description}}</span>
+              </button>
+            }
+          </div>
         </div>
-      </div>
+      }
 
       <!-- Sektion: Präparat-Auswahl -->
       <div>
@@ -85,67 +87,75 @@
       </div>
       
       <!-- Sektion: Dosierung -->
-      <div>
-        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ t().dosageLabel }}</label>
-        <div class="flex gap-2">
-            <input type="number" step="any" name="dosageAmount" [(ngModel)]="formDosageAmount" (input)="fieldChanged()" [placeholder]="t().dosageAmountPlaceholder" class="block w-2/3 pl-3 pr-2 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
-            <input type="text" name="dosageUnit" [(ngModel)]="formDosageUnit" (input)="fieldChanged()" [placeholder]="t().dosageUnitPlaceholder" class="block w-1/3 pl-3 pr-2 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
+      @if (dataService.moduleSettings().showDosage) {
+        <div>
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ t().dosageLabel }}</label>
+          <div class="flex gap-2">
+              <input type="number" step="any" name="dosageAmount" [(ngModel)]="formDosageAmount" (input)="fieldChanged()" [placeholder]="t().dosageAmountPlaceholder" class="block w-2/3 pl-3 pr-2 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
+              <input type="text" name="dosageUnit" [(ngModel)]="formDosageUnit" (input)="fieldChanged()" [placeholder]="t().dosageUnitPlaceholder" class="block w-1/3 pl-3 pr-2 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
+          </div>
         </div>
-      </div>
+      }
       
       <!-- Sektion: Effekte (Mehrfachauswahl) -->
-      <div>
-        <div class="flex items-center justify-between mb-1">
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().effectsLabel }}</label>
-          <button type="button" (click)="openCreateEffectForm()" [title]="t().addNewEffectTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
-            <i class="fa fa-plus text-xs"></i>
-          </button>
-        </div>
-        <div class="flex flex-wrap gap-2">
-          @for(effect of dataService.effects(); track effect.id) {
-            <button type="button" 
-                    (click)="toggleEffect(effect.id)"
-                    [class.bg-primary-500]="isEffectSelected(effect.id)"
-                    [class.text-white]="isEffectSelected(effect.id)"
-                    [class.bg-slate-100]="!isEffectSelected(effect.id)"
-                    [class.dark:bg-slate-700]="!isEffectSelected(effect.id)"
-                    class="px-3 py-1 rounded-full text-sm flex items-center gap-2 transition-colors">
-              <span>{{effect.emoji}}</span>
-              <span>{{effect.description}}</span>
+      @if (dataService.moduleSettings().showEffects) {
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().effectsLabel }}</label>
+            <button type="button" (click)="openCreateEffectForm()" [title]="t().addNewEffectTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
+              <i class="fa fa-plus text-xs"></i>
             </button>
-          }
+          </div>
+          <div class="flex flex-wrap gap-2">
+            @for(effect of dataService.effects(); track effect.id) {
+              <button type="button" 
+                      (click)="toggleEffect(effect.id)"
+                      [class.bg-primary-500]="isEffectSelected(effect.id)"
+                      [class.text-white]="isEffectSelected(effect.id)"
+                      [class.bg-slate-100]="!isEffectSelected(effect.id)"
+                      [class.dark:bg-slate-700]="!isEffectSelected(effect.id)"
+                      class="px-3 py-1 rounded-full text-sm flex items-center gap-2 transition-colors">
+                <span>{{effect.emoji}}</span>
+                <span>{{effect.description}}</span>
+              </button>
+            }
+          </div>
         </div>
-      </div>
+      }
 
       <!-- Sektion: Aktivitäten (Mehrfachauswahl) -->
-      <div>
-        <div class="flex items-center justify-between mb-1">
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().activitiesLabel }}</label>
-           <button type="button" (click)="openCreateActivityForm()" [title]="t().addNewActivityTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
-            <i class="fa fa-plus text-xs"></i>
-          </button>
-        </div>
-        <div class="flex flex-wrap gap-2">
-          @for(activity of dataService.activities(); track activity.id) {
-            <button type="button" 
-                    (click)="toggleActivity(activity.id)"
-                    [class.bg-primary-500]="isActivitySelected(activity.id)"
-                    [class.text-white]="isActivitySelected(activity.id)"
-                    [class.bg-slate-100]="!isActivitySelected(activity.id)"
-                    [class.dark:bg-slate-700]="!isActivitySelected(activity.id)"
-                    class="px-3 py-1 rounded-full text-sm flex items-center gap-2 transition-colors">
-              <span>{{activity.emoji}}</span>
-              <span>{{activity.description}}</span>
+      @if (dataService.moduleSettings().showActivities) {
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().activitiesLabel }}</label>
+            <button type="button" (click)="openCreateActivityForm()" [title]="t().addNewActivityTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
+              <i class="fa fa-plus text-xs"></i>
             </button>
-          }
+          </div>
+          <div class="flex flex-wrap gap-2">
+            @for(activity of dataService.activities(); track activity.id) {
+              <button type="button" 
+                      (click)="toggleActivity(activity.id)"
+                      [class.bg-primary-500]="isActivitySelected(activity.id)"
+                      [class.text-white]="isActivitySelected(activity.id)"
+                      [class.bg-slate-100]="!isActivitySelected(activity.id)"
+                      [class.dark:bg-slate-700]="!isActivitySelected(activity.id)"
+                      class="px-3 py-1 rounded-full text-sm flex items-center gap-2 transition-colors">
+                <span>{{activity.emoji}}</span>
+                <span>{{activity.description}}</span>
+              </button>
+            }
+          </div>
         </div>
-      </div>
+      }
       
       <!-- Sektion: Notiz -->
-       <div>
-        <label for="note" class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().noteLabel }}</label>
-        <input type="text" id="note" name="note" [(ngModel)]="formNote" (input)="fieldChanged()" maxlength="160" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
-      </div>
+       @if (dataService.moduleSettings().showNote) {
+        <div>
+          <label for="note" class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().noteLabel }}</label>
+          <input type="text" id="note" name="note" [(ngModel)]="formNote" (input)="fieldChanged()" maxlength="160" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
+        </div>
+      }
 
       <!-- Aktionsbuttons: Abbrechen und Speichern -->
       <div class="flex justify-end flex-wrap gap-2 pt-4 border-t border-slate-200 dark:border-slate-700 mt-6">

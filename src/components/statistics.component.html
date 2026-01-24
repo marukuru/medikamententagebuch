@@ -32,70 +32,74 @@
       </div>
 
        <!-- Karte: Symptome & Linderung -->
-      <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
-        <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
-            <span class="text-3xl">🤒</span>
-            <span>{{ t().symptomsAndRelief }}</span>
-        </h2>
-        <div class="space-y-6">
-          @for(stat of symptomReliefStats(); track stat.symptom.id) {
-            <div>
-                <h3 class="font-semibold text-lg flex items-center gap-2"><span class="text-2xl">{{ stat.symptom.emoji }}</span> {{ stat.symptom.description }}</h3>
-                @if(stat.topPreps.length > 0) {
-                    <p class="text-sm text-slate-600 dark:text-slate-400 pl-4 mt-1">{{ t().positiveEffectsForSymptom }}</p>
-                    <ol class="list-decimal list-inside space-y-1 pl-8 mt-1 text-slate-700 dark:text-slate-300">
-                         @for(p of stat.topPreps; track p.prep.id) {
-                            <li>
-                                <span>
-                                    @if (p.man) {<span>{{ p.man.name }} - </span>}
-                                    <strong>{{ p.prep.name }}</strong>
-                                    @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
-                                </span>
-                                 <span class="text-sm font-mono bg-slate-100 dark:bg-slate-700 rounded px-2 py-0.5 ml-2">{{ p.count }}x</span>
-                            </li>
-                        }
-                    </ol>
-                }
-            </div>
-          }
-           @if(symptomReliefStats().length === 0) {
-             <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForStatistic }}</p>
-          }
+      @if (dataService.moduleSettings().showSymptoms && dataService.moduleSettings().showEffects) {
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+          <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
+              <span class="text-3xl">🤒</span>
+              <span>{{ t().symptomsAndRelief }}</span>
+          </h2>
+          <div class="space-y-6">
+            @for(stat of symptomReliefStats(); track stat.symptom.id) {
+              <div>
+                  <h3 class="font-semibold text-lg flex items-center gap-2"><span class="text-2xl">{{ stat.symptom.emoji }}</span> {{ stat.symptom.description }}</h3>
+                  @if(stat.topPreps.length > 0) {
+                      <p class="text-sm text-slate-600 dark:text-slate-400 pl-4 mt-1">{{ t().positiveEffectsForSymptom }}</p>
+                      <ol class="list-decimal list-inside space-y-1 pl-8 mt-1 text-slate-700 dark:text-slate-300">
+                          @for(p of stat.topPreps; track p.prep.id) {
+                              <li>
+                                  <span>
+                                      @if (p.man) {<span>{{ p.man.name }} - </span>}
+                                      <strong>{{ p.prep.name }}</strong>
+                                      @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
+                                  </span>
+                                  <span class="text-sm font-mono bg-slate-100 dark:bg-slate-700 rounded px-2 py-0.5 ml-2">{{ p.count }}x</span>
+                              </li>
+                          }
+                      </ol>
+                  }
+              </div>
+            }
+            @if(symptomReliefStats().length === 0) {
+              <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForStatistic }}</p>
+            }
+          </div>
         </div>
-      </div>
+      }
       
        <!-- Karte: Aktivitäten & Effekte -->
-      <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
-        <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
-            <span class="text-3xl">🤸</span>
-            <span>{{ t().activitiesAndEffects }}</span>
-        </h2>
-        <div class="space-y-6">
-          @for(stat of activityEffectStats(); track stat.activity.id) {
-            <div>
-                <h3 class="font-semibold text-lg flex items-center gap-2"><span class="text-2xl">{{ stat.activity.emoji }}</span> {{ stat.activity.description }}</h3>
-                @if(stat.topPreps.length > 0) {
-                    <p class="text-sm text-slate-600 dark:text-slate-400 pl-4 mt-1">{{ t().positiveEffectsForActivity }}</p>
-                    <ol class="list-decimal list-inside space-y-1 pl-8 mt-1 text-slate-700 dark:text-slate-300">
-                         @for(p of stat.topPreps; track p.prep.id) {
-                            <li>
-                                <span>
-                                    @if (p.man) {<span>{{ p.man.name }} - </span>}
-                                    <strong>{{ p.prep.name }}</strong>
-                                    @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
-                                </span>
-                                 <span class="text-sm font-mono bg-slate-100 dark:bg-slate-700 rounded px-2 py-0.5 ml-2">{{ p.count }}x</span>
-                            </li>
-                        }
-                    </ol>
-                }
-            </div>
-          }
-           @if(activityEffectStats().length === 0) {
-             <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForStatistic }}</p>
-          }
+      @if (dataService.moduleSettings().showActivities && dataService.moduleSettings().showEffects) {
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+          <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
+              <span class="text-3xl">🤸</span>
+              <span>{{ t().activitiesAndEffects }}</span>
+          </h2>
+          <div class="space-y-6">
+            @for(stat of activityEffectStats(); track stat.activity.id) {
+              <div>
+                  <h3 class="font-semibold text-lg flex items-center gap-2"><span class="text-2xl">{{ stat.activity.emoji }}</span> {{ stat.activity.description }}</h3>
+                  @if(stat.topPreps.length > 0) {
+                      <p class="text-sm text-slate-600 dark:text-slate-400 pl-4 mt-1">{{ t().positiveEffectsForActivity }}</p>
+                      <ol class="list-decimal list-inside space-y-1 pl-8 mt-1 text-slate-700 dark:text-slate-300">
+                          @for(p of stat.topPreps; track p.prep.id) {
+                              <li>
+                                  <span>
+                                      @if (p.man) {<span>{{ p.man.name }} - </span>}
+                                      <strong>{{ p.prep.name }}</strong>
+                                      @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
+                                  </span>
+                                  <span class="text-sm font-mono bg-slate-100 dark:bg-slate-700 rounded px-2 py-0.5 ml-2">{{ p.count }}x</span>
+                              </li>
+                          }
+                      </ol>
+                  }
+              </div>
+            }
+            @if(activityEffectStats().length === 0) {
+              <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForStatistic }}</p>
+            }
+          </div>
         </div>
-      </div>
+      }
 
       <!-- Karte: Stimmungen & Präparate -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
@@ -132,62 +136,66 @@
       </div>
       
       <!-- Karte: Positive Effekte -->
-      <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
-        <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
-            <span class="text-3xl">😊</span>
-            <span>{{ t().positiveEffects }}</span>
-        </h2>
-        <div class="space-y-6">
-          @for(stat of categorizedEffectStats().positive; track stat.effectName) {
-            <div>
-                <h3 class="font-semibold text-lg flex items-center gap-2"><span class="text-2xl">{{ stat.emoji }}</span> {{ stat.effectName }}</h3>
-                <ol class="list-decimal list-inside space-y-1 pl-4 mt-1 text-slate-700 dark:text-slate-300">
-                      @for(p of stat.topPreps; track p.prep.id) {
-                        <li>
-                            <span>
-                                @if (p.man) {<span>{{ p.man.name }} - </span>}
-                                <strong>{{ p.prep.name }}</strong>
-                                @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
-                            </span>
-                        </li>
-                    }
-                </ol>
-            </div>
-          }
-          @if(categorizedEffectStats().positive.length === 0) {
-            <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForPositiveEffects }}</p>
-          }
+      @if (dataService.moduleSettings().showEffects) {
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+          <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
+              <span class="text-3xl">😊</span>
+              <span>{{ t().positiveEffects }}</span>
+          </h2>
+          <div class="space-y-6">
+            @for(stat of categorizedEffectStats().positive; track stat.effectName) {
+              <div>
+                  <h3 class="font-semibold text-lg flex items-center gap-2"><span class="text-2xl">{{ stat.emoji }}</span> {{ stat.effectName }}</h3>
+                  <ol class="list-decimal list-inside space-y-1 pl-4 mt-1 text-slate-700 dark:text-slate-300">
+                        @for(p of stat.topPreps; track p.prep.id) {
+                          <li>
+                              <span>
+                                  @if (p.man) {<span>{{ p.man.name }} - </span>}
+                                  <strong>{{ p.prep.name }}</strong>
+                                  @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
+                              </span>
+                          </li>
+                      }
+                  </ol>
+              </div>
+            }
+            @if(categorizedEffectStats().positive.length === 0) {
+              <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForPositiveEffects }}</p>
+            }
+          </div>
         </div>
-      </div>
+      }
 
       <!-- Karte: Negative Effekte -->
-      <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
-        <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
-            <span class="text-3xl">😟</span>
-            <span>{{ t().negativeEffects }}</span>
-        </h2>
-        <div class="space-y-6">
-          @for(stat of categorizedEffectStats().negative; track stat.effectName) {
-            <div>
-                <h3 class="font-semibold text-lg flex items-center gap-2"><span class="text-2xl">{{ stat.emoji }}</span> {{ stat.effectName }}</h3>
-                <ol class="list-decimal list-inside space-y-1 pl-4 mt-1 text-slate-700 dark:text-slate-300">
-                      @for(p of stat.topPreps; track p.prep.id) {
-                        <li>
-                            <span>
-                                @if (p.man) {<span>{{ p.man.name }} - </span>}
-                                <strong>{{ p.prep.name }}</strong>
-                                @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
-                            </span>
-                        </li>
-                    }
-                </ol>
-            </div>
-          }
-          @if(categorizedEffectStats().negative.length === 0) {
-            <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForNegativeEffects }}</p>
-          }
+      @if (dataService.moduleSettings().showEffects) {
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
+          <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
+              <span class="text-3xl">😟</span>
+              <span>{{ t().negativeEffects }}</span>
+          </h2>
+          <div class="space-y-6">
+            @for(stat of categorizedEffectStats().negative; track stat.effectName) {
+              <div>
+                  <h3 class="font-semibold text-lg flex items-center gap-2"><span class="text-2xl">{{ stat.emoji }}</span> {{ stat.effectName }}</h3>
+                  <ol class="list-decimal list-inside space-y-1 pl-4 mt-1 text-slate-700 dark:text-slate-300">
+                        @for(p of stat.topPreps; track p.prep.id) {
+                          <li>
+                              <span>
+                                  @if (p.man) {<span>{{ p.man.name }} - </span>}
+                                  <strong>{{ p.prep.name }}</strong>
+                                  @if (p.ai) {<span class="text-sm text-slate-500"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
+                              </span>
+                          </li>
+                      }
+                  </ol>
+              </div>
+            }
+            @if(categorizedEffectStats().negative.length === 0) {
+              <p class="text-slate-500 dark:text-slate-400">{{ t().noDataForNegativeEffects }}</p>
+            }
+          </div>
         </div>
-      </div>
+      }
 
     </div>
   </div>

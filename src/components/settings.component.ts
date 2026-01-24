@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DataService } from '../services/data.service';
+import { DataService, ModuleSettings } from '../services/data.service';
 import { CrudEntity, Reminder } from '../models';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
@@ -209,6 +209,15 @@ export class SettingsComponent {
   // --- Sprach- und Designeinstellungen ---
   setLanguage(lang: Language) {
     this.translationService.setLanguage(lang);
+  }
+  
+  // --- Modul-Einstellungen ---
+  toggleModule(module: keyof ModuleSettings, event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    this.dataService.moduleSettings.update(settings => ({
+      ...settings,
+      [module]: isChecked,
+    }));
   }
 
   // --- Sicherheitseinstellungen ---
