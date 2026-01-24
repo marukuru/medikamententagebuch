@@ -4,14 +4,38 @@ Eine App zur Erfassung der Einnahme von Medizin und deren Auswirkungen. Verwalte
 
 ## ✨ Features
 
-- **Tagebuch:** Erfassen Sie Einnahmen mit Datum, Uhrzeit, Stimmung, Präparat, Dosierung, Effekten und Notizen.
-- **Statistiken:** Visualisieren Sie, welche Präparate am häufigsten verwendet werden und wie sie sich auf Stimmungen und Effekte auswirken.
-- **Anpassbar:** Verwalten Sie Ihre eigenen Stimmungen, Effekte, Hersteller, Präparate und mehr.
-- **Daten-Hoheit:** Exportieren und importieren Sie Ihre gesamten Daten als JSON-Datei.
-- **Sicherheit:** Schützen Sie Ihre Daten mit einer PIN-Sperre und biometrischer Authentifizierung (Fingerabdruck).
-- **Mehrsprachig:** Verfügbar in Deutsch und Englisch.
-- **Cross-Platform:** Läuft im Webbrowser und als native Android-App.
-- **Dark Mode:** Wechseln Sie zwischen hellem und dunklem Design.
+-   **✍️ Umfassendes Tagebuch:** Erfassen Sie Einnahmen mit allen relevanten Details:
+    -   Datum & Uhrzeit
+    -   Stimmung
+    -   Symptome
+    -   Aktivitäten
+    -   Präparat & Dosierung
+    -   Positive/Negative Effekte
+    -   Freitext-Notizen
+-   **📊 Aussagekräftige Statistiken:** Visualisieren Sie Ihre Daten, um Muster zu erkennen:
+    -   Top 5 der am häufigsten verwendeten Präparate.
+    -   Zusammenhänge zwischen Stimmungen und Präparaten.
+    -   Analyse von positiven und negativen Effekten pro Präparat.
+    -   Auswertung, welche Präparate bei bestimmten Symptomen oder Aktivitäten Linderung verschaffen.
+-   **⚙️ Hohe Anpassbarkeit:** Passen Sie die App an Ihre Bedürfnisse an:
+    -   **Modulare Ansicht:** Aktivieren oder deaktivieren Sie einzelne Module (Dosierung, Symptome, Effekte etc.), um die Benutzeroberfläche zu vereinfachen.
+    -   Verwalten Sie Ihre eigenen Stimmungen, Symptome, Aktivitäten, Effekte, Hersteller, Präparate und mehr.
+    -   Fügen Sie eigene Emojis zum Emoji-Picker hinzu.
+-   **⏰ Intelligente Erinnerungen:**
+    -   Richten Sie tägliche oder wöchentliche Benachrichtigungen ein, um keinen Eintrag zu vergessen.
+-   **🔒 Sicherheit & Datenschutz:** Schützen Sie Ihre sensiblen Daten:
+    -   Aktivieren Sie eine App-Sperre mit einer 4-stelligen PIN.
+    -   Nutzen Sie biometrische Authentifizierung (Fingerabdruck/Face ID) zum schnellen Entsperren.
+    -   Konfigurieren Sie einen Auto-Lock-Timer.
+-   **🔄 Daten-Hoheit:** Sie haben die volle Kontrolle über Ihre Daten:
+    -   Exportieren und importieren Sie Ihre gesamten Daten als lesbare JSON-Datei.
+    -   Setzen Sie die App bei Bedarf vollständig auf den Werkszustand zurück.
+-   **🌐 Mehrsprachig & Theming:**
+    -   Verfügbar in Deutsch und Englisch.
+    -   Wechseln Sie nahtlos zwischen einem hellen und einem dunklen Design (Dark Mode).
+-   **📱 Cross-Platform:**
+    -   Läuft im modernen Webbrowser und als native Android-App.
+
 
 ## 🛠️ Tech Stack
 
