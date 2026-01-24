@@ -10,6 +10,7 @@ import {
   CrudEntity,
   Reminder,
   Symptom,
+  Activity,
 } from '../models';
 import { TranslationService } from './translation.service';
 
@@ -40,6 +41,7 @@ export class DataService {
   moods = signal<Mood[]>([]);
   effects = signal<Effect[]>([]);
   symptoms = signal<Symptom[]>([]);
+  activities = signal<Activity[]>([]);
   manufacturers = signal<Manufacturer[]>([]);
   dosages = signal<Dosage[]>([]);
   activeIngredients = signal<ActiveIngredient[]>([]);
@@ -130,6 +132,7 @@ export class DataService {
       this.moods.set(parsedData.moods || this.translationService.defaultMoods());
       this.effects.set(parsedData.effects || this.translationService.defaultEffects());
       this.symptoms.set(parsedData.symptoms || this.translationService.defaultSymptoms());
+      this.activities.set(parsedData.activities || this.translationService.defaultActivities());
       this.manufacturers.set(parsedData.manufacturers || []);
       this.dosages.set(parsedData.dosages || []);
       this.activeIngredients.set(parsedData.activeIngredients || []);
@@ -142,6 +145,7 @@ export class DataService {
       this.moods.set(this.translationService.defaultMoods());
       this.effects.set(this.translationService.defaultEffects());
       this.symptoms.set(this.translationService.defaultSymptoms());
+      this.activities.set(this.translationService.defaultActivities());
     }
   }
 
@@ -155,6 +159,7 @@ export class DataService {
       moods: this.moods(),
       effects: this.effects(),
       symptoms: this.symptoms(),
+      activities: this.activities(),
       manufacturers: this.manufacturers(),
       dosages: this.dosages(),
       activeIngredients: this.activeIngredients(),
@@ -221,6 +226,17 @@ export class DataService {
             return entry;
           }));
         break;
+       case 'Activity':
+        this.activities.update(items => items.filter(i => i.id !== id));
+        // Verknüpfung in Tagebucheinträgen aufheben
+         this.diaryEntries.update(entries => entries.map(entry => {
+            if (entry.activityIds?.includes(id)) {
+              const newActivityIds = entry.activityIds.filter(aid => aid !== id);
+              return { ...entry, activityIds: newActivityIds.length > 0 ? newActivityIds : undefined };
+            }
+            return entry;
+          }));
+        break;
       case 'Manufacturer':
         this.manufacturers.update(items => items.filter(i => i.id !== id));
         // Verknüpfung in Präparaten aufheben
@@ -266,6 +282,7 @@ export class DataService {
       moods: this.moods(),
       effects: this.effects(),
       symptoms: this.symptoms(),
+      activities: this.activities(),
       manufacturers: this.manufacturers(),
       dosages: this.dosages(),
       activeIngredients: this.activeIngredients(),
@@ -307,6 +324,7 @@ export class DataService {
       this.moods.set(data.moods || []);
       this.effects.set(data.effects || []);
       this.symptoms.set(data.symptoms || []);
+      this.activities.set(data.activities || []);
       this.manufacturers.set(data.manufacturers || []);
       this.dosages.set(data.dosages || []);
       this.activeIngredients.set(data.activeIngredients || []);
@@ -330,6 +348,7 @@ export class DataService {
     this.moods.set(this.translationService.defaultMoods());
     this.effects.set(this.translationService.defaultEffects());
     this.symptoms.set(this.translationService.defaultSymptoms());
+    this.activities.set(this.translationService.defaultActivities());
     this.manufacturers.set([]);
     this.dosages.set([]);
     this.activeIngredients.set([]);

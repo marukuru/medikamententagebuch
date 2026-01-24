@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { DataService } from './data.service';
-import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, CrudEntity, EffectPerception, Page, Symptom } from '../models';
+import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, CrudEntity, EffectPerception, Page, Symptom, Activity } from '../models';
 import { TranslationService, TranslationKey } from './translation.service';
 import { ToastService } from './toast.service';
 import { EMOJI_DATA } from '../emoji-data';
@@ -58,6 +58,7 @@ export class UiService {
     moodForm = signal<Partial<Mood>>({});
     effectForm = signal<Partial<Effect>>({});
     symptomForm = signal<Partial<Symptom>>({});
+    activityForm = signal<Partial<Activity>>({});
     manufacturerForm = signal<Partial<Manufacturer>>({});
     dosageForm = signal<Partial<Dosage>>({});
     activeIngredientForm = signal<Partial<ActiveIngredient>>({});
@@ -89,6 +90,7 @@ export class UiService {
                     case 'Mood': this.moodForm.set(form.formValues); break;
                     case 'Effect': this.effectForm.set(form.formValues); break;
                     case 'Symptom': this.symptomForm.set(form.formValues); break;
+                    case 'Activity': this.activityForm.set(form.formValues); break;
                     case 'Manufacturer': this.manufacturerForm.set(form.formValues); break;
                     case 'Dosage': this.dosageForm.set(form.formValues); break;
                     case 'ActiveIngredient': this.activeIngredientForm.set(form.formValues); break;
@@ -198,6 +200,18 @@ export class UiService {
                     return false;
                 }
                 this.dataService.addItem(this.dataService.symptoms, { ...formValues, description } as Omit<Symptom, 'id'>);
+                break;
+            }
+            case 'Activity': {
+                const formValues = this.activityForm();
+                if (!formValues.description || !formValues.emoji) return false;
+                const description = formValues.description.trim();
+                if (!description) return false;
+                if (this.dataService.activities().some(a => a.description.toLowerCase() === description.toLowerCase())) {
+                    this.showErrorToast('duplicateActivityError');
+                    return false;
+                }
+                this.dataService.addItem(this.dataService.activities, { ...formValues, description } as Omit<Activity, 'id'>);
                 break;
             }
             case 'Effect': {
@@ -318,6 +332,18 @@ export class UiService {
                 this.dataService.updateItem(this.dataService.symptoms, { ...formValues, id, description } as Symptom);
                 break;
             }
+            case 'Activity': {
+                const formValues = this.activityForm();
+                if (!formValues.description || !formValues.emoji) return false;
+                const description = formValues.description.trim();
+                if (!description) return false;
+                if (this.dataService.activities().some(a => a.id !== id && a.description.toLowerCase() === description.toLowerCase())) {
+                    this.showErrorToast('duplicateActivityError');
+                    return false;
+                }
+                this.dataService.updateItem(this.dataService.activities, { ...formValues, id, description } as Activity);
+                break;
+            }
             case 'Effect': {
                 const formValues = this.effectForm();
                 if (!formValues.description || !formValues.emoji) return false;
@@ -390,6 +416,7 @@ export class UiService {
         this.moodForm.set({});
         this.effectForm.set({});
         this.symptomForm.set({});
+        this.activityForm.set({});
         this.manufacturerForm.set({});
         this.dosageForm.set({});
         this.activeIngredientForm.set({});

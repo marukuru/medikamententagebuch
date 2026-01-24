@@ -54,6 +54,7 @@ export class DiaryEntryFormComponent {
   formMoodId = signal<string | undefined>(undefined);
   formEffectIds = signal<string[]>([]);
   formSymptomIds = signal<string[]>([]);
+  formActivityIds = signal<string[]>([]);
   formPreparationId = signal<string | undefined>(undefined);
   formDosageAmount = signal<number | null>(null);
   formDosageUnit = signal('');
@@ -85,6 +86,7 @@ export class DiaryEntryFormComponent {
             this.formMoodId.set(entry.mood.id);
             this.formEffectIds.set(entry.effects.map(e => e.id));
             this.formSymptomIds.set(entry.symptomIds || []);
+            this.formActivityIds.set(entry.activityIds || []);
             this.formPreparationId.set(entry.preparationId);
             this.formDosageAmount.set(entry.dosage?.amount ?? null);
             this.formDosageUnit.set(entry.dosage?.unit ?? '');
@@ -140,6 +142,20 @@ export class DiaryEntryFormComponent {
     }
   }
   
+  isActivitySelected(activityId: string): boolean {
+    return this.formActivityIds().includes(activityId);
+  }
+
+  toggleActivity(activityId: string) {
+    this.isDirty.set(true);
+    const currentIds = this.formActivityIds();
+    if (currentIds.includes(activityId)) {
+      this.formActivityIds.set(currentIds.filter(id => id !== activityId));
+    } else {
+      this.formActivityIds.set([...currentIds, activityId]);
+    }
+  }
+  
   /**
    * Markiert das Formular als "geändert", wenn ein Feld bearbeitet wird.
    */
@@ -154,6 +170,7 @@ export class DiaryEntryFormComponent {
     this.formMoodId.set(undefined);
     this.formEffectIds.set([]);
     this.formSymptomIds.set([]);
+    this.formActivityIds.set([]);
     this.formPreparationId.set(undefined);
     this.formDosageAmount.set(null);
     this.formDosageUnit.set('');
@@ -193,6 +210,7 @@ export class DiaryEntryFormComponent {
         preparationId: this.formPreparationId(),
         effects: effects,
         symptomIds: this.formSymptomIds().length > 0 ? this.formSymptomIds() : undefined,
+        activityIds: this.formActivityIds().length > 0 ? this.formActivityIds() : undefined,
         note: this.formNote(),
       };
 
@@ -210,6 +228,7 @@ export class DiaryEntryFormComponent {
         preparationId: this.formPreparationId(),
         effects: effects,
         symptomIds: this.formSymptomIds().length > 0 ? this.formSymptomIds() : undefined,
+        activityIds: this.formActivityIds().length > 0 ? this.formActivityIds() : undefined,
         note: this.formNote(),
       };
 
@@ -240,6 +259,10 @@ export class DiaryEntryFormComponent {
   
   openCreateSymptomForm() {
     this.uiService.openCreateForm('Symptom');
+  }
+
+  openCreateActivityForm() {
+    this.uiService.openCreateForm('Activity');
   }
 
   /**

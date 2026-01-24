@@ -1,4 +1,4 @@
-import { Mood, Effect, Symptom } from '../models';
+import { Mood, Effect, Symptom, Activity } from '../models';
 
 export const LANG_DE = {
   translations: {
@@ -26,6 +26,7 @@ export const LANG_DE = {
     atTime: 'um',
     mood: 'Stimmung',
     symptoms: 'Symptome',
+    activities: 'Aktivitäten',
     preparation: 'Präparat',
     activeIngredient: 'Wirkstoff',
     dosage: 'Dosierung',
@@ -61,6 +62,8 @@ export const LANG_DE = {
     noDataForNegativeEffects: 'Keine Daten für negative Effekte verfügbar.',
     symptomsAndRelief: 'Symptome & Linderung',
     positiveEffectsForSymptom: 'Präparate mit positiven Effekten für dieses Symptom:',
+    activitiesAndEffects: 'Aktivitäten & Effekte',
+    positiveEffectsForActivity: 'Präparate mit positiven Effekten bei dieser Aktivität:',
 
 
     // Settings Page
@@ -68,6 +71,7 @@ export const LANG_DE = {
     crudMoods: 'Stimmungen',
     crudSymptoms: 'Symptome',
     crudEffects: 'Effekte',
+    crudActivities: 'Aktivitäten',
     crudManufacturers: 'Hersteller',
     crudPreparations: 'Präparate',
     crudDosages: 'Dosierungen',
@@ -103,6 +107,7 @@ export const LANG_DE = {
     dateTimeLabel: 'Datum & Uhrzeit *',
     moodLabel: 'Stimmung *',
     symptomsLabel: 'Symptome',
+    activitiesLabel: 'Aktivitäten',
     preparationLabel: 'Präparat',
     dosageLabel: 'Dosierung',
     effectsLabel: 'Effekte',
@@ -110,6 +115,7 @@ export const LANG_DE = {
     optional: '-- Optional --',
     addNewPreparationTitle: 'Neues Präparat anlegen',
     addNewSymptomTitle: 'Neues Symptom anlegen',
+    addNewActivityTitle: 'Neue Aktivität anlegen',
     dosageAmountPlaceholder: 'Menge',
     dosageUnitPlaceholder: 'Einheit (z.B. mg)',
     save: 'Speichern',
@@ -210,6 +216,7 @@ export const LANG_DE = {
     // Duplicate Errors
     duplicateMoodError: 'Eine Stimmung mit dieser Beschreibung existiert bereits.',
     duplicateSymptomError: 'Ein Symptom mit dieser Beschreibung existiert bereits.',
+    duplicateActivityError: 'Eine Aktivität mit dieser Beschreibung existiert bereits.',
     duplicateEffectError: 'Ein Effekt mit dieser Beschreibung existiert bereits.',
     duplicateManufacturerError: 'Ein Hersteller mit diesem Namen existiert bereits.',
     duplicateDosageError: 'Eine Dosierung mit dieser Menge und Einheit existiert bereits.',
@@ -237,6 +244,13 @@ export const LANG_DE = {
     { id: '8', emoji: '😫', description: 'Rückenschmerzen' },
     { id: '9', emoji: '🤸', description: 'Hyperaktivität' },
   ] as Symptom[],
+  defaultActivities: [
+    { id: '1', emoji: '💼', description: 'Arbeit' },
+    { id: '2', emoji: '🧘', description: 'Entspannen' },
+    { id: '3', emoji: '👨‍👩‍👧‍👦', description: 'Familie' },
+    { id: '4', emoji: '👥', description: 'Freunde' },
+    { id: '5', emoji: '🤸', description: 'Sport' },
+  ] as Activity[],
   defaultEffects: [
     { id: '1', emoji: '😴', description: 'Schläfrig', perception: 'positive' },
     { id: '2', emoji: '😌', description: 'Schmerzlindernd', perception: 'positive' },

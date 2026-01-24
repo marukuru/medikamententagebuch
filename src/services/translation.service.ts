@@ -39,6 +39,7 @@ export class TranslationService {
   defaultMoods = computed(() => ALL_TRANSLATIONS[this.language()].defaultMoods);
   defaultEffects = computed(() => ALL_TRANSLATIONS[this.language()].defaultEffects);
   defaultSymptoms = computed(() => ALL_TRANSLATIONS[this.language()].defaultSymptoms);
+  defaultActivities = computed(() => ALL_TRANSLATIONS[this.language()].defaultActivities);
 
   constructor() {
     // Speichert die ausgewählte Sprache im Local Storage, wenn sie sich ändert.

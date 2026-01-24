@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../services/data.service';
-import { Manufacturer, ActiveIngredient, Preparation, EffectPerception, Symptom } from '../models';
+import { Manufacturer, ActiveIngredient, Preparation, EffectPerception, Symptom, Activity } from '../models';
 import { TranslationService } from '../services/translation.service';
 
 /**
@@ -166,6 +166,47 @@ export class StatisticsComponent {
         if (topPreps.length > 0) {
             result.push({
                 symptom: value.symptom,
+                topPreps: topPreps.slice(0, 5),
+            });
+        }
+    });
+
+    return result;
+  });
+
+  /**
+   * Berechnet, welche Präparate bei bestimmten Aktivitäten positive Effekte gezeigt haben.
+   */
+  activityEffectStats = computed(() => {
+    const stats = new Map<string, { activity: Activity, prepCounts: Map<string, number> }>();
+
+    for (const entry of this.dataService.diaryEntries()) {
+      const hasPositiveEffect = entry.effects.some(e => e.perception === 'positive');
+      if (!entry.activityIds || entry.activityIds.length === 0 || !entry.preparationId || !hasPositiveEffect) {
+        continue;
+      }
+      
+      for (const activityId of entry.activityIds) {
+        if (!stats.has(activityId)) {
+          const activity = this.dataService.activities().find(a => a.id === activityId);
+          if (activity) {
+             stats.set(activityId, { activity, prepCounts: new Map() });
+          }
+        }
+        
+        const activityStat = stats.get(activityId);
+        if (activityStat) {
+          activityStat.prepCounts.set(entry.preparationId, (activityStat.prepCounts.get(entry.preparationId) || 0) + 1);
+        }
+      }
+    }
+    
+    const result: { activity: Activity, topPreps: PreparationStat[] }[] = [];
+    stats.forEach((value) => {
+        const topPreps = this.getSortedPrepStats(value.prepCounts);
+        if (topPreps.length > 0) {
+            result.push({
+                activity: value.activity,
                 topPreps: topPreps.slice(0, 5),
             });
         }

@@ -45,7 +45,7 @@ export class AppComponent {
 
   // --- Emoji Picker State ---
   showEmojiPicker = signal(false);
-  emojiTargetField = signal<'mood' | 'effect' | 'symptom' | null>(null);
+  emojiTargetField = signal<'mood' | 'effect' | 'symptom' | 'activity' | null>(null);
 
   constructor(
     private renderer: Renderer2, 
@@ -130,7 +130,7 @@ export class AppComponent {
   }
 
   // --- Emoji Picker Methods ---
-  openEmojiPicker(target: 'mood' | 'effect' | 'symptom') {
+  openEmojiPicker(target: 'mood' | 'effect' | 'symptom' | 'activity') {
     this.emojiTargetField.set(target);
     this.showEmojiPicker.set(true);
   }
@@ -148,6 +148,8 @@ export class AppComponent {
       this.uiService.effectForm.update(form => ({...form, emoji}));
     } else if (target === 'symptom') {
         this.uiService.symptomForm.update(form => ({ ...form, emoji }));
+    } else if (target === 'activity') {
+        this.uiService.activityForm.update(form => ({ ...form, emoji }));
     }
     this.closeEmojiPicker();
   }

@@ -88,6 +88,17 @@
                 </button>
                 <input type="text" [(ngModel)]="uiService.symptomForm().description" name="description" [placeholder]="t().formDescriptionPlaceholder" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
             }
+            @case('Activity') {
+                <button type="button" (click)="openEmojiPicker('activity')" class="w-full p-2 h-11 border rounded dark:bg-slate-700 dark:border-slate-600 text-left flex items-center hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                    @if(uiService.activityForm().emoji; as emoji) {
+                        <span class="text-2xl w-8">{{ emoji }}</span>
+                        <span class="text-slate-500 dark:text-slate-400">{{ t().changeEmoji }}</span>
+                    } @else {
+                        <span class="text-slate-500 dark:text-slate-400">{{ t().formEmojiPlaceholder }}</span>
+                    }
+                </button>
+                <input type="text" [(ngModel)]="uiService.activityForm().description" name="description" [placeholder]="t().formDescriptionPlaceholder" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+            }
             @case('Effect') {
                 <button type="button" (click)="openEmojiPicker('effect')" class="w-full p-2 h-11 border rounded dark:bg-slate-700 dark:border-slate-600 text-left flex items-center hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                     @if(uiService.effectForm().emoji; as emoji) {

@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { DataService } from '../services/data.service';
-import { DiaryEntry, Preparation, Manufacturer, ActiveIngredient, Symptom } from '../models';
+import { DiaryEntry, Preparation, Manufacturer, ActiveIngredient, Symptom, Activity } from '../models';
 import { DiaryEntryFormComponent } from './diary-entry-form.component';
 import { TranslationService } from '../services/translation.service';
 import { UiService } from '../services/ui.service';
@@ -62,12 +62,14 @@ export class DiaryListComponent {
     return dateFiltered.filter(entry => {
       const details = this.getPreparationDetails(entry.preparationId);
       const symptoms = this.getSymptoms(entry.symptomIds);
+      const activities = this.getActivities(entry.activityIds);
       // Erstellt einen durchsuchbaren Text aus allen relevanten Eintragsdaten
       const searchCorpus = [
         entry.note || '',
         entry.mood.description,
         ...entry.effects.map(e => e.description),
         ...symptoms.map(s => s.description),
+        ...activities.map(a => a.description),
         details.prep?.name || '',
         details.man?.name || '',
       ].join(' ').toLowerCase();
@@ -128,6 +130,12 @@ export class DiaryListComponent {
     if (!symptomIds || symptomIds.length === 0) return [];
     const allSymptoms = this.dataService.symptoms();
     return symptomIds.map(id => allSymptoms.find(s => s.id === id)).filter((s): s is Symptom => !!s);
+  }
+
+  getActivities(activityIds?: string[]): Activity[] {
+    if (!activityIds || activityIds.length === 0) return [];
+    const allActivities = this.dataService.activities();
+    return activityIds.map(id => allActivities.find(a => a.id === id)).filter((a): a is Activity => !!a);
   }
 
   // --- Aktionsmethoden ---

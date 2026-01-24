@@ -106,6 +106,30 @@
           }
         </div>
       </div>
+
+      <!-- Sektion: Aktivitäten (Mehrfachauswahl) -->
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().activitiesLabel }}</label>
+           <button type="button" (click)="openCreateActivityForm()" [title]="t().addNewActivityTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
+            <i class="fa fa-plus text-xs"></i>
+          </button>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          @for(activity of dataService.activities(); track activity.id) {
+            <button type="button" 
+                    (click)="toggleActivity(activity.id)"
+                    [class.bg-primary-500]="isActivitySelected(activity.id)"
+                    [class.text-white]="isActivitySelected(activity.id)"
+                    [class.bg-slate-100]="!isActivitySelected(activity.id)"
+                    [class.dark:bg-slate-700]="!isActivitySelected(activity.id)"
+                    class="px-3 py-1 rounded-full text-sm flex items-center gap-2 transition-colors">
+              <span>{{activity.emoji}}</span>
+              <span>{{activity.description}}</span>
+            </button>
+          }
+        </div>
+      </div>
       
       <!-- Sektion: Notiz -->
        <div>
