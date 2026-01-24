@@ -6,7 +6,7 @@ export type EffectPerception = 'positive' | 'negative' | 'neutral';
 /**
  * Definiert die Typen von Entitäten, die über die generischen CRUD-Formulare verwaltet werden können.
  */
-export type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredient' | 'Preparation';
+export type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredient' | 'Preparation' | 'CustomEmoji';
 
 /**
  * Definiert die möglichen Seiten/Ansichten der Anwendung.

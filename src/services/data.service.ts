@@ -44,6 +44,7 @@ export class DataService {
   preparations = signal<Preparation[]>([]);
   diaryEntries = signal<DiaryEntry[]>([]);
   reminders = signal<Reminder[]>([]);
+  customEmojis = signal<string[]>([]);
 
   // --- Computed Signals ---
   // Abgeleitete Daten, die sich automatisch aktualisieren, wenn die Quell-Signale sich ändern.
@@ -132,6 +133,7 @@ export class DataService {
       this.preparations.set(parsedData.preparations || []);
       this.diaryEntries.set(parsedData.diaryEntries || []);
       this.reminders.set(parsedData.reminders || []);
+      this.customEmojis.set(parsedData.customEmojis || []);
     } else {
       // Wenn keine Daten vorhanden sind, werden die Standard-Stimmungen und -Effekte geladen.
       this.moods.set(this.translationService.defaultMoods());
@@ -154,6 +156,7 @@ export class DataService {
       preparations: this.preparations(),
       diaryEntries: this.diaryEntries(),
       reminders: this.reminders(),
+      customEmojis: this.customEmojis(),
     };
     localStorage.setItem('medikamententagebuch', JSON.stringify(data));
   }
@@ -221,6 +224,9 @@ export class DataService {
         // Verknüpfung in Tagebucheinträgen aufheben
         this.diaryEntries.update(entries => entries.map(entry => entry.preparationId === id ? { ...entry, preparationId: undefined } : entry));
         break;
+      case 'CustomEmoji':
+        this.customEmojis.update(items => items.filter(i => i !== id));
+        break;
     }
   }
 
@@ -248,6 +254,7 @@ export class DataService {
       preparations: this.preparations(),
       diaryEntries: this.diaryEntries(),
       reminders: this.reminders(),
+      customEmojis: this.customEmojis(),
     }, null, 2);
   }
   
@@ -287,6 +294,7 @@ export class DataService {
       this.preparations.set(data.preparations || []);
       this.diaryEntries.set(data.diaryEntries || []);
       this.reminders.set(data.reminders || []);
+      this.customEmojis.set(data.customEmojis || []);
       return true;
     } catch (e) {
       console.error('Error importing data', e);
@@ -308,5 +316,6 @@ export class DataService {
     this.preparations.set([]);
     this.diaryEntries.set([]);
     this.reminders.set([]);
+    this.customEmojis.set([]);
   }
 }

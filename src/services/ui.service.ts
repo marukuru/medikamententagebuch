@@ -3,6 +3,7 @@ import { DataService } from './data.service';
 import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, CrudEntity, EffectPerception, Page } from '../models';
 import { TranslationService, TranslationKey } from './translation.service';
 import { ToastService } from './toast.service';
+import { EMOJI_DATA } from '../emoji-data';
 
 /**
  * Definiert den Zustand eines einzelnen Formulars im Stack.
@@ -60,7 +61,12 @@ export class UiService {
     dosageForm = signal<Partial<Dosage>>({});
     activeIngredientForm = signal<Partial<ActiveIngredient>>({});
     preparationForm = signal<Partial<Preparation>>({});
+    customEmojiForm = signal<{ emoji?: string }>({});
     
+    private allDefaultEmojis = computed(() => {
+        return EMOJI_DATA.flatMap(category => category.emojis);
+    });
+
     perceptionOptions = computed(() => {
         const t = this.translationService.translations();
         return [
@@ -85,6 +91,7 @@ export class UiService {
                     case 'Dosage': this.dosageForm.set(form.formValues); break;
                     case 'ActiveIngredient': this.activeIngredientForm.set(form.formValues); break;
                     case 'Preparation': this.preparationForm.set(form.formValues); break;
+                    case 'CustomEmoji': this.customEmojiForm.set(form.formValues); break;
                 }
             }
         }, { allowSignalWrites: true });
@@ -240,6 +247,27 @@ export class UiService {
                 this.dataService.addItem(this.dataService.preparations, { ...formValues, name } as Omit<Preparation, 'id'>);
                 break;
             }
+            case 'CustomEmoji': {
+                const formValues = this.customEmojiForm();
+                const emoji = formValues.emoji?.trim();
+                if (!emoji) return false;
+
+                // Validiert, dass es sich um ein einzelnes sichtbares Zeichen/Emoji handelt
+                if ([...emoji].length !== 1) {
+                    this.showErrorToast('invalidEmojiError');
+                    return false;
+                }
+
+                // Prüft auf Duplikate in Standard- und benutzerdefinierten Emojis
+                const allEmojis = new Set([...this.allDefaultEmojis(), ...this.dataService.customEmojis()]);
+                if (allEmojis.has(emoji)) {
+                    this.showErrorToast('duplicateCustomEmojiError');
+                    return false;
+                }
+
+                this.dataService.customEmojis.update(emojis => [...emojis, emoji]);
+                break;
+            }
         }
         return true;
     }
@@ -339,5 +367,6 @@ export class UiService {
         this.dosageForm.set({});
         this.activeIngredientForm.set({});
         this.preparationForm.set({});
+        this.customEmojiForm.set({});
     }
 }

@@ -67,6 +67,7 @@ export const LANG_DE = {
     crudPreparations: 'Präparate',
     crudDosages: 'Dosierungen',
     crudActiveIngredients: 'Wirkstoffgehalte',
+    crudCustomEmojis: 'Eigene Emojis',
     addNewEntryTitle: 'Neuen Eintrag anlegen',
     noEntriesAvailable: 'Keine Einträge vorhanden.',
     dataManagement: 'Datenverwaltung',
@@ -132,9 +133,11 @@ export const LANG_DE = {
     formPreparationManufacturerOptional: 'Hersteller (optional)',
     formPreparationActiveIngredientOptional: 'Wirkstoffgehalt (optional)',
     formPreparationDosageOptional: 'Standard-Dosierung (optional)',
+    formCustomEmojiPlaceholder: 'Einzelnes Emoji eingeben',
     addNewManufacturerTitle: 'Neuen Hersteller anlegen',
     addNewActiveIngredientTitle: 'Neuen Wirkstoffgehalt anlegen',
     addNewDosageTitle: 'Neue Standard-Dosierung anlegen',
+    addCustomEmoji: 'Eigenes Emoji hinzufügen',
     changeEmoji: 'Emoji ändern',
     emojiPickerTitle: 'Emoji auswählen',
     emojiCatSmileys: 'Smileys & Personen',
@@ -143,6 +146,7 @@ export const LANG_DE = {
     emojiCatActivities: 'Aktivitäten',
     emojiCatObjects: 'Objekte',
     emojiCatSymbols: 'Symbole',
+    emojiCatCustom: 'Eigene',
     
     // Language Settings
     language: 'Sprache',
@@ -203,6 +207,8 @@ export const LANG_DE = {
     duplicateDosageError: 'Eine Dosierung mit dieser Menge und Einheit existiert bereits.',
     duplicateActiveIngredientError: 'Ein Wirkstoffgehalt mit dieser Menge und Einheit existiert bereits.',
     duplicatePreparationError: 'Ein Präparat mit diesem Namen, Hersteller und Wirkstoffgehalt existiert bereits.',
+    duplicateCustomEmojiError: 'Dieses Emoji wurde bereits hinzugefügt.',
+    invalidEmojiError: 'Bitte geben Sie ein einzelnes, gültiges Emoji ein.',
   },
   defaultMoods: [
     { id: '1', emoji: '💩', description: 'Lausig' },

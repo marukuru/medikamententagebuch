@@ -67,6 +67,7 @@ export const LANG_EN = {
     crudPreparations: 'Preparations',
     crudDosages: 'Dosages',
     crudActiveIngredients: 'Active Ingredients',
+    crudCustomEmojis: 'Custom Emojis',
     addNewEntryTitle: 'Add new entry',
     noEntriesAvailable: 'No entries available.',
     dataManagement: 'Data Management',
@@ -132,9 +133,11 @@ export const LANG_EN = {
     formPreparationManufacturerOptional: 'Manufacturer (optional)',
     formPreparationActiveIngredientOptional: 'Active Ingredient (optional)',
     formPreparationDosageOptional: 'Standard Dosage (optional)',
+    formCustomEmojiPlaceholder: 'Enter a single emoji',
     addNewManufacturerTitle: 'Add new manufacturer',
     addNewActiveIngredientTitle: 'Add new active ingredient',
     addNewDosageTitle: 'Add new standard dosage',
+    addCustomEmoji: 'Add custom emoji',
     changeEmoji: 'Change emoji',
     emojiPickerTitle: 'Select Emoji',
     emojiCatSmileys: 'Smileys & People',
@@ -143,6 +146,7 @@ export const LANG_EN = {
     emojiCatActivities: 'Activities',
     emojiCatObjects: 'Objects',
     emojiCatSymbols: 'Symbols',
+    emojiCatCustom: 'Custom',
 
     // Language Settings
     language: 'Language',
@@ -203,6 +207,8 @@ export const LANG_EN = {
     duplicateDosageError: 'A dosage with this amount and unit already exists.',
     duplicateActiveIngredientError: 'An active ingredient with this amount and unit already exists.',
     duplicatePreparationError: 'A preparation with this name, manufacturer, and active ingredient already exists.',
+    duplicateCustomEmojiError: 'This emoji has already been added.',
+    invalidEmojiError: 'Please enter a single, valid emoji.',
   },
   defaultMoods: [
     { id: '1', emoji: '💩', description: 'Awful' },

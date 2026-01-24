@@ -2,6 +2,8 @@ import { Component, ChangeDetectionStrategy, inject, output } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { EMOJI_DATA } from '../emoji-data';
 import { TranslationService } from '../services/translation.service';
+import { DataService } from '../services/data.service';
+import { UiService } from '../services/ui.service';
 
 @Component({
   selector: 'emoji-picker',
@@ -12,12 +14,15 @@ import { TranslationService } from '../services/translation.service';
 })
 export class EmojiPickerComponent {
   translationService = inject(TranslationService);
+  dataService = inject(DataService);
+  uiService = inject(UiService);
   t = this.translationService.translations;
   
   emojiSelect = output<string>();
   close = output<void>();
 
   categories = EMOJI_DATA;
+  customEmojis = this.dataService.customEmojis;
 
   selectEmoji(emoji: string) {
     this.emojiSelect.emit(emoji);
@@ -25,6 +30,11 @@ export class EmojiPickerComponent {
 
   closePicker() {
     this.close.emit();
+  }
+
+  openAddCustomEmojiForm() {
+    this.uiService.openCreateForm('CustomEmoji');
+    this.closePicker();
   }
 
   getCategoryName(key: string): string {

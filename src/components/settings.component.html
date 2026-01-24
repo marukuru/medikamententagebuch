@@ -22,12 +22,14 @@
           <div class="max-h-60 overflow-y-auto pr-2">
             @if(entity.items.length > 0) {
               <ul class="space-y-2">
-                @for(item of entity.items; track item.id) {
+                @for(item of entity.items; track ($any(item).id ?? item)) {
                   <li class="flex justify-between items-center p-2 rounded-lg bg-slate-50 dark:bg-slate-700/50">
                     <span class="text-slate-800 dark:text-slate-200">{{ entity.display(item) }}</span>
                     <div class="flex gap-2">
-                      <button (click)="openEditForm(entity.type, item)" class="text-yellow-500 hover:text-yellow-600"><i class="fa fa-pencil"></i></button>
-                      <button (click)="requestDeleteItem(entity.type, item.id, entity.display(item))" class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
+                      @if(entity.type !== 'CustomEmoji') {
+                        <button (click)="openEditForm(entity.type, item)" class="text-yellow-500 hover:text-yellow-600"><i class="fa fa-pencil"></i></button>
+                      }
+                      <button (click)="requestDeleteItem(entity.type, ($any(item).id ?? item), entity.display(item))" class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
                     </div>
                   </li>
                 }
