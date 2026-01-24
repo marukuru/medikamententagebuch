@@ -1,4 +1,4 @@
-import { Mood, Effect } from '../models';
+import { Mood, Effect, Symptom } from '../models';
 
 export const LANG_DE = {
   translations: {
@@ -25,6 +25,7 @@ export const LANG_DE = {
     date: 'Datum',
     atTime: 'um',
     mood: 'Stimmung',
+    symptoms: 'Symptome',
     preparation: 'Präparat',
     activeIngredient: 'Wirkstoff',
     dosage: 'Dosierung',
@@ -58,10 +59,14 @@ export const LANG_DE = {
     noDataForPositiveEffects: 'Keine Daten für positive Effekte verfügbar.',
     negativeEffects: 'Negative Effekte',
     noDataForNegativeEffects: 'Keine Daten für negative Effekte verfügbar.',
+    symptomsAndRelief: 'Symptome & Linderung',
+    positiveEffectsForSymptom: 'Präparate mit positiven Effekten für dieses Symptom:',
+
 
     // Settings Page
     settingsTitle: 'Einstellungen',
     crudMoods: 'Stimmungen',
+    crudSymptoms: 'Symptome',
     crudEffects: 'Effekte',
     crudManufacturers: 'Hersteller',
     crudPreparations: 'Präparate',
@@ -97,12 +102,14 @@ export const LANG_DE = {
     newEntryTitle: 'Neuer Eintrag',
     dateTimeLabel: 'Datum & Uhrzeit *',
     moodLabel: 'Stimmung *',
+    symptomsLabel: 'Symptome',
     preparationLabel: 'Präparat',
     dosageLabel: 'Dosierung',
     effectsLabel: 'Effekte',
     noteLabel: 'Notiz (max. 160 Zeichen)',
     optional: '-- Optional --',
     addNewPreparationTitle: 'Neues Präparat anlegen',
+    addNewSymptomTitle: 'Neues Symptom anlegen',
     dosageAmountPlaceholder: 'Menge',
     dosageUnitPlaceholder: 'Einheit (z.B. mg)',
     save: 'Speichern',
@@ -202,6 +209,7 @@ export const LANG_DE = {
 
     // Duplicate Errors
     duplicateMoodError: 'Eine Stimmung mit dieser Beschreibung existiert bereits.',
+    duplicateSymptomError: 'Ein Symptom mit dieser Beschreibung existiert bereits.',
     duplicateEffectError: 'Ein Effekt mit dieser Beschreibung existiert bereits.',
     duplicateManufacturerError: 'Ein Hersteller mit diesem Namen existiert bereits.',
     duplicateDosageError: 'Eine Dosierung mit dieser Menge und Einheit existiert bereits.',
@@ -218,6 +226,17 @@ export const LANG_DE = {
     { id: '5', emoji: '🙂', description: 'Gut' },
     { id: '6', emoji: '☺️', description: 'Prima' },
   ] as Mood[],
+  defaultSymptoms: [
+    { id: '1', emoji: '🤯', description: 'Kopfschmerzen' },
+    { id: '2', emoji: '🤢', description: 'Übelkeit' },
+    { id: '3', emoji: '😵', description: 'Schwindel' },
+    { id: '4', emoji: '🥱', description: 'Müdigkeit' },
+    { id: '5', emoji: '🥶', description: 'Frieren' },
+    { id: '6', emoji: '🥵', description: 'Schwitzen' },
+    { id: '7', emoji: '😵‍💫', description: 'Brainfog' },
+    { id: '8', emoji: '😫', description: 'Rückenschmerzen' },
+    { id: '9', emoji: '🤸', description: 'Hyperaktivität' },
+  ] as Symptom[],
   defaultEffects: [
     { id: '1', emoji: '😴', description: 'Schläfrig', perception: 'positive' },
     { id: '2', emoji: '😌', description: 'Schmerzlindernd', perception: 'positive' },

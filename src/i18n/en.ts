@@ -1,4 +1,4 @@
-import { Mood, Effect } from '../models';
+import { Mood, Effect, Symptom } from '../models';
 
 export const LANG_EN = {
   translations: {
@@ -25,6 +25,7 @@ export const LANG_EN = {
     date: 'Date',
     atTime: 'at',
     mood: 'Mood',
+    symptoms: 'Symptoms',
     preparation: 'Preparation',
     activeIngredient: 'Active Ingredient',
     dosage: 'Dosage',
@@ -58,10 +59,13 @@ export const LANG_EN = {
     noDataForPositiveEffects: 'No data available for positive effects.',
     negativeEffects: 'Negative Effects',
     noDataForNegativeEffects: 'No data available for negative effects.',
+    symptomsAndRelief: 'Symptoms & Relief',
+    positiveEffectsForSymptom: 'Preparations with positive effects for this symptom:',
 
     // Settings Page
     settingsTitle: 'Settings',
     crudMoods: 'Moods',
+    crudSymptoms: 'Symptoms',
     crudEffects: 'Effects',
     crudManufacturers: 'Manufacturers',
     crudPreparations: 'Preparations',
@@ -97,12 +101,14 @@ export const LANG_EN = {
     newEntryTitle: 'New Entry',
     dateTimeLabel: 'Date & Time *',
     moodLabel: 'Mood *',
+    symptomsLabel: 'Symptoms',
     preparationLabel: 'Preparation',
     dosageLabel: 'Dosage',
     effectsLabel: 'Effects',
     noteLabel: 'Note (max. 160 characters)',
     optional: '-- Optional --',
     addNewPreparationTitle: 'Add new preparation',
+    addNewSymptomTitle: 'Add new symptom',
     dosageAmountPlaceholder: 'Amount',
     dosageUnitPlaceholder: 'Unit (e.g. mg)',
     save: 'Save',
@@ -202,6 +208,7 @@ export const LANG_EN = {
 
     // Duplicate Errors
     duplicateMoodError: 'A mood with this description already exists.',
+    duplicateSymptomError: 'A symptom with this description already exists.',
     duplicateEffectError: 'An effect with this description already exists.',
     duplicateManufacturerError: 'A manufacturer with this name already exists.',
     duplicateDosageError: 'A dosage with this amount and unit already exists.',
@@ -218,6 +225,17 @@ export const LANG_EN = {
     { id: '5', emoji: '🙂', description: 'Good' },
     { id: '6', emoji: '☺️', description: 'Great' },
   ] as Mood[],
+  defaultSymptoms: [
+    { id: '1', emoji: '🤯', description: 'Headache' },
+    { id: '2', emoji: '🤢', description: 'Nausea' },
+    { id: '3', emoji: '😵', description: 'Dizziness' },
+    { id: '4', emoji: '🥱', description: 'Fatigue' },
+    { id: '5', emoji: '🥶', description: 'Chills' },
+    { id: '6', emoji: '🥵', description: 'Sweating' },
+    { id: '7', emoji: '😵‍💫', description: 'Brain fog' },
+    { id: '8', emoji: '😫', description: 'Back pain' },
+    { id: '9', emoji: '🤸', description: 'Hyperactivity' },
+  ] as Symptom[],
   defaultEffects: [
     { id: '1', emoji: '😴', description: 'Sleepy', perception: 'positive' },
     { id: '2', emoji: '😌', description: 'Pain-relieving', perception: 'positive' },

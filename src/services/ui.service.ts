@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { DataService } from './data.service';
-import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, CrudEntity, EffectPerception, Page } from '../models';
+import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, CrudEntity, EffectPerception, Page, Symptom } from '../models';
 import { TranslationService, TranslationKey } from './translation.service';
 import { ToastService } from './toast.service';
 import { EMOJI_DATA } from '../emoji-data';
@@ -57,6 +57,7 @@ export class UiService {
     // Dies ist an `[(ngModel)]` im Template gebunden.
     moodForm = signal<Partial<Mood>>({});
     effectForm = signal<Partial<Effect>>({});
+    symptomForm = signal<Partial<Symptom>>({});
     manufacturerForm = signal<Partial<Manufacturer>>({});
     dosageForm = signal<Partial<Dosage>>({});
     activeIngredientForm = signal<Partial<ActiveIngredient>>({});
@@ -87,6 +88,7 @@ export class UiService {
                 switch(form.type) {
                     case 'Mood': this.moodForm.set(form.formValues); break;
                     case 'Effect': this.effectForm.set(form.formValues); break;
+                    case 'Symptom': this.symptomForm.set(form.formValues); break;
                     case 'Manufacturer': this.manufacturerForm.set(form.formValues); break;
                     case 'Dosage': this.dosageForm.set(form.formValues); break;
                     case 'ActiveIngredient': this.activeIngredientForm.set(form.formValues); break;
@@ -184,6 +186,18 @@ export class UiService {
                     return false;
                 }
                 this.dataService.addItem(this.dataService.moods, { ...formValues, description } as Omit<Mood, 'id'>);
+                break;
+            }
+             case 'Symptom': {
+                const formValues = this.symptomForm();
+                if (!formValues.description || !formValues.emoji) return false;
+                const description = formValues.description.trim();
+                if (!description) return false;
+                if (this.dataService.symptoms().some(s => s.description.toLowerCase() === description.toLowerCase())) {
+                    this.showErrorToast('duplicateSymptomError');
+                    return false;
+                }
+                this.dataService.addItem(this.dataService.symptoms, { ...formValues, description } as Omit<Symptom, 'id'>);
                 break;
             }
             case 'Effect': {
@@ -292,6 +306,18 @@ export class UiService {
                 this.dataService.updateItem(this.dataService.moods, { ...formValues, id, description } as Mood);
                 break;
             }
+            case 'Symptom': {
+                const formValues = this.symptomForm();
+                if (!formValues.description || !formValues.emoji) return false;
+                const description = formValues.description.trim();
+                if (!description) return false;
+                if (this.dataService.symptoms().some(s => s.id !== id && s.description.toLowerCase() === description.toLowerCase())) {
+                    this.showErrorToast('duplicateSymptomError');
+                    return false;
+                }
+                this.dataService.updateItem(this.dataService.symptoms, { ...formValues, id, description } as Symptom);
+                break;
+            }
             case 'Effect': {
                 const formValues = this.effectForm();
                 if (!formValues.description || !formValues.emoji) return false;
@@ -363,6 +389,7 @@ export class UiService {
     private resetForms() {
         this.moodForm.set({});
         this.effectForm.set({});
+        this.symptomForm.set({});
         this.manufacturerForm.set({});
         this.dosageForm.set({});
         this.activeIngredientForm.set({});

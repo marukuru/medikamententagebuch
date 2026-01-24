@@ -6,7 +6,7 @@ export type EffectPerception = 'positive' | 'negative' | 'neutral';
 /**
  * Definiert die Typen von Entitäten, die über die generischen CRUD-Formulare verwaltet werden können.
  */
-export type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredient' | 'Preparation' | 'CustomEmoji';
+export type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredient' | 'Preparation' | 'CustomEmoji' | 'Symptom';
 
 /**
  * Definiert die möglichen Seiten/Ansichten der Anwendung.
@@ -17,6 +17,15 @@ export type Page = 'diary' | 'stats' | 'settings' | 'info';
  * Repräsentiert eine Stimmung mit einer Beschreibung und einem zugehörigen Emoji.
  */
 export interface Mood {
+  id: string;
+  description: string;
+  emoji: string;
+}
+
+/**
+ * Repräsentiert ein Symptom mit einer Beschreibung und einem zugehörigen Emoji.
+ */
+export interface Symptom {
   id: string;
   description: string;
   emoji: string;
@@ -82,6 +91,7 @@ export interface DiaryEntry {
   preparationId?: string;
   dosage?: Dosage; // Copied entity
   effects: Effect[]; // Copied entities
+  symptomIds?: string[]; // Referenced entities
   note?: string;
 }
 

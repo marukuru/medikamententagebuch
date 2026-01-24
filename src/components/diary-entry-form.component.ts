@@ -53,6 +53,7 @@ export class DiaryEntryFormComponent {
   formTime = signal(''); // HH:mm
   formMoodId = signal<string | undefined>(undefined);
   formEffectIds = signal<string[]>([]);
+  formSymptomIds = signal<string[]>([]);
   formPreparationId = signal<string | undefined>(undefined);
   formDosageAmount = signal<number | null>(null);
   formDosageUnit = signal('');
@@ -83,6 +84,7 @@ export class DiaryEntryFormComponent {
             this.formTime.set(this.formatTimeForInput(entryDate));
             this.formMoodId.set(entry.mood.id);
             this.formEffectIds.set(entry.effects.map(e => e.id));
+            this.formSymptomIds.set(entry.symptomIds || []);
             this.formPreparationId.set(entry.preparationId);
             this.formDosageAmount.set(entry.dosage?.amount ?? null);
             this.formDosageUnit.set(entry.dosage?.unit ?? '');
@@ -123,6 +125,20 @@ export class DiaryEntryFormComponent {
       this.formEffectIds.set([...currentIds, effectId]);
     }
   }
+
+  isSymptomSelected(symptomId: string): boolean {
+    return this.formSymptomIds().includes(symptomId);
+  }
+
+  toggleSymptom(symptomId: string) {
+    this.isDirty.set(true);
+    const currentIds = this.formSymptomIds();
+    if (currentIds.includes(symptomId)) {
+      this.formSymptomIds.set(currentIds.filter(id => id !== symptomId));
+    } else {
+      this.formSymptomIds.set([...currentIds, symptomId]);
+    }
+  }
   
   /**
    * Markiert das Formular als "geändert", wenn ein Feld bearbeitet wird.
@@ -137,6 +153,7 @@ export class DiaryEntryFormComponent {
     this.formTime.set(this.formatTimeForInput(now));
     this.formMoodId.set(undefined);
     this.formEffectIds.set([]);
+    this.formSymptomIds.set([]);
     this.formPreparationId.set(undefined);
     this.formDosageAmount.set(null);
     this.formDosageUnit.set('');
@@ -175,6 +192,7 @@ export class DiaryEntryFormComponent {
         mood: mood,
         preparationId: this.formPreparationId(),
         effects: effects,
+        symptomIds: this.formSymptomIds().length > 0 ? this.formSymptomIds() : undefined,
         note: this.formNote(),
       };
 
@@ -191,6 +209,7 @@ export class DiaryEntryFormComponent {
         mood: mood,
         preparationId: this.formPreparationId(),
         effects: effects,
+        symptomIds: this.formSymptomIds().length > 0 ? this.formSymptomIds() : undefined,
         note: this.formNote(),
       };
 
@@ -217,6 +236,10 @@ export class DiaryEntryFormComponent {
 
   openCreatePreparationForm() {
     this.uiService.openCreateForm('Preparation');
+  }
+  
+  openCreateSymptomForm() {
+    this.uiService.openCreateForm('Symptom');
   }
 
   /**

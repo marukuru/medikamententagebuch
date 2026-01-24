@@ -76,6 +76,7 @@
         @for (entry of paginatedEntries(); track entry.id) {
           <!-- Details für das Präparat werden einmal pro Eintrag geholt -->
           @let details = getPreparationDetails(entry.preparationId);
+          @let symptoms = getSymptoms(entry.symptomIds);
           <div (click)="viewEntry(entry)" class="bg-white dark:bg-slate-800 rounded-xl shadow-md hover:shadow-lg transition-shadow cursor-pointer p-4 border border-slate-200 dark:border-slate-700">
             <div class="flex justify-between items-start">
               <div>
@@ -110,14 +111,26 @@
               <!-- Stimmungs-Emoji -->
               <div class="text-3xl">{{ entry.mood.emoji }}</div>
             </div>
-            <!-- Effekte-Emojis, falls vorhanden -->
-            @if (entry.effects.length > 0) {
-              <div class="mt-2 text-xl flex flex-wrap gap-2">
-                @for (effect of entry.effects; track effect.id) {
-                  <span>{{ effect.emoji }}</span>
-                }
-              </div>
-            }
+            <!-- Effekte- & Symptom-Emojis, falls vorhanden -->
+            <div class="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-xl">
+              @if (symptoms.length > 0) {
+                <div class="flex flex-wrap gap-2">
+                  @for (symptom of symptoms; track symptom.id) {
+                    <span>{{ symptom.emoji }}</span>
+                  }
+                </div>
+              }
+              @if (entry.effects.length > 0 && symptoms.length > 0) {
+                  <div class="border-l border-slate-300 dark:border-slate-600 h-5"></div>
+              }
+              @if (entry.effects.length > 0) {
+                <div class="flex flex-wrap gap-2">
+                  @for (effect of entry.effects; track effect.id) {
+                    <span>{{ effect.emoji }}</span>
+                  }
+                </div>
+              }
+            </div>
           </div>
         }
         <!-- "Mehr laden"-Button, wenn es mehr Einträge gibt als angezeigt werden -->
@@ -146,6 +159,7 @@
 <!-- Modal für die Detailansicht eines Eintrags -->
 @if (showDetail(); as entry) {
   @let details = getPreparationDetails(entry.preparationId);
+  @let symptoms = getSymptoms(entry.symptomIds);
   <div class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-40 px-4 pt-[calc(1rem+env(safe-area-inset-top,0rem))] pb-[calc(1rem+env(safe-area-inset-bottom,0rem))]" (click)="showDetail.set(null)">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
       <div class="flex justify-between items-center mb-4">
@@ -161,6 +175,20 @@
           <span>{{ entry.mood.description }}</span>
         </div>
         
+         @if (symptoms.length > 0) {
+          <div>
+            <strong>{{ t().symptoms }}:</strong>
+            <ul class="list-none pl-4 space-y-1 mt-1">
+              @for(symptom of symptoms; track symptom.id) {
+                <li class="flex items-center gap-2">
+                  <span class="text-xl">{{ symptom.emoji }}</span>
+                  <span>{{ symptom.description }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+
         @if (details.prep) {
           <div>
             <strong>{{ t().preparation }}:</strong>

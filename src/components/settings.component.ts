@@ -83,6 +83,7 @@ export class SettingsComponent {
     const t = this.t();
     return [
       { type: 'Mood' as const, title: t.crudMoods, emoji: '🙆', items: this.dataService.moods(), display: (i: any) => `${i.emoji} ${i.description}` },
+      { type: 'Symptom' as const, title: t.crudSymptoms, emoji: '🤒', items: this.dataService.symptoms(), display: (i: any) => `${i.emoji} ${i.description}` },
       { type: 'Effect' as const, title: t.crudEffects, emoji: '🧖', items: this.dataService.effects(), display: (i: any) => `${i.emoji} ${i.description}` },
       { type: 'Manufacturer' as const, title: t.crudManufacturers, emoji: '🏢', items: this.dataService.sortedManufacturers(), display: (i: any) => i.name },
       { type: 'Preparation' as const, title: t.crudPreparations, emoji: '💊', items: this.dataService.sortedPreparations(), display: (i: any) => i.name },

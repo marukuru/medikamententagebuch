@@ -36,6 +36,30 @@
         </div>
       </div>
 
+      <!-- Sektion: Symptome (Mehrfachauswahl) -->
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().symptomsLabel }}</label>
+          <button type="button" (click)="openCreateSymptomForm()" [title]="t().addNewSymptomTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
+            <i class="fa fa-plus text-xs"></i>
+          </button>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          @for(symptom of dataService.symptoms(); track symptom.id) {
+            <button type="button" 
+                    (click)="toggleSymptom(symptom.id)"
+                    [class.bg-primary-500]="isSymptomSelected(symptom.id)"
+                    [class.text-white]="isSymptomSelected(symptom.id)"
+                    [class.bg-slate-100]="!isSymptomSelected(symptom.id)"
+                    [class.dark:bg-slate-700]="!isSymptomSelected(symptom.id)"
+                    class="px-3 py-1 rounded-full text-sm flex items-center gap-2 transition-colors">
+              <span>{{symptom.emoji}}</span>
+              <span>{{symptom.description}}</span>
+            </button>
+          }
+        </div>
+      </div>
+
       <!-- Sektion: Präparat-Auswahl -->
       <div>
         <label for="preparation" class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().preparationLabel }}</label>
