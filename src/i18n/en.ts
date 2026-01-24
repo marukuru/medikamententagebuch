@@ -62,9 +62,9 @@ export const LANG_EN = {
     negativeEffects: 'Negative Effects',
     noDataForNegativeEffects: 'No data available for negative effects.',
     symptomsAndRelief: 'Symptoms & Relief',
-    positiveEffectsForSymptom: 'Preparations with positive effects for this symptom:',
+    positiveEffectsForSymptom: 'Preparations with positive effects for symptoms:',
     activitiesAndEffects: 'Activities & Effects',
-    positiveEffectsForActivity: 'Preparations with positive effects for this activity:',
+    positiveEffectsForActivity: 'Preparations with positive effects for activities:',
 
     // Settings Page
     settingsTitle: 'Settings',
