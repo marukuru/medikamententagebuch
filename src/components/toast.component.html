@@ -10,8 +10,8 @@
         <i [class]="getIconClass(toast.type)" class="text-xl"></i>
       </div>
       <!-- Toast-Nachricht -->
-      <div class="ml-3 flex-1">
-        <p class="text-sm font-medium">{{ toast.message }}</p>
+      <div class="ml-3 flex-1 min-w-0">
+        <p class="text-sm font-medium whitespace-pre-wrap break-words">{{ toast.message }}</p>
       </div>
       <!-- Schließen-Button -->
       <div class="ml-4 flex-shrink-0 flex">
