@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, inject, signal, input, output, effe
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
-import { DiaryEntry, Preparation } from '../models';
+import { DiaryEntry, Preparation, Mood, Symptom, Activity, Effect } from '../models';
 import { UiService } from '../services/ui.service';
 import { TranslationService } from '../services/translation.service';
 import { ToastService } from '../services/toast.service';
@@ -254,23 +254,38 @@ export class DiaryEntryFormComponent {
   }
 
   openCreatePreparationForm() {
-    this.uiService.openCreateForm('Preparation');
+    this.uiService.openCreateForm('Preparation', (item: Preparation) => {
+        this.formPreparationId.set(item.id);
+        this.fieldChanged();
+    });
   }
   
   openCreateSymptomForm() {
-    this.uiService.openCreateForm('Symptom');
+    this.uiService.openCreateForm('Symptom', (item: Symptom) => {
+        this.formSymptomIds.update(ids => [...ids, item.id]);
+        this.fieldChanged();
+    });
   }
 
   openCreateActivityForm() {
-    this.uiService.openCreateForm('Activity');
+    this.uiService.openCreateForm('Activity', (item: Activity) => {
+        this.formActivityIds.update(ids => [...ids, item.id]);
+        this.fieldChanged();
+    });
   }
 
   openCreateEffectForm() {
-    this.uiService.openCreateForm('Effect');
+    this.uiService.openCreateForm('Effect', (item: Effect) => {
+        this.formEffectIds.update(ids => [...ids, item.id]);
+        this.fieldChanged();
+    });
   }
 
   openCreateMoodForm() {
-    this.uiService.openCreateForm('Mood');
+    this.uiService.openCreateForm('Mood', (item: Mood) => {
+        this.formMoodId.set(item.id);
+        this.fieldChanged();
+    });
   }
 
   /**

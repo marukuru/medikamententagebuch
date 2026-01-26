@@ -213,8 +213,10 @@ export class DataService {
   }
 
   // Generische CRUD Methoden für Einstellungs-Entitäten
-  addItem<T extends { id: string }>(stateSignal: ReturnType<typeof signal<T[]>>, item: Omit<T, 'id'>) {
-    stateSignal.update(items => [...items, { ...item, id: this.generateId() } as T]);
+  addItem<T extends { id: string }>(stateSignal: ReturnType<typeof signal<T[]>>, item: Omit<T, 'id'>): T {
+    const newItem = { ...item, id: this.generateId() } as T;
+    stateSignal.update(items => [...items, newItem]);
+    return newItem;
   }
 
   updateItem<T extends { id: string }>(stateSignal: ReturnType<typeof signal<T[]>>, updatedItem: T) {
