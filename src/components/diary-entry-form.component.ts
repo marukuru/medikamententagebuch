@@ -306,12 +306,12 @@ export class DiaryEntryFormComponent {
   /**
    * Formatiert den Namen eines Präparats für die Anzeige im Dropdown.
    * @param prep Das Präparat-Objekt.
-   * @returns Ein formatierter String, z.B. "Hersteller - Name (Wirkstoff)".
+   * @returns Ein formatierter String, z.B. "Name Wirkstoffgehalt (Hersteller)".
    */
   formatPreparation(prep: Preparation): string {
     const man = this.dataService.manufacturers().find((m) => m.id === prep.manufacturerId);
     const ai = this.dataService.activeIngredients().find((a) => a.id === prep.activeIngredientId);
-    return `${man ? man.name + ' - ' : ''}${prep.name}${ai ? ` (${ai.amount} ${ai.unit})` : ''}`;
+    return `${prep.name}${ai ? ` ${ai.amount} ${ai.unit}` : ''}${man ? ` (${man.name})` : ''}`;
   }
 
   // --- Private Hilfsmethoden ---
