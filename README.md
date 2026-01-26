@@ -36,6 +36,19 @@ Eine App zur Erfassung der Einnahme von Medizin und deren Auswirkungen. Verwalte
 -   **📱 Cross-Platform:**
     -   Läuft im modernen Webbrowser und als native Android-App.
 
+## 📜 Lizenz
+
+Dieses Projekt ist unter der [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Lizenz (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/) lizenziert.
+
+Das bedeutet zusammengefasst:
+
+-   **✅ Teilen:** Sie dürfen das Material in jedwedem Format oder Medium vervielfältigen und weiterverbreiten.
+-   **✅ Bearbeiten:** Sie dürfen das Material remixen, verändern und darauf aufbauen.
+-   **📋 Namensnennung (Attribution):** Sie müssen angemessene Urheber- und Rechteangaben machen, einen Link zur Lizenz beifügen und angeben, ob Änderungen vorgenommen wurden.
+-   **❌ Nicht kommerziell (NonCommercial):** Sie dürfen das Material **nicht** für kommerzielle Zwecke nutzen.
+-   **🔄 Weitergabe unter gleichen Bedingungen (ShareAlike):** Wenn Sie das Material remixen, verändern oder anderweitig direkt darauf aufbauen, müssen Sie Ihre Beiträge unter derselben Lizenz wie das Original verbreiten.
+
+Die vollständigen Lizenzbedingungen finden Sie in der `LICENSE`-Datei.
 
 ## 🛠️ Tech Stack
 
@@ -83,6 +96,7 @@ Stellen Sie sicher, dass Sie eine Android-Entwicklungsumgebung eingerichtet habe
 
 ## ⚙️ Benutzte Werkzeuge
 - AI Studio (Gemini 2.5 Pro)
+- Android Studio
 - git
 - GitHub & GitHub Actions
 - Visual Studio Code (GPT-5 mini)
