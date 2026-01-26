@@ -234,6 +234,15 @@ export const LANG_EN = {
     duplicatePreparationError: 'A preparation with this name, manufacturer, and active ingredient already exists.',
     duplicateCustomEmojiError: 'This emoji has already been added.',
     invalidEmojiError: 'Please enter a single, valid emoji.',
+    // Form validation errors
+    formErrorDescriptionRequired: 'Description is a required field.',
+    formErrorEmojiRequired: 'Please select an emoji.',
+    formErrorNameRequired: 'Name is a required field.',
+    formErrorDosageAmountRequired: 'Amount is a required field.',
+    formErrorDosageUnitRequired: 'Unit is a required field.',
+    formErrorActiveIngredientAmountRequired: 'Active ingredient amount is a required field.',
+    formErrorActiveIngredientUnitRequired: 'Active ingredient unit is a required field.',
+    formErrorCustomEmojiRequired: 'Please enter an emoji.',
   },
   defaultMoods: [
     { id: '1', emoji: '💩', description: 'Awful' },

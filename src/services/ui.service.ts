@@ -206,9 +206,15 @@ export class UiService {
         switch (type) {
             case 'Mood': {
                 const formValues = this.moodForm();
-                if (!formValues.description || !formValues.emoji) return null;
-                const description = formValues.description.trim();
-                if (!description) return null;
+                if (!formValues.emoji) {
+                    this.showErrorToast('formErrorEmojiRequired');
+                    return null;
+                }
+                const description = formValues.description?.trim();
+                if (!description) {
+                    this.showErrorToast('formErrorDescriptionRequired');
+                    return null;
+                }
                 if (this.dataService.moods().some(m => m.description.toLowerCase() === description.toLowerCase())) {
                     this.showErrorToast('duplicateMoodError');
                     return null;
@@ -217,9 +223,15 @@ export class UiService {
             }
              case 'Symptom': {
                 const formValues = this.symptomForm();
-                if (!formValues.description || !formValues.emoji) return null;
-                const description = formValues.description.trim();
-                if (!description) return null;
+                if (!formValues.emoji) {
+                    this.showErrorToast('formErrorEmojiRequired');
+                    return null;
+                }
+                const description = formValues.description?.trim();
+                if (!description) {
+                    this.showErrorToast('formErrorDescriptionRequired');
+                    return null;
+                }
                 if (this.dataService.symptoms().some(s => s.description.toLowerCase() === description.toLowerCase())) {
                     this.showErrorToast('duplicateSymptomError');
                     return null;
@@ -228,9 +240,15 @@ export class UiService {
             }
             case 'Activity': {
                 const formValues = this.activityForm();
-                if (!formValues.description || !formValues.emoji) return null;
-                const description = formValues.description.trim();
-                if (!description) return null;
+                if (!formValues.emoji) {
+                    this.showErrorToast('formErrorEmojiRequired');
+                    return null;
+                }
+                const description = formValues.description?.trim();
+                if (!description) {
+                    this.showErrorToast('formErrorDescriptionRequired');
+                    return null;
+                }
                 if (this.dataService.activities().some(a => a.description.toLowerCase() === description.toLowerCase())) {
                     this.showErrorToast('duplicateActivityError');
                     return null;
@@ -239,9 +257,15 @@ export class UiService {
             }
             case 'Effect': {
                 const formValues = this.effectForm();
-                if (!formValues.description || !formValues.emoji) return null;
-                const description = formValues.description.trim();
-                if (!description) return null;
+                if (!formValues.emoji) {
+                    this.showErrorToast('formErrorEmojiRequired');
+                    return null;
+                }
+                const description = formValues.description?.trim();
+                if (!description) {
+                    this.showErrorToast('formErrorDescriptionRequired');
+                    return null;
+                }
                 if (this.dataService.effects().some(e => e.description.toLowerCase() === description.toLowerCase())) {
                     this.showErrorToast('duplicateEffectError');
                     return null;
@@ -250,9 +274,11 @@ export class UiService {
             }
             case 'Manufacturer': {
                 const formValues = this.manufacturerForm();
-                if (!formValues.name) return null;
-                const name = formValues.name.trim();
-                if (!name) return null;
+                const name = formValues.name?.trim();
+                if (!name) {
+                    this.showErrorToast('formErrorNameRequired');
+                    return null;
+                }
                 if (this.dataService.manufacturers().some(m => m.name.toLowerCase() === name.toLowerCase())) {
                     this.showErrorToast('duplicateManufacturerError');
                     return null;
@@ -261,9 +287,15 @@ export class UiService {
             }
             case 'Dosage': {
                 const formValues = this.dosageForm();
-                if (!formValues.amount || !formValues.unit) return null;
-                const unit = formValues.unit.trim();
-                if (!unit) return null;
+                if (formValues.amount == null) {
+                    this.showErrorToast('formErrorDosageAmountRequired');
+                    return null;
+                }
+                const unit = formValues.unit?.trim();
+                if (!unit) {
+                    this.showErrorToast('formErrorDosageUnitRequired');
+                    return null;
+                }
                 if (this.dataService.dosages().some(d => d.amount === formValues.amount && d.unit.toLowerCase() === unit.toLowerCase())) {
                     this.showErrorToast('duplicateDosageError');
                     return null;
@@ -272,10 +304,16 @@ export class UiService {
             }
             case 'ActiveIngredient': {
                 const formValues = this.activeIngredientForm();
-                if (!formValues.amount || !formValues.unit) return null;
-                const amount = formValues.amount.trim();
-                const unit = formValues.unit.trim();
-                if (!amount || !unit) return null;
+                const amount = formValues.amount?.trim();
+                if (!amount) {
+                    this.showErrorToast('formErrorActiveIngredientAmountRequired');
+                    return null;
+                }
+                const unit = formValues.unit?.trim();
+                if (!unit) {
+                    this.showErrorToast('formErrorActiveIngredientUnitRequired');
+                    return null;
+                }
                 if (this.dataService.activeIngredients().some(ai => ai.amount.toLowerCase() === amount.toLowerCase() && ai.unit.toLowerCase() === unit.toLowerCase())) {
                     this.showErrorToast('duplicateActiveIngredientError');
                     return null;
@@ -284,9 +322,11 @@ export class UiService {
             }
             case 'Preparation': {
                 const formValues = this.preparationForm();
-                if (!formValues.name) return null;
-                const name = formValues.name.trim();
-                if (!name) return null;
+                const name = formValues.name?.trim();
+                if (!name) {
+                    this.showErrorToast('formErrorNameRequired');
+                    return null;
+                }
                 if (this.dataService.preparations().some(p => p.name.toLowerCase() === name.toLowerCase() && p.manufacturerId === formValues.manufacturerId && p.activeIngredientId === formValues.activeIngredientId)) {
                     this.showErrorToast('duplicatePreparationError');
                     return null;
@@ -296,7 +336,10 @@ export class UiService {
             case 'CustomEmoji': {
                 const formValues = this.customEmojiForm();
                 const emoji = formValues.emoji?.trim();
-                if (!emoji) return null;
+                if (!emoji) {
+                    this.showErrorToast('formErrorCustomEmojiRequired');
+                    return null;
+                }
 
                 // Validiert, dass es sich um ein einzelnes sichtbares Zeichen/Emoji handelt
                 if ([...emoji].length !== 1) {
@@ -328,9 +371,15 @@ export class UiService {
         switch (type) {
             case 'Mood': {
                 const formValues = this.moodForm();
-                if (!formValues.description || !formValues.emoji) return false;
-                const description = formValues.description.trim();
-                if (!description) return false;
+                 if (!formValues.emoji) {
+                    this.showErrorToast('formErrorEmojiRequired');
+                    return false;
+                }
+                const description = formValues.description?.trim();
+                if (!description) {
+                    this.showErrorToast('formErrorDescriptionRequired');
+                    return false;
+                }
                 if (this.dataService.moods().some(m => m.id !== id && m.description.toLowerCase() === description.toLowerCase())) {
                     this.showErrorToast('duplicateMoodError');
                     return false;
@@ -340,9 +389,15 @@ export class UiService {
             }
             case 'Symptom': {
                 const formValues = this.symptomForm();
-                if (!formValues.description || !formValues.emoji) return false;
-                const description = formValues.description.trim();
-                if (!description) return false;
+                if (!formValues.emoji) {
+                    this.showErrorToast('formErrorEmojiRequired');
+                    return false;
+                }
+                const description = formValues.description?.trim();
+                if (!description) {
+                    this.showErrorToast('formErrorDescriptionRequired');
+                    return false;
+                }
                 if (this.dataService.symptoms().some(s => s.id !== id && s.description.toLowerCase() === description.toLowerCase())) {
                     this.showErrorToast('duplicateSymptomError');
                     return false;
@@ -352,9 +407,15 @@ export class UiService {
             }
             case 'Activity': {
                 const formValues = this.activityForm();
-                if (!formValues.description || !formValues.emoji) return false;
-                const description = formValues.description.trim();
-                if (!description) return false;
+                 if (!formValues.emoji) {
+                    this.showErrorToast('formErrorEmojiRequired');
+                    return false;
+                }
+                const description = formValues.description?.trim();
+                if (!description) {
+                    this.showErrorToast('formErrorDescriptionRequired');
+                    return false;
+                }
                 if (this.dataService.activities().some(a => a.id !== id && a.description.toLowerCase() === description.toLowerCase())) {
                     this.showErrorToast('duplicateActivityError');
                     return false;
@@ -364,9 +425,15 @@ export class UiService {
             }
             case 'Effect': {
                 const formValues = this.effectForm();
-                if (!formValues.description || !formValues.emoji) return false;
-                const description = formValues.description.trim();
-                if (!description) return false;
+                if (!formValues.emoji) {
+                    this.showErrorToast('formErrorEmojiRequired');
+                    return false;
+                }
+                const description = formValues.description?.trim();
+                if (!description) {
+                    this.showErrorToast('formErrorDescriptionRequired');
+                    return false;
+                }
                 if (this.dataService.effects().some(e => e.id !== id && e.description.toLowerCase() === description.toLowerCase())) {
                     this.showErrorToast('duplicateEffectError');
                     return false;
@@ -376,9 +443,11 @@ export class UiService {
             }
             case 'Manufacturer': {
                 const formValues = this.manufacturerForm();
-                if (!formValues.name) return false;
-                const name = formValues.name.trim();
-                if (!name) return false;
+                const name = formValues.name?.trim();
+                if (!name) {
+                    this.showErrorToast('formErrorNameRequired');
+                    return false;
+                }
                 if (this.dataService.manufacturers().some(m => m.id !== id && m.name.toLowerCase() === name.toLowerCase())) {
                     this.showErrorToast('duplicateManufacturerError');
                     return false;
@@ -388,9 +457,15 @@ export class UiService {
             }
             case 'Dosage': {
                 const formValues = this.dosageForm();
-                if (!formValues.amount || !formValues.unit) return false;
-                const unit = formValues.unit.trim();
-                if (!unit) return false;
+                if (formValues.amount == null) {
+                    this.showErrorToast('formErrorDosageAmountRequired');
+                    return false;
+                }
+                const unit = formValues.unit?.trim();
+                if (!unit) {
+                    this.showErrorToast('formErrorDosageUnitRequired');
+                    return false;
+                }
                 if (this.dataService.dosages().some(d => d.id !== id && d.amount === formValues.amount && d.unit.toLowerCase() === unit.toLowerCase())) {
                     this.showErrorToast('duplicateDosageError');
                     return false;
@@ -400,10 +475,16 @@ export class UiService {
             }
             case 'ActiveIngredient': {
                 const formValues = this.activeIngredientForm();
-                if (!formValues.amount || !formValues.unit) return false;
-                const amount = formValues.amount.trim();
-                const unit = formValues.unit.trim();
-                if (!amount || !unit) return false;
+                const amount = formValues.amount?.trim();
+                if (!amount) {
+                    this.showErrorToast('formErrorActiveIngredientAmountRequired');
+                    return false;
+                }
+                const unit = formValues.unit?.trim();
+                if (!unit) {
+                    this.showErrorToast('formErrorActiveIngredientUnitRequired');
+                    return false;
+                }
                 if (this.dataService.activeIngredients().some(ai => ai.id !== id && ai.amount.toLowerCase() === amount.toLowerCase() && ai.unit.toLowerCase() === unit.toLowerCase())) {
                     this.showErrorToast('duplicateActiveIngredientError');
                     return false;
@@ -413,9 +494,11 @@ export class UiService {
             }
             case 'Preparation': {
                 const formValues = this.preparationForm();
-                if (!formValues.name) return false;
-                const name = formValues.name.trim();
-                if (!name) return false;
+                const name = formValues.name?.trim();
+                if (!name) {
+                    this.showErrorToast('formErrorNameRequired');
+                    return false;
+                }
                 if (this.dataService.preparations().some(p => p.id !== id && p.name.toLowerCase() === name.toLowerCase() && p.manufacturerId === formValues.manufacturerId && p.activeIngredientId === formValues.activeIngredientId)) {
                     this.showErrorToast('duplicatePreparationError');
                     return false;

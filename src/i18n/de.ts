@@ -235,6 +235,15 @@ export const LANG_DE = {
     duplicatePreparationError: 'Ein Präparat mit diesem Namen, Hersteller und Wirkstoffgehalt existiert bereits.',
     duplicateCustomEmojiError: 'Dieses Emoji wurde bereits hinzugefügt.',
     invalidEmojiError: 'Bitte geben Sie ein einzelnes, gültiges Emoji ein.',
+    // Form validation errors
+    formErrorDescriptionRequired: 'Die Beschreibung ist ein Pflichtfeld.',
+    formErrorEmojiRequired: 'Bitte wählen Sie ein Emoji aus.',
+    formErrorNameRequired: 'Der Name ist ein Pflichtfeld.',
+    formErrorDosageAmountRequired: 'Die Menge ist ein Pflichtfeld.',
+    formErrorDosageUnitRequired: 'Die Einheit ist ein Pflichtfeld.',
+    formErrorActiveIngredientAmountRequired: 'Die Wirkstoffmenge ist ein Pflichtfeld.',
+    formErrorActiveIngredientUnitRequired: 'Die Wirkstoffeinheit ist ein Pflichtfeld.',
+    formErrorCustomEmojiRequired: 'Bitte geben Sie ein Emoji ein.',
   },
   defaultMoods: [
     { id: '1', emoji: '💩', description: 'Lausig' },
