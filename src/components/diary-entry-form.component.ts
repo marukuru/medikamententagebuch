@@ -37,18 +37,11 @@ export class DiaryEntryFormComponent {
   close = output();
 
   // --- UI-Zustand ---
-  /**
-   * Signal, das verfolgt, ob das Formular ungespeicherte Änderungen hat.
-   */
   isDirty = signal(false);
-  /**
-   * Signal, das die Sichtbarkeit des "Änderungen verwerfen?"-Dialogs steuert.
-   */
   showCancelConfirm = signal(false);
+  isPreparationDropdownOpen = signal(false);
 
   // --- Formularfelder als Signale ---
-  // Die Verwendung von Signalen für Formularfelder ermöglicht eine reaktive
-  // und einfache Zustandsverwaltung innerhalb der Komponente.
   formDate = signal(''); // YYYY-MM-DD
   formTime = signal(''); // HH:mm
   formMoodId = signal<string | undefined>(undefined);
@@ -62,25 +55,59 @@ export class DiaryEntryFormComponent {
   formNote = signal('');
 
   /**
-   * Ein Computed Signal, das die Präparate für das Dropdown-Menü formatiert und sortiert.
+   * Sortiert die Präparate für das Dropdown.
+   * Kriterien:
+   * 1. Nach letztem Verwendungsdatum absteigend.
+   * 2. Präparate ohne Verwendung am Ende, alphabetisch sortiert.
    */
-  preparationsForDropdown = computed(() => {
-    return this.dataService.preparations()
-        .map(prep => ({
-            id: prep.id,
-            formattedName: this.formatPreparation(prep)
-        }))
-        .sort((a, b) => a.formattedName.localeCompare(b.formattedName, 'de', { sensitivity: 'base' }));
+  sortedPreparationsForDropdown = computed(() => {
+    const lastUsedMap = new Map<string, string>();
+    // `sortedDiaryEntries` ist bereits nach Datum absteigend sortiert.
+    // Der erste Treffer für eine ID ist also die letzte Verwendung.
+    for (const entry of this.dataService.sortedDiaryEntries()) {
+        if (entry.preparationId && !lastUsedMap.has(entry.preparationId)) {
+            lastUsedMap.set(entry.preparationId, entry.datetime);
+        }
+    }
+    
+    const allPreps = this.dataService.preparations().map(prep => ({
+        id: prep.id,
+        formattedName: this.formatPreparation(prep)
+    }));
+
+    allPreps.sort((a, b) => {
+        const lastUsedA = lastUsedMap.get(a.id);
+        const lastUsedB = lastUsedMap.get(b.id);
+
+        if (lastUsedA && lastUsedB) {
+            // Beide wurden verwendet -> nach Datum absteigend sortieren
+            return new Date(lastUsedB).getTime() - new Date(lastUsedA).getTime();
+        }
+        if (lastUsedA) return -1; // Nur A wurde verwendet -> A kommt zuerst
+        if (lastUsedB) return 1;  // Nur B wurde verwendet -> B kommt zuerst
+
+        // Beide unbenutzt -> alphabetisch sortieren
+        return a.formattedName.localeCompare(b.formattedName, this.translationService.language(), { sensitivity: 'base' });
+    });
+    
+    return allPreps;
+  });
+
+  /**
+   * Filtert die sortierte Präparate-Liste basierend auf der Texteingabe.
+   */
+  filteredPreparationsForDropdown = computed(() => {
+      const searchText = this.preparationSearchText().toLowerCase();
+      if (!searchText) {
+          return this.sortedPreparationsForDropdown();
+      }
+      return this.sortedPreparationsForDropdown().filter(p => p.formattedName.toLowerCase().includes(searchText));
   });
 
   constructor() {
-    // Dieser `effect` wird ausgeführt, wenn sich `entryToEdit` ändert.
-    // Er initialisiert das Formular entweder mit den Daten des Eintrags
-    // oder setzt es auf die Standardwerte zurück.
     effect(() => {
         const entry = this.entryToEdit();
         if (entry) {
-            // Bearbeitungsmodus: Formular mit Eintragsdaten füllen
             const entryDate = new Date(entry.datetime);
             this.formDate.set(this.formatDateForInput(entryDate));
             this.formTime.set(this.formatTimeForInput(entryDate));
@@ -90,7 +117,6 @@ export class DiaryEntryFormComponent {
             this.formActivityIds.set(entry.activityIds || []);
             this.formPreparationId.set(entry.preparationId);
 
-            // Set the search text based on the ID for the combobox
             if (entry.preparationId) {
                 const prep = this.dataService.preparations().find(p => p.id === entry.preparationId);
                 this.preparationSearchText.set(prep ? this.formatPreparation(prep) : '');
@@ -102,16 +128,13 @@ export class DiaryEntryFormComponent {
             this.formDosageUnit.set(entry.dosage?.unit ?? '');
             this.formNote.set(entry.note || '');
         } else {
-            // Erstellungsmodus: Formular zurücksetzen
             this.resetForm();
         }
     }, { allowSignalWrites: true });
 
-    // Dieser `effect` füllt automatisch die Dosierung aus, wenn ein Präparat
-    // mit einer Standard-Dosierung ausgewählt wird.
     effect(() => {
       const prepId = this.formPreparationId();
-      if (this.entryToEdit()) return; // Nicht überschreiben, wenn ein Eintrag bearbeitet wird
+      if (this.entryToEdit()) return; 
 
       const prep = this.dataService.preparations().find(p => p.id === prepId);
       if(prep && prep.dosageId) {
@@ -120,7 +143,7 @@ export class DiaryEntryFormComponent {
           this.formDosageAmount.set(dosage.amount);
           this.formDosageUnit.set(dosage.unit);
         }
-      } else if (!prepId) { // When preparation is cleared, clear auto-filled dosage
+      } else if (!prepId) {
           this.formDosageAmount.set(null);
           this.formDosageUnit.set('');
       }
@@ -133,12 +156,7 @@ export class DiaryEntryFormComponent {
 
   toggleEffect(effectId: string) {
     this.isDirty.set(true);
-    const currentIds = this.formEffectIds();
-    if (currentIds.includes(effectId)) {
-      this.formEffectIds.set(currentIds.filter(id => id !== effectId));
-    } else {
-      this.formEffectIds.set([...currentIds, effectId]);
-    }
+    this.formEffectIds.update(ids => ids.includes(effectId) ? ids.filter(id => id !== effectId) : [...ids, effectId]);
   }
 
   isSymptomSelected(symptomId: string): boolean {
@@ -147,12 +165,7 @@ export class DiaryEntryFormComponent {
 
   toggleSymptom(symptomId: string) {
     this.isDirty.set(true);
-    const currentIds = this.formSymptomIds();
-    if (currentIds.includes(symptomId)) {
-      this.formSymptomIds.set(currentIds.filter(id => id !== symptomId));
-    } else {
-      this.formSymptomIds.set([...currentIds, symptomId]);
-    }
+    this.formSymptomIds.update(ids => ids.includes(symptomId) ? ids.filter(id => id !== symptomId) : [...ids, symptomId]);
   }
   
   isActivitySelected(activityId: string): boolean {
@@ -161,17 +174,9 @@ export class DiaryEntryFormComponent {
 
   toggleActivity(activityId: string) {
     this.isDirty.set(true);
-    const currentIds = this.formActivityIds();
-    if (currentIds.includes(activityId)) {
-      this.formActivityIds.set(currentIds.filter(id => id !== activityId));
-    } else {
-      this.formActivityIds.set([...currentIds, activityId]);
-    }
+    this.formActivityIds.update(ids => ids.includes(activityId) ? ids.filter(id => id !== activityId) : [...ids, activityId]);
   }
   
-  /**
-   * Markiert das Formular als "geändert", wenn ein Feld bearbeitet wird.
-   */
   fieldChanged() {
     this.isDirty.set(true);
   }
@@ -185,38 +190,46 @@ export class DiaryEntryFormComponent {
     this.formSymptomIds.set([]);
     this.formActivityIds.set([]);
     this.formPreparationId.set(undefined);
-    this.preparationSearchText.set(''); // Reset the search text
+    this.preparationSearchText.set('');
     this.formDosageAmount.set(null);
     this.formDosageUnit.set('');
     this.formNote.set('');
     this.isDirty.set(false);
   }
 
-  /**
-   * Handles changes from the preparation text input.
-   * Finds the corresponding preparation ID based on the input text
-   * and updates the form state.
-   */
-  onPreparationChange(event: Event) {
+  // --- Präparat-Auswahl Logik ---
+  onPreparationInput(event: Event) {
     const value = (event.target as HTMLInputElement).value;
-    // We don't use two-way binding, so we update the signal manually.
     this.preparationSearchText.set(value);
     this.fieldChanged();
 
-    const matchedPrep = this.preparationsForDropdown().find(p => p.formattedName === value);
-    const newId = matchedPrep ? matchedPrep.id : undefined;
-
-    // Only update if the ID has actually changed to avoid re-triggering effects.
-    if (this.formPreparationId() !== newId) {
-        this.formPreparationId.set(newId);
+    const matchedPrep = this.sortedPreparationsForDropdown().find(p => p.formattedName.toLowerCase() === value.toLowerCase());
+    this.formPreparationId.set(matchedPrep ? matchedPrep.id : undefined);
+    
+    if (!this.isPreparationDropdownOpen()) {
+        this.isPreparationDropdownOpen.set(true);
     }
   }
 
-  /**
-   * Validiert die Formulardaten und speichert den Eintrag (entweder neu oder aktualisiert).
-   */
+  onPreparationFocus() {
+    this.isPreparationDropdownOpen.set(true);
+  }
+
+  onPreparationBlur() {
+    // Kurze Verzögerung, damit ein Klick auf ein Dropdown-Item noch registriert werden kann
+    setTimeout(() => {
+        this.isPreparationDropdownOpen.set(false);
+    }, 200);
+  }
+
+  selectPreparation(prep: {id: string, formattedName: string}) {
+    this.preparationSearchText.set(prep.formattedName);
+    this.formPreparationId.set(prep.id);
+    this.isPreparationDropdownOpen.set(false);
+    this.fieldChanged();
+  }
+
   save() {
-    // Validierung: Stimmung ist ein Pflichtfeld
     const moodId = this.formMoodId();
     const mood = this.dataService.moods().find(m => m.id === moodId);
     if (!mood) {
@@ -226,9 +239,15 @@ export class DiaryEntryFormComponent {
 
     const dosageAmount = this.formDosageAmount();
     const dosageUnit = this.formDosageUnit().trim();
-    // Validierung: Wenn eines der Dosierungsfelder ausgefüllt ist, muss das andere auch ausgefüllt sein
     if ((dosageAmount !== null && !dosageUnit) || (dosageAmount === null && dosageUnit)) {
         this.toastService.showError(this.translationService.t('dosageFieldsIncomplete'));
+        return;
+    }
+    
+    // Validierung: Wenn Text im Präparat-Feld steht, muss es einem gültigen Präparat entsprechen
+    const prepSearchText = this.preparationSearchText().trim();
+    if (prepSearchText && !this.formPreparationId()) {
+        this.toastService.showError(this.translationService.t('invalidPreparationError'));
         return;
     }
 
@@ -236,7 +255,6 @@ export class DiaryEntryFormComponent {
     const newDatetime = new Date(`${this.formDate()}T${this.formTime()}`).toISOString();
 
     if (this.entryToEdit()) {
-      // Bestehenden Eintrag aktualisieren
       const updatedEntry: DiaryEntry = {
         ...this.entryToEdit()!,
         datetime: newDatetime,
@@ -247,15 +265,9 @@ export class DiaryEntryFormComponent {
         activityIds: this.formActivityIds().length > 0 ? this.formActivityIds() : undefined,
         note: this.formNote(),
       };
-
-      if (dosageAmount !== null && dosageUnit) {
-        updatedEntry.dosage = { id: '', amount: dosageAmount, unit: dosageUnit };
-      } else {
-        delete updatedEntry.dosage;
-      }
+      updatedEntry.dosage = (dosageAmount !== null && dosageUnit) ? { id: '', amount: dosageAmount, unit: dosageUnit } : undefined;
       this.dataService.updateDiaryEntry(updatedEntry);
     } else {
-      // Neuen Eintrag erstellen
       const newEntry: Omit<DiaryEntry, 'id'> = {
         datetime: newDatetime,
         mood: mood,
@@ -264,21 +276,14 @@ export class DiaryEntryFormComponent {
         symptomIds: this.formSymptomIds().length > 0 ? this.formSymptomIds() : undefined,
         activityIds: this.formActivityIds().length > 0 ? this.formActivityIds() : undefined,
         note: this.formNote(),
+        dosage: (dosageAmount !== null && dosageUnit) ? { id: '', amount: dosageAmount, unit: dosageUnit } : undefined,
       };
-
-      if (dosageAmount !== null && dosageUnit) {
-        (newEntry as DiaryEntry).dosage = { id: '', amount: dosageAmount, unit: dosageUnit };
-      }
       this.dataService.addDiaryEntry(newEntry);
     }
     
     this.close.emit();
   }
 
-  /**
-   * Behandelt den Klick auf den "Abbrechen"-Button.
-   * Zeigt bei ungespeicherten Änderungen eine Bestätigung an.
-   */
   cancel() {
     if (this.isDirty()) {
       this.showCancelConfirm.set(true);
@@ -288,6 +293,7 @@ export class DiaryEntryFormComponent {
   }
 
   openCreatePreparationForm() {
+    this.isPreparationDropdownOpen.set(false);
     this.uiService.openCreateForm('Preparation', (item: Preparation) => {
         this.preparationSearchText.set(this.formatPreparation(item));
         this.formPreparationId.set(item.id);
@@ -323,38 +329,23 @@ export class DiaryEntryFormComponent {
     });
   }
 
-  /**
-   * Bestätigt das Verwerfen von Änderungen und schließt das Formular.
-   */
   confirmClose() {
     this.showCancelConfirm.set(false);
     this.close.emit();
   }
 
-  /**
-   * Bricht den Schließvorgang ab und kehrt zum Formular zurück.
-   */
   abortClose() {
     this.showCancelConfirm.set(false);
   }
 
-  /**
-   * Formatiert den Namen eines Präparats für die Anzeige im Dropdown.
-   * @param prep Das Präparat-Objekt.
-   * @returns Ein formatierter String, z.B. "Name Wirkstoffgehalt (Hersteller)".
-   */
   formatPreparation(prep: Preparation): string {
     const man = this.dataService.manufacturers().find((m) => m.id === prep.manufacturerId);
     const ai = this.dataService.activeIngredients().find((a) => a.id === prep.activeIngredientId);
     return `${prep.name}${ai ? ` ${ai.amount} ${ai.unit}` : ''}${man ? ` (${man.name})` : ''}`;
   }
 
-  // --- Private Hilfsmethoden ---
   private formatDateForInput(date: Date): string {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    return date.toISOString().slice(0, 10);
   }
 
   private formatTimeForInput(date: Date): string {

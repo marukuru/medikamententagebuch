@@ -71,20 +71,31 @@
       <div>
         <label for="preparation" class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().preparationLabel }}</label>
         <div class="flex items-center gap-2 mt-1">
-          <input 
-            type="text"
-            id="preparation"
-            name="preparation"
-            list="preparations-list"
-            [ngModel]="preparationSearchText()"
-            (input)="onPreparationChange($event)"
-            [placeholder]="t().optional"
-            class="block w-full pl-3 pr-2 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
-          <datalist id="preparations-list">
-              @for(prep of preparationsForDropdown(); track prep.id) {
-                  <option [value]="prep.formattedName"></option>
-              }
-          </datalist>
+          <div class="relative w-full">
+            <input 
+              type="text"
+              id="preparation"
+              name="preparation"
+              autocomplete="off"
+              [ngModel]="preparationSearchText()"
+              (input)="onPreparationInput($event)"
+              (focus)="onPreparationFocus()"
+              (blur)="onPreparationBlur()"
+              [placeholder]="t().optional"
+              class="block w-full pl-3 pr-2 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
+            <!-- Benutzerdefinierte Dropdown-Liste -->
+            @if (isPreparationDropdownOpen()) {
+              <div class="absolute z-10 w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg mt-1 max-h-52 overflow-y-auto">
+                  @for(prep of filteredPreparationsForDropdown(); track prep.id) {
+                      <button type="button" (click)="selectPreparation(prep)" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
+                          <div class="whitespace-normal break-words">{{ prep.formattedName }}</div>
+                      </button>
+                  } @empty {
+                      <div class="px-3 py-2 text-slate-500 italic">{{ t().noFilterResults }}</div>
+                  }
+              </div>
+            }
+          </div>
           
           <!-- Button, um direkt aus diesem Formular ein neues Präparat zu erstellen -->
           <button type="button" (click)="openCreatePreparationForm()" [title]="t().addNewPreparationTitle" class="flex-shrink-0 w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">

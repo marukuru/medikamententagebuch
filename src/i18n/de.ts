@@ -113,7 +113,7 @@ export const LANG_DE = {
     dosageLabel: 'Dosierung',
     effectsLabel: 'Effekte',
     noteLabel: 'Notiz (max. 160 Zeichen)',
-    optional: '-- Optional --',
+    optional: 'Suchen oder auswählen...',
     addNewPreparationTitle: 'Neues Präparat anlegen',
     addNewSymptomTitle: 'Neues Symptom anlegen',
     addNewActivityTitle: 'Neue Aktivität anlegen',
@@ -129,6 +129,7 @@ export const LANG_DE = {
     // alerts
     moodIsRequired: 'Stimmung ist ein Pflichtfeld.',
     dosageFieldsIncomplete: 'Für die Dosierung müssen Menge und Einheit angegeben werden, oder beide Felder leer sein.',
+    invalidPreparationError: 'Bitte wählen Sie ein gültiges Präparat aus der Liste aus oder lassen Sie das Feld leer.',
     
     // Generic CRUD Form
     editTitle: 'Bearbeiten',

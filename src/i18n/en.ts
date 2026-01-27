@@ -112,7 +112,7 @@ export const LANG_EN = {
     dosageLabel: 'Dosage',
     effectsLabel: 'Effects',
     noteLabel: 'Note (max. 160 characters)',
-    optional: '-- Optional --',
+    optional: 'Search or select...',
     addNewPreparationTitle: 'Add new preparation',
     addNewSymptomTitle: 'Add new symptom',
     addNewActivityTitle: 'Add new activity',
@@ -128,6 +128,7 @@ export const LANG_EN = {
     // alerts
     moodIsRequired: 'Mood is a required field.',
     dosageFieldsIncomplete: 'For dosage, either both amount and unit must be provided, or both must be empty.',
+    invalidPreparationError: 'Please select a valid preparation from the list or leave the field empty.',
     
     // Generic CRUD Form
     editTitle: 'Edit',
