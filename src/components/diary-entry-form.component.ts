@@ -72,12 +72,13 @@ export class DiaryEntryFormComponent {
     
     const allPreps = this.dataService.preparations().map(prep => ({
         id: prep.id,
-        formattedName: this.formatPreparation(prep)
+        formattedName: this.formatPreparation(prep),
+        lastUsed: lastUsedMap.get(prep.id)
     }));
 
     allPreps.sort((a, b) => {
-        const lastUsedA = lastUsedMap.get(a.id);
-        const lastUsedB = lastUsedMap.get(b.id);
+        const lastUsedA = a.lastUsed;
+        const lastUsedB = b.lastUsed;
 
         if (lastUsedA && lastUsedB) {
             // Beide wurden verwendet -> nach Datum absteigend sortieren
@@ -222,7 +223,7 @@ export class DiaryEntryFormComponent {
     }, 200);
   }
 
-  selectPreparation(prep: {id: string, formattedName: string}) {
+  selectPreparation(prep: {id: string, formattedName: string, lastUsed?: string}) {
     this.preparationSearchText.set(prep.formattedName);
     this.formPreparationId.set(prep.id);
     this.isPreparationDropdownOpen.set(false);

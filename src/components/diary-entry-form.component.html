@@ -86,7 +86,11 @@
             <!-- Benutzerdefinierte Dropdown-Liste -->
             @if (isPreparationDropdownOpen()) {
               <div class="absolute z-10 w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg mt-1 max-h-52 overflow-y-auto">
-                  @for(prep of filteredPreparationsForDropdown(); track prep.id) {
+                  @for(prep of filteredPreparationsForDropdown(); track prep.id; let i = $index) {
+                      @let prevPrep = i > 0 ? filteredPreparationsForDropdown()[i - 1] : null;
+                      @if (prevPrep && prevPrep.lastUsed && !prep.lastUsed) {
+                        <hr class="my-1 border-slate-300 dark:border-slate-600">
+                      }
                       <button type="button" (click)="selectPreparation(prep)" class="w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors">
                           <div class="whitespace-normal break-words">{{ prep.formattedName }}</div>
                       </button>
