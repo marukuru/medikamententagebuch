@@ -71,14 +71,21 @@
       <div>
         <label for="preparation" class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().preparationLabel }}</label>
         <div class="flex items-center gap-2 mt-1">
-          <select id="preparation" name="preparation" [(ngModel)]="formPreparationId" (change)="fieldChanged()" class="block w-full pl-3 pr-10 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
-            <option [ngValue]="undefined">{{ t().optional }}</option>
-            @for(prep of preparationsForDropdown(); track prep.id) {
-              <option [value]="prep.id">
-                {{ prep.formattedName }}
-              </option>
-            }
-          </select>
+          <input 
+            type="text"
+            id="preparation"
+            name="preparation"
+            list="preparations-list"
+            [ngModel]="preparationSearchText()"
+            (input)="onPreparationChange($event)"
+            [placeholder]="t().optional"
+            class="block w-full pl-3 pr-2 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
+          <datalist id="preparations-list">
+              @for(prep of preparationsForDropdown(); track prep.id) {
+                  <option [value]="prep.formattedName"></option>
+              }
+          </datalist>
+          
           <!-- Button, um direkt aus diesem Formular ein neues Präparat zu erstellen -->
           <button type="button" (click)="openCreatePreparationForm()" [title]="t().addNewPreparationTitle" class="flex-shrink-0 w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
             <i class="fa fa-plus"></i>

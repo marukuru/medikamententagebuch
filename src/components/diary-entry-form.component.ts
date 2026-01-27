@@ -56,6 +56,7 @@ export class DiaryEntryFormComponent {
   formSymptomIds = signal<string[]>([]);
   formActivityIds = signal<string[]>([]);
   formPreparationId = signal<string | undefined>(undefined);
+  preparationSearchText = signal(''); // Signal for the combobox text input
   formDosageAmount = signal<number | null>(null);
   formDosageUnit = signal('');
   formNote = signal('');
@@ -88,6 +89,15 @@ export class DiaryEntryFormComponent {
             this.formSymptomIds.set(entry.symptomIds || []);
             this.formActivityIds.set(entry.activityIds || []);
             this.formPreparationId.set(entry.preparationId);
+
+            // Set the search text based on the ID for the combobox
+            if (entry.preparationId) {
+                const prep = this.dataService.preparations().find(p => p.id === entry.preparationId);
+                this.preparationSearchText.set(prep ? this.formatPreparation(prep) : '');
+            } else {
+                this.preparationSearchText.set('');
+            }
+            
             this.formDosageAmount.set(entry.dosage?.amount ?? null);
             this.formDosageUnit.set(entry.dosage?.unit ?? '');
             this.formNote.set(entry.note || '');
@@ -110,6 +120,9 @@ export class DiaryEntryFormComponent {
           this.formDosageAmount.set(dosage.amount);
           this.formDosageUnit.set(dosage.unit);
         }
+      } else if (!prepId) { // When preparation is cleared, clear auto-filled dosage
+          this.formDosageAmount.set(null);
+          this.formDosageUnit.set('');
       }
     }, { allowSignalWrites: true });
   }
@@ -172,10 +185,31 @@ export class DiaryEntryFormComponent {
     this.formSymptomIds.set([]);
     this.formActivityIds.set([]);
     this.formPreparationId.set(undefined);
+    this.preparationSearchText.set(''); // Reset the search text
     this.formDosageAmount.set(null);
     this.formDosageUnit.set('');
     this.formNote.set('');
     this.isDirty.set(false);
+  }
+
+  /**
+   * Handles changes from the preparation text input.
+   * Finds the corresponding preparation ID based on the input text
+   * and updates the form state.
+   */
+  onPreparationChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    // We don't use two-way binding, so we update the signal manually.
+    this.preparationSearchText.set(value);
+    this.fieldChanged();
+
+    const matchedPrep = this.preparationsForDropdown().find(p => p.formattedName === value);
+    const newId = matchedPrep ? matchedPrep.id : undefined;
+
+    // Only update if the ID has actually changed to avoid re-triggering effects.
+    if (this.formPreparationId() !== newId) {
+        this.formPreparationId.set(newId);
+    }
   }
 
   /**
@@ -255,6 +289,7 @@ export class DiaryEntryFormComponent {
 
   openCreatePreparationForm() {
     this.uiService.openCreateForm('Preparation', (item: Preparation) => {
+        this.preparationSearchText.set(this.formatPreparation(item));
         this.formPreparationId.set(item.id);
         this.fieldChanged();
     });
