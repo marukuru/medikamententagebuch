@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "ng serve",
-    "build": "ng build --base-href /medikamententagebuch/",
+    "build": "ng build --base-href ./",
+    "build:gh-pages": "ng build --base-href /medikamententagebuch/",
     "android": "npm run build && npx cap run android"
   },
   "dependencies": {
