@@ -275,7 +275,8 @@ export class SettingsComponent {
   // --- Erinnerungs-Einstellungen ---
   openReminderModal() {
     this.reminderTime.set('08:00');
-    this.reminderDays.set(new Set());
+    // FIX: Explicitly type `new Set()` to avoid the `reminderDays` signal type being widened to `Set<any>`, which causes type errors downstream.
+    this.reminderDays.set(new Set<number>());
     this.showReminderModal.set(true);
   }
 
@@ -285,19 +286,21 @@ export class SettingsComponent {
 
   toggleDay(dayValue: number) {
     this.reminderDays.update(days => {
-      if (days.has(dayValue)) {
-        days.delete(dayValue);
+      const newDays = new Set(days);
+      if (newDays.has(dayValue)) {
+        newDays.delete(dayValue);
       } else {
-        days.add(dayValue);
+        newDays.add(dayValue);
       }
-      return new Set(days);
+      return newDays;
     });
   }
 
   toggleDaily() {
     this.reminderDays.update(days => {
       if (days.size === 7) {
-        return new Set(); // Alle abwählen
+        // FIX: Explicitly type `new Set()` to `new Set<number>()` to prevent widening the signal's type to `Set<any>`, which would cause type errors.
+        return new Set<number>(); // Alle abwählen
       } else {
         return new Set([1, 2, 3, 4, 5, 6, 7]); // Alle anwählen
       }
@@ -305,7 +308,8 @@ export class SettingsComponent {
   }
 
   async saveReminder() {
-    const days = Array.from(this.reminderDays());
+    // FIX: Explicitly convert the Set to a number array to satisfy the `Reminder` type.
+    const days: number[] = [...this.reminderDays()];
     if (days.length === 0) {
         this.toastService.showError(this.t().reminderErrorNoDays);
         return;
