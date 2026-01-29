@@ -34,7 +34,7 @@ Eine App zur Erfassung der Einnahme von Medizin und deren Auswirkungen. Verwalte
     -   Verfügbar in Deutsch und Englisch.
     -   Wechseln Sie nahtlos zwischen einem hellen und einem dunklen Design (Dark Mode).
 -   **📱 Cross-Platform:**
-    -   Läuft im modernen Webbrowser und als native Android-App.
+    -   Läuft im modernen [Webbrowser](https://marukuru.github.io/medikamententagebuch/) und als native [Android-App](https://github.com/marukuru/medikamententagebuch/releases).
 
 ## 📜 Lizenz
 
