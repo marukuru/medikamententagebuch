@@ -48,6 +48,8 @@ export const LANG_DE = {
     filter30days: 'Letzte 30 Tage',
     noFilterResults: 'Keine Einträge gefunden',
     noFilterResultsDescription: 'Versuchen Sie, Ihre Suche oder Filter anzupassen.',
+    daysSkippedSingular: '{{count}} Tag ausgelassen',
+    daysSkippedPlural: '{{count}} Tage ausgelassen',
 
     // Statistics Page
     statisticsTitle: 'Statistik',
@@ -177,6 +179,7 @@ export const LANG_DE = {
     moduleActivities: 'Aktivitäten',
     moduleEffects: 'Effekte',
     moduleNote: 'Notiz',
+    moduleDateGaps: 'Datumslücken anzeigen',
 
     // Design Settings
     design: 'Darstellung',

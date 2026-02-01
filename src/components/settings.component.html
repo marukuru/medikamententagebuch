@@ -75,7 +75,8 @@
             { key: 'showSymptoms', label: t().moduleSymptoms },
             { key: 'showActivities', label: t().moduleActivities },
             { key: 'showEffects', label: t().moduleEffects },
-            { key: 'showNote', label: t().moduleNote }
+            { key: 'showNote', label: t().moduleNote },
+            { key: 'showDateGaps', label: t().moduleDateGaps }
           ]; track item.key) {
             <div class="flex items-center justify-between">
               <label [for]="'toggle-' + item.key" class="font-medium text-slate-700 dark:text-slate-300">{{ item.label }}</label>

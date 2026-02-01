@@ -32,6 +32,7 @@ export interface ModuleSettings {
   showActivities: boolean;
   showEffects: boolean;
   showNote: boolean;
+  showDateGaps: boolean;
 }
 
 /**
@@ -55,6 +56,7 @@ export class DataService {
     showActivities: true,
     showEffects: true,
     showNote: true,
+    showDateGaps: true,
   });
   moods = signal<Mood[]>([]);
   effects = signal<Effect[]>([]);
@@ -147,7 +149,7 @@ export class DataService {
       const parsedData = JSON.parse(data);
       this.theme.set(parsedData.theme || 'light');
       this.lockSettings.set(parsedData.lockSettings || { isEnabled: false, pin: null, timeout: 0 });
-      this.moduleSettings.set(parsedData.moduleSettings || { showDosage: true, showSymptoms: true, showActivities: true, showEffects: true, showNote: true });
+      this.moduleSettings.set(parsedData.moduleSettings || { showDosage: true, showSymptoms: true, showActivities: true, showEffects: true, showNote: true, showDateGaps: true });
       this.moods.set(parsedData.moods || this.translationService.defaultMoods());
       this.effects.set(parsedData.effects || this.translationService.defaultEffects());
       this.symptoms.set(parsedData.symptoms || this.translationService.defaultSymptoms());
@@ -344,7 +346,7 @@ export class DataService {
         timeout: importedSettings.timeout ?? 0,
       });
 
-      this.moduleSettings.set(data.moduleSettings || { showDosage: true, showSymptoms: true, showActivities: true, showEffects: true, showNote: true });
+      this.moduleSettings.set(data.moduleSettings || { showDosage: true, showSymptoms: true, showActivities: true, showEffects: true, showNote: true, showDateGaps: true });
       this.moods.set(data.moods || []);
       this.effects.set(data.effects || []);
       this.symptoms.set(data.symptoms || []);
@@ -369,7 +371,7 @@ export class DataService {
   resetToDefaults() {
     this.theme.set('light');
     this.lockSettings.set({ isEnabled: false, pin: null, timeout: 0 });
-    this.moduleSettings.set({ showDosage: true, showSymptoms: true, showActivities: true, showEffects: true, showNote: true });
+    this.moduleSettings.set({ showDosage: true, showSymptoms: true, showActivities: true, showEffects: true, showNote: true, showDateGaps: true });
     this.moods.set(this.translationService.defaultMoods());
     this.effects.set(this.translationService.defaultEffects());
     this.symptoms.set(this.translationService.defaultSymptoms());

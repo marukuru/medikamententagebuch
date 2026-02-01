@@ -39,7 +39,7 @@ export class DiaryListComponent {
    * Ein Computed Signal, das die Tagebucheinträge basierend auf dem aktuellen
    * Suchbegriff und Datumsfilter filtert.
    */
-  filteredEntries = computed(() => {
+  private filteredEntries = computed(() => {
     const term = this.searchTerm().toLowerCase();
     const filter = this.dateFilter();
     const allEntries = this.dataService.sortedDiaryEntries();
@@ -79,6 +79,34 @@ export class DiaryListComponent {
     });
   });
 
+  /**
+   * Ein Computed Signal, das die gefilterten Einträge um die Information
+   * über die Datumslücke zum jeweils nächsten Eintrag erweitert.
+   */
+  private entriesWithGaps = computed(() => {
+    const entries = this.filteredEntries();
+    return entries.map((entry, index) => {
+      let gap = 0;
+      if (index < entries.length - 1) {
+        const nextEntry = entries[index + 1];
+
+        const currentDate = new Date(entry.datetime);
+        const nextDate = new Date(nextEntry.datetime);
+
+        // Zeit auf Mitternacht setzen, um nur das Datum zu vergleichen
+        currentDate.setHours(0, 0, 0, 0);
+        nextDate.setHours(0, 0, 0, 0);
+
+        const diffTime = currentDate.getTime() - nextDate.getTime();
+        // Math.round, um Probleme mit der Sommerzeit zu vermeiden
+        const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+        // Ein Tag Lücke bedeutet, die Differenz ist 2 Tage (z.B. 25. vs 23.)
+        gap = diffDays > 1 ? diffDays - 1 : 0;
+      }
+      return { ...entry, gapAfter: gap };
+    });
+  });
 
   // --- Paginierung ---
   private initialLoadCount = 50; // Anzahl der Einträge, die initial geladen werden
@@ -89,14 +117,14 @@ export class DiaryListComponent {
    * Ein Computed Signal, das die paginierte Liste der Einträge zurückgibt.
    */
   paginatedEntries = computed(() => {
-    return this.filteredEntries().slice(0, this.visibleCount());
+    return this.entriesWithGaps().slice(0, this.visibleCount());
   });
   
   /**
    * Ein Computed Signal, das anzeigt, ob es noch mehr Einträge zum Laden gibt.
    */
   hasMoreEntries = computed(() => {
-    return this.visibleCount() < this.filteredEntries().length;
+    return this.visibleCount() < this.entriesWithGaps().length;
   });
 
   constructor() {

@@ -48,6 +48,8 @@ export const LANG_EN = {
     filter30days: 'Last 30 days',
     noFilterResults: 'No entries found',
     noFilterResultsDescription: 'Try adjusting your search or filters.',
+    daysSkippedSingular: '{{count}} day skipped',
+    daysSkippedPlural: '{{count}} days skipped',
 
     // Statistics Page
     statisticsTitle: 'Statistics',
@@ -176,6 +178,7 @@ export const LANG_EN = {
     moduleActivities: 'Activities',
     moduleEffects: 'Effects',
     moduleNote: 'Note',
+    moduleDateGaps: 'Show date gaps',
 
     // Design Settings
     design: 'Appearance',
