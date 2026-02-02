@@ -30,13 +30,13 @@
             }
           </div>
 
-          <!-- Filter-Buttons -->
+          <!-- Datums-Filter-Buttons -->
           <div class="flex flex-wrap gap-2">
             <button (click)="setDateFilter('all')"
-                    [class.bg-primary-600]="dateFilter() === 'all'"
-                    [class.text-white]="dateFilter() === 'all'"
-                    [class.bg-slate-200]="dateFilter() !== 'all'"
-                    [class.dark:bg-slate-700]="dateFilter() !== 'all'"
+                    [class.bg-primary-600]="dateFilter() === 'all' && yearFilter() === 'all'"
+                    [class.text-white]="dateFilter() === 'all' && yearFilter() === 'all'"
+                    [class.bg-slate-200]="dateFilter() !== 'all' || yearFilter() !== 'all'"
+                    [class.dark:bg-slate-700]="dateFilter() !== 'all' || yearFilter() !== 'all'"
                     class="px-4 py-1.5 rounded-full text-sm font-medium hover:bg-primary-500 hover:text-white transition-colors">
               {{ t().filterAll }}
             </button>
@@ -57,6 +57,21 @@
               {{ t().filter30days }}
             </button>
           </div>
+
+          <!-- Jahres-Filter-Dropdown -->
+          @if (availableYears().length > 1) {
+            <div class="border-t border-slate-200 dark:border-slate-700 pt-4 mt-4">
+                <select 
+                    [value]="yearFilter()" 
+                    (change)="onYearFilterChange($event)"
+                    class="w-full p-3 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md bg-white dark:bg-slate-700 shadow-sm">
+                    <option value="all">{{ t().filterByYear }}</option>
+                    @for (year of availableYears(); track year) {
+                        <option [value]="year">{{ year }}</option>
+                    }
+                </select>
+            </div>
+          }
         </div>
       }
     </div>

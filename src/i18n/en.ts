@@ -46,6 +46,7 @@ export const LANG_EN = {
     filterAll: 'All',
     filter7days: 'Last 7 days',
     filter30days: 'Last 30 days',
+    filterByYear: 'Filter by year...',
     noFilterResults: 'No entries found',
     noFilterResultsDescription: 'Try adjusting your search or filters.',
     daysSkippedSingular: '{{count}} day skipped',

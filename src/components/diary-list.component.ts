@@ -34,6 +34,17 @@ export class DiaryListComponent {
   // --- Suche & Filter ---
   searchTerm = signal(''); // Der aktuelle Suchbegriff
   dateFilter = signal<'all' | '7d' | '30d'>('all'); // Der aktive Datumsfilter
+  yearFilter = signal<number | 'all'>('all'); // Der neue Jahresfilter
+
+  /**
+   * Ein Computed Signal, das alle eindeutigen Jahre aus den Tagebucheinträgen extrahiert.
+   */
+  availableYears = computed(() => {
+    const years = this.dataService.diaryEntries()
+      .map(entry => new Date(entry.datetime).getFullYear());
+    // Eindeutige Jahre ermitteln und absteigend sortieren
+    return [...new Set(years)].sort((a, b) => b - a);
+  });
 
   /**
    * Ein Computed Signal, das die Tagebucheinträge basierend auf dem aktuellen
@@ -41,26 +52,34 @@ export class DiaryListComponent {
    */
   private filteredEntries = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    const filter = this.dateFilter();
+    const dateF = this.dateFilter();
+    const yearF = this.yearFilter();
     const allEntries = this.dataService.sortedDiaryEntries();
 
-    // 1. Datumsfilter anwenden
-    const dateFiltered = allEntries.filter(entry => {
-      if (filter === 'all') return true;
-      const entryDate = new Date(entry.datetime);
-      const now = new Date();
-      const daysAgo = (now.getTime() - entryDate.getTime()) / (1000 * 3600 * 24);
-      if (filter === '7d') return daysAgo <= 7;
-      if (filter === '30d') return daysAgo <= 30;
-      return true;
-    });
+    let temporarilyFilteredEntries: DiaryEntry[];
 
-    // 2. Suchbegriff-Filter anwenden
-    if (!term) {
-      return dateFiltered;
+    // 1. Priorität: Jahresfilter. Wenn aktiv, werden die anderen Datumsfilter ignoriert.
+    if (yearF !== 'all') {
+      temporarilyFilteredEntries = allEntries.filter(entry => new Date(entry.datetime).getFullYear() === yearF);
+    } else {
+      // Ansonsten, wende den relativen Datumsfilter an.
+      temporarilyFilteredEntries = allEntries.filter(entry => {
+        if (dateF === 'all') return true;
+        const entryDate = new Date(entry.datetime);
+        const now = new Date();
+        const daysAgo = (now.getTime() - entryDate.getTime()) / (1000 * 3600 * 24);
+        if (dateF === '7d') return daysAgo <= 7;
+        if (dateF === '30d') return daysAgo <= 30;
+        return true;
+      });
     }
 
-    return dateFiltered.filter(entry => {
+    // 2. Suchbegriff-Filter auf die bereits gefilterte Liste anwenden
+    if (!term) {
+      return temporarilyFilteredEntries;
+    }
+
+    return temporarilyFilteredEntries.filter(entry => {
       const details = this.getPreparationDetails(entry.preparationId);
       const symptoms = this.getSymptoms(entry.symptomIds);
       const activities = this.getActivities(entry.activityIds);
@@ -257,8 +276,22 @@ export class DiaryListComponent {
     this.visibleCount.set(this.initialLoadCount); // Paginierung zurücksetzen
   }
 
-setDateFilter(filter: 'all' | '7d' | '30d') {
+  setDateFilter(filter: 'all' | '7d' | '30d') {
     this.dateFilter.set(filter);
+    this.yearFilter.set('all'); // Jahresfilter zurücksetzen, wenn ein Datumsfilter gesetzt wird
     this.visibleCount.set(this.initialLoadCount); // Paginierung bei Filteränderung zurücksetzen
+  }
+
+  setYearFilter(year: number | 'all') {
+    this.yearFilter.set(year);
+    this.dateFilter.set('all'); // Datumsfilter zurücksetzen, wenn ein Jahresfilter gesetzt wird
+    this.visibleCount.set(this.initialLoadCount);
+  }
+
+  onYearFilterChange(event: Event) {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    // Der Wert von <option> ist immer ein String.
+    const year = selectedValue === 'all' ? 'all' : parseInt(selectedValue, 10);
+    this.setYearFilter(year);
   }
 }
