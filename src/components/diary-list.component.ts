@@ -108,6 +108,37 @@ export class DiaryListComponent {
     });
   });
 
+  /**
+   * Ein Computed Signal, das die Lücke zwischen heute und dem ersten
+   * (neuesten) Eintrag in der gefilterten Liste berechnet.
+   */
+  gapBeforeFirstEntry = computed(() => {
+    const entries = this.filteredEntries();
+    if (entries.length === 0) {
+      return 0;
+    }
+
+    const firstEntry = entries[0]; // Dies ist der neueste Eintrag in der gefilterten Liste
+    const today = new Date();
+    const firstEntryDate = new Date(firstEntry.datetime);
+
+    // Zeit auf Mitternacht setzen, um nur das Datum zu vergleichen
+    today.setHours(0, 0, 0, 0);
+    firstEntryDate.setHours(0, 0, 0, 0);
+
+    // Keine Lücke für zukünftige Einträge anzeigen
+    if (firstEntryDate.getTime() > today.getTime()) {
+      return 0;
+    }
+
+    const diffTime = today.getTime() - firstEntryDate.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+    // Eine Differenz von 1 Tag (heute vs. gestern) bedeutet 0 ausgelassene Tage.
+    // Eine Differenz von 2 Tagen (heute vs. vorgestern) bedeutet 1 ausgelassener Tag.
+    return diffDays > 1 ? diffDays - 1 : 0;
+  });
+
   // --- Paginierung ---
   private initialLoadCount = 50; // Anzahl der Einträge, die initial geladen werden
   private subsequentLoadCount = 10; // Anzahl der Einträge, die bei "Mehr laden" nachgeladen werden

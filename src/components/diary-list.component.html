@@ -78,95 +78,112 @@
       </div>
     } @else {
       <!-- Fall: Gefilterte Einträge werden angezeigt -->
-      <div class="space-y-4">
-        @for (entry of paginatedEntries(); track entry.id) {
-          <!-- Details für das Präparat werden einmal pro Eintrag geholt -->
-          @let details = getPreparationDetails(entry.preparationId);
-          @let symptoms = getSymptoms(entry.symptomIds);
-          @let activities = getActivities(entry.activityIds);
-          <div>
-            <div (click)="viewEntry(entry)" class="bg-white dark:bg-slate-800 rounded-xl shadow-md hover:shadow-lg transition-shadow cursor-pointer p-4 border border-slate-200 dark:border-slate-700">
-              <div class="flex justify-between items-start">
-                <div>
-                  <p class="font-semibold text-slate-800 dark:text-slate-200">{{ entry.datetime | date:'dd.MM.yyyy, HH:mm' }}</p>
-                  <!-- Präparat-Details, falls vorhanden -->
-                  @if (details.prep) {
-                    <p class="text-sm text-slate-600 dark:text-slate-400">
-                      @if (details.man) {
-                        <span>{{ details.man.name }} - </span>
-                      }
-                      <span>{{ details.prep.name }}</span>
-                      @if (details.ai) {
-                        <span class="text-xs"> ({{ details.ai.amount }} {{ details.ai.unit }})</span>
-                      }
-                      @if (entry.dosage && dataService.moduleSettings().showDosage) {
-                        <span>: {{ entry.dosage.amount }} {{ entry.dosage.unit }}</span>
-                      }
-                    </p>
-                  } @else {
-                    <!-- Nur Dosierung anzeigen, wenn kein Präparat verknüpft ist -->
-                    @if (entry.dosage && dataService.moduleSettings().showDosage) {
-                      <p class="text-sm text-slate-600 dark:text-slate-400">
-                        {{ t().dosageLabelWithData.replace('{amount}', entry.dosage.amount.toString()).replace('{unit}', entry.dosage.unit) }}
-                      </p>
-                    }
-                  }
-                  <!-- Gekürzte Notiz, falls vorhanden -->
-                   @if(entry.note && dataService.moduleSettings().showNote) {
-                      <p class="text-sm text-slate-500 dark:text-slate-400 italic mt-1">"{{ entry.note }}"</p>
-                  }
-                </div>
-                <!-- Stimmungs-Emoji -->
-                <div class="text-3xl">{{ entry.mood.emoji }}</div>
-              </div>
-              <!-- Emojis für Symptome, Effekte, Aktivitäten -->
-              <div class="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-xl">
-                @if (symptoms.length > 0 && dataService.moduleSettings().showSymptoms) {
-                  <div class="flex flex-wrap gap-2">
-                    @for (symptom of symptoms; track symptom.id) {
-                      <span>{{ symptom.emoji }}</span>
-                    }
-                  </div>
-                }
-                @if (entry.effects.length > 0 && symptoms.length > 0 && dataService.moduleSettings().showEffects && dataService.moduleSettings().showSymptoms) {
-                    <div class="border-l border-slate-300 dark:border-slate-600 h-5"></div>
-                }
-                @if (entry.effects.length > 0 && dataService.moduleSettings().showEffects) {
-                  <div class="flex flex-wrap gap-2">
-                    @for (effect of entry.effects; track effect.id) {
-                      <span>{{ effect.emoji }}</span>
-                    }
-                  </div>
-                }
-                 @if (activities.length > 0 && (entry.effects.length > 0 || symptoms.length > 0) && dataService.moduleSettings().showActivities && (dataService.moduleSettings().showEffects || dataService.moduleSettings().showSymptoms)) {
-                    <div class="border-l border-slate-300 dark:border-slate-600 h-5"></div>
-                }
-                @if (activities.length > 0 && dataService.moduleSettings().showActivities) {
-                  <div class="flex flex-wrap gap-2">
-                    @for (activity of activities; track activity.id) {
-                      <span>{{ activity.emoji }}</span>
-                    }
-                  </div>
-                }
-              </div>
-            </div>
-
-            <!-- Trennlinie für Datumslücken -->
-            @if(dataService.moduleSettings().showDateGaps && entry.gapAfter > 0) {
-              <div class="flex items-center text-center my-4" aria-hidden="true">
-                <div class="flex-grow border-t border-slate-300 dark:border-slate-600"></div>
-                <span class="flex-shrink mx-4 text-xs text-slate-500 dark:text-slate-400">
-                  @if (entry.gapAfter === 1) {
-                    {{ t().daysSkippedSingular.replace('{{count}}', entry.gapAfter.toString()) }}
-                  } @else {
-                    {{ t().daysSkippedPlural.replace('{{count}}', entry.gapAfter.toString()) }}
-                  }
-                </span>
-                <div class="flex-grow border-t border-slate-300 dark:border-slate-600"></div>
-              </div>
-            }
+      <div>
+        <!-- Trennlinie für Lücke vor dem ersten Eintrag -->
+        @if(dataService.moduleSettings().showDateGaps && gapBeforeFirstEntry() > 0) {
+          <div class="flex items-center text-center mb-4" aria-hidden="true">
+            <div class="flex-grow border-t border-slate-300 dark:border-slate-600"></div>
+            <span class="flex-shrink mx-4 text-xs text-slate-500 dark:text-slate-400">
+              @if (gapBeforeFirstEntry() === 1) {
+                {{ t().daysSkippedSingular.replace('{{count}}', gapBeforeFirstEntry().toString()) }}
+              } @else {
+                {{ t().daysSkippedPlural.replace('{{count}}', gapBeforeFirstEntry().toString()) }}
+              }
+            </span>
+            <div class="flex-grow border-t border-slate-300 dark:border-slate-600"></div>
           </div>
         }
+
+        <div class="space-y-4">
+          @for (entry of paginatedEntries(); track entry.id) {
+            <!-- Details für das Präparat werden einmal pro Eintrag geholt -->
+            @let details = getPreparationDetails(entry.preparationId);
+            @let symptoms = getSymptoms(entry.symptomIds);
+            @let activities = getActivities(entry.activityIds);
+            <div>
+              <div (click)="viewEntry(entry)" class="bg-white dark:bg-slate-800 rounded-xl shadow-md hover:shadow-lg transition-shadow cursor-pointer p-4 border border-slate-200 dark:border-slate-700">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <p class="font-semibold text-slate-800 dark:text-slate-200">{{ entry.datetime | date:'dd.MM.yyyy, HH:mm' }}</p>
+                    <!-- Präparat-Details, falls vorhanden -->
+                    @if (details.prep) {
+                      <p class="text-sm text-slate-600 dark:text-slate-400">
+                        @if (details.man) {
+                          <span>{{ details.man.name }} - </span>
+                        }
+                        <span>{{ details.prep.name }}</span>
+                        @if (details.ai) {
+                          <span class="text-xs"> ({{ details.ai.amount }} {{ details.ai.unit }})</span>
+                        }
+                        @if (entry.dosage && dataService.moduleSettings().showDosage) {
+                          <span>: {{ entry.dosage.amount }} {{ entry.dosage.unit }}</span>
+                        }
+                      </p>
+                    } @else {
+                      <!-- Nur Dosierung anzeigen, wenn kein Präparat verknüpft ist -->
+                      @if (entry.dosage && dataService.moduleSettings().showDosage) {
+                        <p class="text-sm text-slate-600 dark:text-slate-400">
+                          {{ t().dosageLabelWithData.replace('{amount}', entry.dosage.amount.toString()).replace('{unit}', entry.dosage.unit) }}
+                        </p>
+                      }
+                    }
+                    <!-- Gekürzte Notiz, falls vorhanden -->
+                    @if(entry.note && dataService.moduleSettings().showNote) {
+                        <p class="text-sm text-slate-500 dark:text-slate-400 italic mt-1">"{{ entry.note }}"</p>
+                    }
+                  </div>
+                  <!-- Stimmungs-Emoji -->
+                  <div class="text-3xl">{{ entry.mood.emoji }}</div>
+                </div>
+                <!-- Emojis für Symptome, Effekte, Aktivitäten -->
+                <div class="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-xl">
+                  @if (symptoms.length > 0 && dataService.moduleSettings().showSymptoms) {
+                    <div class="flex flex-wrap gap-2">
+                      @for (symptom of symptoms; track symptom.id) {
+                        <span>{{ symptom.emoji }}</span>
+                      }
+                    </div>
+                  }
+                  @if (entry.effects.length > 0 && symptoms.length > 0 && dataService.moduleSettings().showEffects && dataService.moduleSettings().showSymptoms) {
+                      <div class="border-l border-slate-300 dark:border-slate-600 h-5"></div>
+                  }
+                  @if (entry.effects.length > 0 && dataService.moduleSettings().showEffects) {
+                    <div class="flex flex-wrap gap-2">
+                      @for (effect of entry.effects; track effect.id) {
+                        <span>{{ effect.emoji }}</span>
+                      }
+                    </div>
+                  }
+                  @if (activities.length > 0 && (entry.effects.length > 0 || symptoms.length > 0) && dataService.moduleSettings().showActivities && (dataService.moduleSettings().showEffects || dataService.moduleSettings().showSymptoms)) {
+                      <div class="border-l border-slate-300 dark:border-slate-600 h-5"></div>
+                  }
+                  @if (activities.length > 0 && dataService.moduleSettings().showActivities) {
+                    <div class="flex flex-wrap gap-2">
+                      @for (activity of activities; track activity.id) {
+                        <span>{{ activity.emoji }}</span>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- Trennlinie für Datumslücken -->
+              @if(dataService.moduleSettings().showDateGaps && entry.gapAfter > 0) {
+                <div class="flex items-center text-center my-4" aria-hidden="true">
+                  <div class="flex-grow border-t border-slate-300 dark:border-slate-600"></div>
+                  <span class="flex-shrink mx-4 text-xs text-slate-500 dark:text-slate-400">
+                    @if (entry.gapAfter === 1) {
+                      {{ t().daysSkippedSingular.replace('{{count}}', entry.gapAfter.toString()) }}
+                    } @else {
+                      {{ t().daysSkippedPlural.replace('{{count}}', entry.gapAfter.toString()) }}
+                    }
+                  </span>
+                  <div class="flex-grow border-t border-slate-300 dark:border-slate-600"></div>
+                </div>
+              }
+            </div>
+          }
+        </div>
         <!-- "Mehr laden"-Button, wenn es mehr Einträge gibt als angezeigt werden -->
         @if(hasMoreEntries()) {
           <div class="text-center pt-4">
