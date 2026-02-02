@@ -42,6 +42,7 @@ export const LANG_EN = {
     dosageLabelWithData: 'Dosage: {{amount}} {{unit}}',
     // Search and Filter
     searchAndFilter: 'Search & Filter',
+    filter: 'Filter',
     searchPlaceholder: 'Search by preparation, note, etc...',
     filterAll: 'All',
     filter7days: 'Last 7 days',

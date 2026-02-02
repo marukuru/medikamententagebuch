@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../services/data.service';
 import { Manufacturer, ActiveIngredient, Preparation, EffectPerception, Symptom, Activity } from '../models';
@@ -30,19 +30,54 @@ export class StatisticsComponent {
   translationService = inject(TranslationService);
   t = this.translationService.translations;
   
+  // --- UI & Filter-Zustand ---
+  showFilters = signal(false);
+  dateFilter = signal<'all' | '7d' | '30d'>('all');
+  yearFilter = signal<number | 'all'>('all');
+
   /**
-   * Berechnet die 5 am häufigsten verwendeten Präparate.
-   * `computed` sorgt dafür, dass die Berechnung nur dann neu ausgeführt wird,
-   * wenn sich die `diaryEntries` ändern.
+   * Berechnet die verfügbaren Jahre aus den Tagebucheinträgen für den Filter.
+   */
+  availableYears = computed(() => {
+    const years = this.dataService.diaryEntries()
+      .map(entry => new Date(entry.datetime).getFullYear());
+    return [...new Set(years)].sort((a, b) => b - a);
+  });
+
+  /**
+   * Ein Computed Signal, das die Tagebucheinträge basierend auf dem aktuellen
+   * Datums- oder Jahresfilter filtert. Dies ist die Datenquelle für alle Statistiken.
+   */
+  filteredEntries = computed(() => {
+    const dateF = this.dateFilter();
+    const yearF = this.yearFilter();
+    const allEntries = this.dataService.diaryEntries();
+
+    if (yearF !== 'all') {
+      return allEntries.filter(entry => new Date(entry.datetime).getFullYear() === yearF);
+    } else {
+      return allEntries.filter(entry => {
+        if (dateF === 'all') return true;
+        const entryDate = new Date(entry.datetime);
+        const now = new Date();
+        const daysAgo = (now.getTime() - entryDate.getTime()) / (1000 * 3600 * 24);
+        if (dateF === '7d') return daysAgo <= 7;
+        if (dateF === '30d') return daysAgo <= 30;
+        return true;
+      });
+    }
+  });
+  
+  /**
+   * Berechnet die 5 am häufigsten verwendeten Präparate basierend auf den gefilterten Einträgen.
    */
   topPreparations = computed(() => {
     const counts = new Map<string, number>();
-    for (const entry of this.dataService.diaryEntries()) {
+    for (const entry of this.filteredEntries()) {
       if (entry.preparationId) {
         counts.set(entry.preparationId, (counts.get(entry.preparationId) || 0) + 1);
       }
     }
-    // `getSortedPrepStats` wandelt die Map in eine sortierte Liste um
     return this.getSortedPrepStats(counts).slice(0, 5);
   });
 
@@ -50,9 +85,8 @@ export class StatisticsComponent {
    * Berechnet, welche Präparate am häufigsten bei bestimmten Stimmungen eingenommen wurden.
    */
   moodStats = computed(() => {
-    // Schritt 1: Gruppiere die Zählungen pro Stimmung und Präparat
     const stats = new Map<string, { moodName: string, emoji: string, counts: Map<string, number> }>();
-    for (const entry of this.dataService.diaryEntries()) {
+    for (const entry of this.filteredEntries()) {
       if (!entry.preparationId) continue;
       
       if (!stats.has(entry.mood.id)) {
@@ -63,7 +97,6 @@ export class StatisticsComponent {
       moodStat.counts.set(entry.preparationId, (moodStat.counts.get(entry.preparationId) || 0) + 1);
     }
 
-    // Schritt 2: Wandle die gruppierten Daten in eine anzeigbare Struktur um
     const result: { moodName: string, emoji: string, topPreps: PreparationStat[] }[] = [];
     stats.forEach((value) => {
       result.push({
@@ -76,11 +109,9 @@ export class StatisticsComponent {
   });
 
   /**
-   * Berechnet, welche Präparate am häufigsten mit bestimmten Effekten assoziiert sind,
-   * getrennt nach positiver und negativer Wahrnehmung.
+   * Berechnet, welche Präparate am häufigsten mit bestimmten Effekten assoziiert sind.
    */
   categorizedEffectStats = computed(() => {
-    // Schritt 1: Gruppiere Zählungen pro Effekt und Präparat
     const stats = new Map<string, { 
       effectName: string, 
       emoji: string, 
@@ -88,7 +119,7 @@ export class StatisticsComponent {
       counts: Map<string, number> 
     }>();
 
-    for (const entry of this.dataService.diaryEntries()) {
+    for (const entry of this.filteredEntries()) {
       if (!entry.preparationId) continue;
 
       for (const effect of entry.effects) {
@@ -105,7 +136,6 @@ export class StatisticsComponent {
       }
     }
     
-    // Schritt 2: Formatiere und kategorisiere die Ergebnisse
     const result: { 
       positive: { effectName: string, emoji: string, topPreps: PreparationStat[] }[],
       negative: { effectName: string, emoji: string, topPreps: PreparationStat[] }[],
@@ -139,7 +169,7 @@ export class StatisticsComponent {
   symptomReliefStats = computed(() => {
     const stats = new Map<string, { symptom: Symptom, prepCounts: Map<string, number> }>();
 
-    for (const entry of this.dataService.diaryEntries()) {
+    for (const entry of this.filteredEntries()) {
       const hasPositiveEffect = entry.effects.some(e => e.perception === 'positive');
       if (!entry.symptomIds || entry.symptomIds.length === 0 || !entry.preparationId || !hasPositiveEffect) {
         continue;
@@ -180,7 +210,7 @@ export class StatisticsComponent {
   activityEffectStats = computed(() => {
     const stats = new Map<string, { activity: Activity, prepCounts: Map<string, number> }>();
 
-    for (const entry of this.dataService.diaryEntries()) {
+    for (const entry of this.filteredEntries()) {
       const hasPositiveEffect = entry.effects.some(e => e.perception === 'positive');
       if (!entry.activityIds || entry.activityIds.length === 0 || !entry.preparationId || !hasPositiveEffect) {
         continue;
@@ -215,22 +245,37 @@ export class StatisticsComponent {
     return result;
   });
 
-  /**
-   * Eine private Hilfsmethode, die eine Map von Präparat-IDs und deren Zählungen
-   * in ein sortiertes Array von `PreparationStat`-Objekten umwandelt.
-   * @param counts Eine Map, bei der der Schlüssel die Präparat-ID und der Wert die Anzahl ist.
-   * @returns Ein nach Anzahl absteigend sortiertes Array von `PreparationStat`.
-   */
   private getSortedPrepStats(counts: Map<string, number>): PreparationStat[] {
     return Array.from(counts.entries())
       .map(([prepId, count]) => {
         const prep = this.dataService.preparations().find(p => p.id === prepId);
-        if (!prep) return null; // Falls ein Präparat gelöscht wurde, aber noch in alten Einträgen referenziert wird
+        if (!prep) return null;
         const man = this.dataService.manufacturers().find(m => m.id === prep.manufacturerId);
         const ai = this.dataService.activeIngredients().find(a => a.id === prep.activeIngredientId);
         return { prep, man, ai, count };
       })
-      .filter((item): item is PreparationStat => item !== null) // Entfernt null-Werte
-      .sort((a, b) => b.count - a.count); // Sortiert absteigend nach Anzahl
+      .filter((item): item is PreparationStat => item !== null)
+      .sort((a, b) => b.count - a.count);
+  }
+  
+  // --- Filter-Methoden ---
+  toggleFilters() {
+    this.showFilters.update(v => !v);
+  }
+
+  setDateFilter(filter: 'all' | '7d' | '30d') {
+    this.dateFilter.set(filter);
+    this.yearFilter.set('all');
+  }
+
+  setYearFilter(year: number | 'all') {
+    this.yearFilter.set(year);
+    this.dateFilter.set('all');
+  }
+
+  onYearFilterChange(event: Event) {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    const year = selectedValue === 'all' ? 'all' : parseInt(selectedValue, 10);
+    this.setYearFilter(year);
   }
 }
