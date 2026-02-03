@@ -7,7 +7,7 @@
       <button (click)="closePicker()" class="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-2xl">&times;</button>
     </div>
     <!-- Scrollbarer Container für die Emoji-Liste -->
-    <div class="overflow-y-auto pr-2 flex-grow">
+    <div class="overflow-y-auto pr-2 flex-grow [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
       <!-- Eigene Emojis -->
       @if (customEmojis().length > 0) {
         <section>

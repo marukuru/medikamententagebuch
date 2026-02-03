@@ -85,7 +85,7 @@
               class="block w-full pl-3 pr-2 py-2 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md bg-white dark:bg-slate-700">
             <!-- Benutzerdefinierte Dropdown-Liste -->
             @if (isPreparationDropdownOpen()) {
-              <div class="absolute z-10 w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg mt-1 max-h-52 overflow-y-auto">
+              <div class="absolute z-10 w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md shadow-lg mt-1 max-h-52 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
                   @for(prep of filteredPreparationsForDropdown(); track prep.id; let i = $index) {
                       @let prevPrep = i > 0 ? filteredPreparationsForDropdown()[i - 1] : null;
                       @if (prevPrep && prevPrep.lastUsed && !prep.lastUsed) {

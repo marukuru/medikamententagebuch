@@ -13,7 +13,7 @@
               <i class="fa fa-plus"></i>
             </button>
           </div>
-          <div class="max-h-60 overflow-y-auto pr-2">
+          <div class="max-h-60 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
             @if(entity.items.length > 0) {
               <ul class="space-y-2">
                 @for(item of entity.items; track ($any(item).id ?? item)) {
@@ -45,7 +45,7 @@
               <i class="fa fa-plus"></i>
             </button>
           </div>
-          <div class="max-h-60 overflow-y-auto pr-2">
+          <div class="max-h-60 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
             @if(dataService.reminders().length > 0) {
               <ul class="space-y-2">
                 @for(reminder of dataService.reminders(); track reminder.id) {
