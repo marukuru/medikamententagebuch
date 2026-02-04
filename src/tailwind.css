@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/* Extend colors and animations using the @layer directive */
+@layer utilities {
+  /* Primary color palette */
+  :root {
+    --color-primary-50: #eff6ff;
+    --color-primary-100: #dbeafe;
+    --color-primary-200: #bfdbfe;
+    --color-primary-300: #93c5fd;
+    --color-primary-400: #60a5fa;
+    --color-primary-500: #3b82f6;
+    --color-primary-600: #2563eb;
+    --color-primary-700: #1d4ed8;
+    --color-primary-800: #1e40af;
+    --color-primary-900: #1e3a8a;
+    --color-primary-950: #172554;
+  }
+
+  /* Fade-in-up animation keyframes */
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Fade-in-up animation utility */
+  .animate-fade-in-up {
+    animation: fade-in-up 0.3s ease-out forwards;
+  }
+}
+
+/* Optional: dark mode class setup */
+.dark {
+  /* Tailwind’s dark mode works automatically with the class strategy */
+}
