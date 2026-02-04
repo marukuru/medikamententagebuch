@@ -10,6 +10,8 @@ import { Language, TranslationService } from '../services/translation.service';
 import { ToastService } from '../services/toast.service';
 import { LockService } from '../services/lock.service';
 import { NotificationService } from '../services/notification.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faPlus, faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * SettingsComponent ist eine umfassende Seite zur Verwaltung aller App-Einstellungen.
@@ -19,7 +21,7 @@ import { NotificationService } from '../services/notification.service';
 @Component({
   selector: 'settings',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FontAwesomeModule],
   templateUrl: './settings.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -31,6 +33,11 @@ export class SettingsComponent {
   lockService = inject(LockService);
   notificationService = inject(NotificationService);
   t = this.translationService.translations;
+
+  // --- Icons ---
+  faPlus = faPlus;
+  faPencil = faPencil;
+  faTrash = faTrash;
 
   // --- Zustandssignale für Bestätigungsdialoge ---
   itemToDelete = signal<{ type: CrudEntity, id: string, name: string } | null>(null);

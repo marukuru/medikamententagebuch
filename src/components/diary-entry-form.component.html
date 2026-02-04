@@ -20,7 +20,7 @@
         <div class="flex items-center justify-between mb-1">
           <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().moodLabel }}</label>
           <button type="button" (click)="openCreateMoodForm()" [title]="t().addNewMoodTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
-            <i class="fa fa-plus text-xs"></i>
+            <fa-icon [icon]="faPlus" class="text-xs"></fa-icon>
           </button>
         </div>
         <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
@@ -47,7 +47,7 @@
           <div class="flex items-center justify-between mb-1">
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().symptomsLabel }}</label>
             <button type="button" (click)="openCreateSymptomForm()" [title]="t().addNewSymptomTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
-              <i class="fa fa-plus text-xs"></i>
+              <fa-icon [icon]="faPlus" class="text-xs"></fa-icon>
             </button>
           </div>
           <div class="flex flex-wrap gap-2">
@@ -103,7 +103,7 @@
           
           <!-- Button, um direkt aus diesem Formular ein neues Präparat zu erstellen -->
           <button type="button" (click)="openCreatePreparationForm()" [title]="t().addNewPreparationTitle" class="flex-shrink-0 w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
-            <i class="fa fa-plus"></i>
+            <fa-icon [icon]="faPlus"></fa-icon>
           </button>
         </div>
       </div>
@@ -125,7 +125,7 @@
           <div class="flex items-center justify-between mb-1">
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().effectsLabel }}</label>
             <button type="button" (click)="openCreateEffectForm()" [title]="t().addNewEffectTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
-              <i class="fa fa-plus text-xs"></i>
+              <fa-icon [icon]="faPlus" class="text-xs"></fa-icon>
             </button>
           </div>
           <div class="flex flex-wrap gap-2">
@@ -151,7 +151,7 @@
           <div class="flex items-center justify-between mb-1">
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().activitiesLabel }}</label>
             <button type="button" (click)="openCreateActivityForm()" [title]="t().addNewActivityTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
-              <i class="fa fa-plus text-xs"></i>
+              <fa-icon [icon]="faPlus" class="text-xs"></fa-icon>
             </button>
           </div>
           <div class="flex flex-wrap gap-2">

@@ -10,7 +10,7 @@
               <span>{{ entity.title }}</span>
             </h2>
             <button (click)="openCreateForm(entity.type)" [title]="t().addNewEntryTitle" class="flex-shrink-0 w-9 h-9 rounded-full bg-primary-500 text-white hover:bg-primary-600 transition-colors flex items-center justify-center">
-              <i class="fa fa-plus"></i>
+              <fa-icon [icon]="faPlus"></fa-icon>
             </button>
           </div>
           <div class="max-h-60 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
@@ -21,9 +21,9 @@
                     <span class="text-slate-800 dark:text-slate-200">{{ entity.display(item) }}</span>
                     <div class="flex gap-2">
                       @if(entity.type !== 'CustomEmoji') {
-                        <button (click)="openEditForm(entity.type, item)" class="text-yellow-500 hover:text-yellow-600"><i class="fa fa-pencil"></i></button>
+                        <button (click)="openEditForm(entity.type, item)" class="text-yellow-500 hover:text-yellow-600"><fa-icon [icon]="faPencil"></fa-icon></button>
                       }
-                      <button (click)="requestDeleteItem(entity.type, ($any(item).id ?? item), entity.display(item))" class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
+                      <button (click)="requestDeleteItem(entity.type, ($any(item).id ?? item), entity.display(item))" class="text-red-500 hover:text-red-600"><fa-icon [icon]="faTrash"></fa-icon></button>
                     </div>
                   </li>
                 }
@@ -42,7 +42,7 @@
               <span>{{ t().remindersTitle }}</span>
             </h2>
             <button (click)="openReminderModal()" [title]="t().addReminder" class="flex-shrink-0 w-9 h-9 rounded-full bg-primary-500 text-white hover:bg-primary-600 transition-colors flex items-center justify-center">
-              <i class="fa fa-plus"></i>
+              <fa-icon [icon]="faPlus"></fa-icon>
             </button>
           </div>
           <div class="max-h-60 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600">
@@ -54,7 +54,7 @@
                       <span class="text-slate-800 dark:text-slate-200 font-mono text-lg">{{ reminder.time }}</span>
                       <span class="text-slate-600 dark:text-slate-400 text-sm ml-4">{{ formatReminderDays(reminder.days) }}</span>
                     </div>
-                    <button (click)="dataService.deleteReminder(reminder.id)" class="text-red-500 hover:text-red-600"><i class="fa fa-trash"></i></button>
+                    <button (click)="dataService.deleteReminder(reminder.id)" class="text-red-500 hover:text-red-600"><fa-icon [icon]="faTrash"></fa-icon></button>
                   </li>
                 }
               </ul>

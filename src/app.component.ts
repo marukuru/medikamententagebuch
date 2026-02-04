@@ -16,6 +16,8 @@ import { Capacitor } from '@capacitor/core';
 import { LocalNotifications, ActionPerformed } from '@capacitor/local-notifications';
 import { Page } from './models';
 import { EmojiPickerComponent } from './components/emoji-picker.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * AppComponent ist die Wurzelkomponente der Anwendung.
@@ -25,7 +27,7 @@ import { EmojiPickerComponent } from './components/emoji-picker.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule, DiaryListComponent, StatisticsComponent, SettingsComponent, InfoComponent, ToastComponent, LockScreenComponent, EmojiPickerComponent],
+  imports: [CommonModule, FormsModule, DiaryListComponent, StatisticsComponent, SettingsComponent, InfoComponent, ToastComponent, LockScreenComponent, EmojiPickerComponent, FontAwesomeModule],
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -46,6 +48,9 @@ export class AppComponent {
   // --- Emoji Picker State ---
   showEmojiPicker = signal(false);
   emojiTargetField = signal<'mood' | 'effect' | 'symptom' | 'activity' | null>(null);
+
+  // --- Icons ---
+  faEllipsisV = faEllipsisV;
 
   /**
    * Ein Computed Signal, das den Titel und das Emoji der aktuellen Seite zurückgibt.

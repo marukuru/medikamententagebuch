@@ -18,8 +18,8 @@
               <!-- Kebab-Menü (drei Punkte) für die Navigation -->
               <div class="relative">
                   <!-- stopPropagation() verhindert, dass der Klick auf den Body durchgereicht wird und das Menü sofort wieder schließt -->
-                  <button (click)="$event.stopPropagation(); toggleMenu()" class="text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400">
-                      <i class="fas fa-ellipsis-v text-xl"></i>
+                  <button (click)="$event.stopPropagation(); toggleMenu()" class="text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 w-8 h-8 flex items-center justify-center rounded-full">
+                      <fa-icon [icon]="faEllipsisV" class="text-xl"></fa-icon>
                   </button>
                   <!-- Das Dropdown-Menü, das nur angezeigt wird, wenn menuOpen() true ist -->
                   @if (menuOpen()) {

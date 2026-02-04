@@ -4,10 +4,10 @@
     <div class="mb-6">
       <button (click)="toggleFilters()" class="w-full flex justify-between items-center text-left font-semibold text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 py-2 transition-colors">
         <span>
-          <i class="fa fa-filter mr-2"></i>
+          <fa-icon [icon]="faFilter" class="mr-2"></fa-icon>
           {{ t().filter }}
         </span>
-        <i class="fa transition-transform duration-200" [class.fa-chevron-down]="!showFilters()" [class.fa-chevron-up]="showFilters()"></i>
+        <fa-icon [icon]="showFilters() ? faChevronUp : faChevronDown" class="transition-transform duration-200"></fa-icon>
       </button>
 
       @if (showFilters()) {

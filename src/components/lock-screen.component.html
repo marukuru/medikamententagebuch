@@ -34,7 +34,7 @@
       <div class="aspect-square flex justify-center items-center">
         @if (lockService.isBiometricsAvailable()) {
           <button (click)="onBiometrics()" class="w-full h-full rounded-full flex justify-center items-center text-slate-500 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
-            <i class="fa-solid fa-fingerprint text-3xl"></i>
+            <fa-icon [icon]="faFingerprint" class="text-3xl"></fa-icon>
           </button>
         }
       </div>
@@ -47,7 +47,7 @@
       <!-- Löschen-Taste -->
       <div class="aspect-square flex justify-center items-center">
         <button (click)="onDelete()" class="w-full h-full rounded-full flex justify-center items-center text-slate-500 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
-          <i class="fa-solid fa-delete-left text-2xl"></i>
+          <fa-icon [icon]="faDeleteLeft" class="text-2xl"></fa-icon>
         </button>
       </div>
     </div>

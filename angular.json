@@ -27,9 +27,7 @@
                 "output": "/"
               }
             ],
-            "styles": [
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
-            ],
+            "styles": [],
             "scripts": []
           },
           "configurations": {

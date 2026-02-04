@@ -5,10 +5,10 @@
     <div class="mb-6">
       <button (click)="toggleFilters()" class="w-full flex justify-between items-center text-left font-semibold text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 py-2 transition-colors">
         <span>
-          <i class="fa fa-filter mr-2"></i>
+          <fa-icon [icon]="faFilter" class="mr-2"></fa-icon>
           {{ t().searchAndFilter }}
         </span>
-        <i class="fa transition-transform duration-200" [class.fa-chevron-down]="!showFilters()" [class.fa-chevron-up]="showFilters()"></i>
+        <fa-icon [icon]="showFilters() ? faChevronUp : faChevronDown" class="transition-transform duration-200"></fa-icon>
       </button>
 
       @if (showFilters()) {
@@ -21,11 +21,11 @@
               (input)="onSearchTermChange($event)"
               [placeholder]="t().searchPlaceholder"
               class="w-full p-3 pl-10 text-base border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md bg-white dark:bg-slate-700 shadow-sm">
-            <i class="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <fa-icon [icon]="faSearch" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></fa-icon>
             <!-- Button zum Leeren des Suchfelds, nur sichtbar, wenn ein Suchbegriff vorhanden ist -->
             @if (searchTerm()) {
               <button (click)="clearSearchTerm()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                <i class="fa fa-times-circle"></i>
+                <fa-icon [icon]="faTimesCircle"></fa-icon>
               </button>
             }
           </div>
@@ -213,7 +213,7 @@
 
   <!-- FAB (Floating Action Button) zum Hinzufügen eines neuen Eintrags -->
   <button (click)="addEntry()" class="fixed bg-primary-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-3xl hover:bg-primary-700 transition-transform hover:scale-110 bottom-[calc(1.5rem+env(safe-area-inset-bottom,0rem))] right-[calc(1.5rem+env(safe-area-inset-right,0rem))]">
-    +
+    <fa-icon [icon]="faPlus"></fa-icon>
   </button>
 </div>
 
@@ -231,7 +231,7 @@
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl md:text-2xl font-bold text-primary-600 dark:text-primary-400">{{ t().entryDetails }}</h2>
-        <button (click)="showDetail.set(null)" class="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-2xl">&times;</button>
+        <button (click)="showDetail.set(null)" class="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-2xl"><fa-icon [icon]="faTimes"></fa-icon></button>
       </div>
 
       <div class="space-y-4">

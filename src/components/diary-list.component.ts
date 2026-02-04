@@ -5,6 +5,8 @@ import { DiaryEntry, Preparation, Manufacturer, ActiveIngredient, Symptom, Activ
 import { DiaryEntryFormComponent } from './diary-entry-form.component';
 import { TranslationService } from '../services/translation.service';
 import { UiService } from '../services/ui.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faFilter, faChevronDown, faChevronUp, faSearch, faTimesCircle, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * DiaryListComponent zeigt die Liste aller Tagebucheinträge an.
@@ -14,7 +16,7 @@ import { UiService } from '../services/ui.service';
 @Component({
   selector: 'diary-list',
   standalone: true,
-  imports: [CommonModule, DatePipe, DiaryEntryFormComponent],
+  imports: [CommonModule, DatePipe, DiaryEntryFormComponent, FontAwesomeModule],
   templateUrl: './diary-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -23,6 +25,15 @@ export class DiaryListComponent {
   translationService = inject(TranslationService);
   uiService = inject(UiService);
   t = this.translationService.translations;
+
+  // --- Icons ---
+  faFilter = faFilter;
+  faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
+  faSearch = faSearch;
+  faTimesCircle = faTimesCircle;
+  faPlus = faPlus;
+  faTimes = faTimes;
 
   // --- UI-Zustandssignale ---
   showForm = signal(false); // Steuert die Sichtbarkeit des Formulars für neue/bearbeitete Einträge
@@ -67,7 +78,8 @@ export class DiaryListComponent {
         if (dateF === 'all') return true;
         const entryDate = new Date(entry.datetime);
         const now = new Date();
-        const daysAgo = (now.getTime() - entryDate.getTime()) / (1000 * 3600 * 24);
+        // FIX: Explicitly cast Date objects to numbers for arithmetic operation to prevent type errors.
+        const daysAgo = (Number(now) - Number(entryDate)) / (1000 * 3600 * 24);
         if (dateF === '7d') return daysAgo <= 7;
         if (dateF === '30d') return daysAgo <= 30;
         return true;
@@ -116,7 +128,8 @@ export class DiaryListComponent {
         currentDate.setHours(0, 0, 0, 0);
         nextDate.setHours(0, 0, 0, 0);
 
-        const diffTime = currentDate.getTime() - nextDate.getTime();
+        // FIX: Explicitly cast Date objects to numbers for arithmetic operation to prevent type errors.
+        const diffTime = Number(currentDate) - Number(nextDate);
         // Math.round, um Probleme mit der Sommerzeit zu vermeiden
         const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
@@ -150,7 +163,8 @@ export class DiaryListComponent {
       return 0;
     }
 
-    const diffTime = today.getTime() - firstEntryDate.getTime();
+    // FIX: Explicitly cast Date objects to numbers for arithmetic operation to prevent type errors.
+    const diffTime = Number(today) - Number(firstEntryDate);
     const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
     // Eine Differenz von 1 Tag (heute vs. gestern) bedeutet 0 ausgelassene Tage.

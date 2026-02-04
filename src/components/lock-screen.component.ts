@@ -2,6 +2,8 @@ import { Component, ChangeDetectionStrategy, inject, signal, computed, effect } 
 import { CommonModule } from '@angular/common';
 import { LockService } from '../services/lock.service';
 import { TranslationService } from '../services/translation.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faFingerprint, faDeleteLeft } from '@fortawesome/free-solid-svg-icons';
 
 const PIN_LENGTH = 4;
 
@@ -12,7 +14,7 @@ const PIN_LENGTH = 4;
 @Component({
   selector: 'lock-screen',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './lock-screen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -20,6 +22,10 @@ export class LockScreenComponent {
   lockService = inject(LockService);
   translationService = inject(TranslationService);
   t = this.translationService.translations;
+
+  // --- Icons ---
+  faFingerprint = faFingerprint;
+  faDeleteLeft = faDeleteLeft;
 
   pin = signal(''); // Das Signal für die aktuelle PIN-Eingabe
   error = signal(false); // Signal, um den Fehlerzustand (z.B. für die Shake-Animation) zu steuern

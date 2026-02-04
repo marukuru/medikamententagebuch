@@ -1,6 +1,8 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastService } from '../services/toast.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { IconDefinition, faCheckCircle, faTimesCircle, faInfoCircle, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * ToastComponent ist eine reine Präsentationskomponente, die die
@@ -9,23 +11,24 @@ import { ToastService } from '../services/toast.service';
 @Component({
   selector: 'toast-notifications',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './toast.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToastComponent {
   toastService = inject(ToastService);
+  faXmark = faXmark;
 
   /**
-   * Gibt die entsprechende Font-Awesome-Icon-Klasse für einen Toast-Typ zurück.
+   * Gibt die entsprechende Font-Awesome-Icon-Definition für einen Toast-Typ zurück.
    * @param type Der Typ des Toasts.
-   * @returns Die CSS-Klasse für das Icon.
+   * @returns Die Icon-Definition.
    */
-  getIconClass(type: 'success' | 'error' | 'info'): string {
+  getIcon(type: 'success' | 'error' | 'info'): IconDefinition {
     switch (type) {
-      case 'success': return 'fa-solid fa-check-circle';
-      case 'error': return 'fa-solid fa-times-circle';
-      case 'info': return 'fa-solid fa-info-circle';
+      case 'success': return faCheckCircle;
+      case 'error': return faTimesCircle;
+      case 'info': return faInfoCircle;
     }
   }
 

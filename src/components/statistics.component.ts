@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { DataService } from '../services/data.service';
 import { Manufacturer, ActiveIngredient, Preparation, EffectPerception, Symptom, Activity } from '../models';
 import { TranslationService } from '../services/translation.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faFilter, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Interface zur Strukturierung von Präparat-Statistiken, inklusive zugehöriger Details.
@@ -21,7 +23,7 @@ interface PreparationStat {
 @Component({
   selector: 'statistics',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './statistics.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -30,6 +32,11 @@ export class StatisticsComponent {
   translationService = inject(TranslationService);
   t = this.translationService.translations;
   
+  // --- Icons ---
+  faFilter = faFilter;
+  faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
+
   // --- UI & Filter-Zustand ---
   showFilters = signal(false);
   dateFilter = signal<'all' | '7d' | '30d'>('all');
@@ -60,7 +67,8 @@ export class StatisticsComponent {
         if (dateF === 'all') return true;
         const entryDate = new Date(entry.datetime);
         const now = new Date();
-        const daysAgo = (now.getTime() - entryDate.getTime()) / (1000 * 3600 * 24);
+        // FIX: Explicitly cast Date objects to numbers for arithmetic operation to prevent type errors.
+        const daysAgo = (Number(now) - Number(entryDate)) / (1000 * 3600 * 24);
         if (dateF === '7d') return daysAgo <= 7;
         if (dateF === '30d') return daysAgo <= 30;
         return true;

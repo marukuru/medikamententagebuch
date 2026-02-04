@@ -6,6 +6,8 @@ import { DiaryEntry, Preparation, Mood, Symptom, Activity, Effect } from '../mod
 import { UiService } from '../services/ui.service';
 import { TranslationService } from '../services/translation.service';
 import { ToastService } from '../services/toast.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * DiaryEntryFormComponent ist ein modales Formular zum Erstellen und Bearbeiten
@@ -14,7 +16,7 @@ import { ToastService } from '../services/toast.service';
 @Component({
   selector: 'diary-entry-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FontAwesomeModule],
   templateUrl: './diary-entry-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -24,6 +26,9 @@ export class DiaryEntryFormComponent {
   translationService = inject(TranslationService);
   toastService = inject(ToastService);
   t = this.translationService.translations;
+
+  // --- Icons ---
+  faPlus = faPlus;
 
   // --- Inputs & Outputs ---
   /**
@@ -82,7 +87,8 @@ export class DiaryEntryFormComponent {
 
         if (lastUsedA && lastUsedB) {
             // Beide wurden verwendet -> nach Datum absteigend sortieren
-            return new Date(lastUsedB).getTime() - new Date(lastUsedA).getTime();
+            // FIX: Explicitly cast Date objects to numbers for arithmetic operation to prevent type errors.
+            return Number(new Date(lastUsedB)) - Number(new Date(lastUsedA));
         }
         if (lastUsedA) return -1; // Nur A wurde verwendet -> A kommt zuerst
         if (lastUsedB) return 1;  // Nur B wurde verwendet -> B kommt zuerst
