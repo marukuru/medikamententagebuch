@@ -5,9 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "ng serve",
-    "build:css": "npx @tailwindcss/cli -i src/tailwind.css -o src/styles.css --minify",
-    "build": "npm run build:css && ng build --base-href ./",
-    "build:gh-pages": "npm run build:css && ng build --base-href /medikamententagebuch/",
+    "build": "ng build --base-href ./",
+    "build:gh-pages": "ng build --base-href /medikamententagebuch/",
     "android": "npm run build && npx cap run android"
   },
   "dependencies": {
