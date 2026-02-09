@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hinzufügen, um dem Browser die Kontrolle über das Theme zu entziehen */
+:root {
+  color-scheme: light;
+
+  /* Material 3 Design Tokens (Light Theme) */
+  --color-surface-container-low: #f7f2fa;
+  --color-surface-container-high: #ece6f0;
+  --color-outline-variant: #cac4d0;
+  --color-on-surface: #1c1b1f;
+  --color-on-surface-variant: #49454f;
+}
+html.dark {
+  color-scheme: dark;
+  
+  /* Material 3 Design Tokens (Dark Theme) */
+  --color-surface-container-low: #211f26; /* Adjusted for better contrast */
+  --color-surface-container-high: #2b2930;
+  --color-outline-variant: #49454f;
+  --color-on-surface: #e6e1e5;
+  --color-on-surface-variant: #cac4d0;
+}

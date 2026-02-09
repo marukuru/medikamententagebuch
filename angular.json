@@ -27,7 +27,7 @@
                 "output": "/"
               }
             ],
-            "styles": [],
+            "styles": ["src/style.css"],
             "scripts": []
           },
           "configurations": {
