@@ -50,6 +50,18 @@ jobs:
             cp -r android-resources/* android/app/src/main/res/
           fi
 
+      - name: Remove Internet Permission for Release Build
+        run: |
+          MANIFEST_PATH="android/app/src/main/AndroidManifest.xml"
+          PERMISSION_PATTERN='<uses-permission.*android:name="android.permission.INTERNET".*>'
+          if grep -q -E "$PERMISSION_PATTERN" "$MANIFEST_PATH"; then
+            echo "Internet permission found. Removing it for offline build..."
+            sed -i "/${PERMISSION_PATTERN}/d" "$MANIFEST_PATH"
+            echo "Internet permission removed."
+          else
+            echo "Internet permission not found. No changes needed."
+          fi
+
       - name: Decode Keystore
         run: |
           echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > android/app/my-release-key.jks
