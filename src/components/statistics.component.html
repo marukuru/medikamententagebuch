@@ -159,39 +159,41 @@
         }
 
         <!-- Karte: Stimmungen -->
-        <div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant">
-          <h2 class="text-2xl font-normal mb-4 flex items-center gap-3">
-              <span class="text-3xl">🙆</span>
-              <span>{{ t().moods }}</span>
-          </h2>
-          <div class="space-y-6">
-            @for(stat of moodStats(); track stat.moodName) {
-              <div>
-                  <h3 class="font-semibold text-lg flex items-center gap-2 text-on-surface"><span class="text-2xl">{{ stat.emoji }}</span> {{ stat.moodName }}</h3>
-                  @if(stat.topPreps.length > 0) {
-                      <ol class="list-decimal list-inside space-y-1 pl-8 mt-1 text-on-surface-variant">
-                          @for(p of stat.topPreps; track p.prep.id) {
-                              <li>
-                                  <span class="text-on-surface">
-                                      @if (p.man) {<span>{{ p.man.name }} - </span>}
-                                      <strong>{{ p.prep.name }}</strong>
-                                      @if (p.ai) {<span class="text-sm"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
-                                  </span>
-                                  <span class="text-sm font-mono bg-surface-container-high rounded px-2 py-0.5 ml-2">{{ p.count }}x</span>
-                              </li>
-                          }
-                      </ol>
-                  } @else {
-                      <p class="text-on-surface-variant pl-4">{{ t().noAssociatedPreparations }}</p>
-                  }
-              </div>
-            }
-            <!-- Nachricht, wenn es überhaupt keine Stimmungs-Statistiken gibt -->
-            @if(moodStats().length === 0) {
-              <p class="text-on-surface-variant">{{ t().noDataForStatistic }}</p>
-            }
+        @if (dataService.moduleSettings().showMood) {
+          <div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant">
+            <h2 class="text-2xl font-normal mb-4 flex items-center gap-3">
+                <span class="text-3xl">🙆</span>
+                <span>{{ t().moods }}</span>
+            </h2>
+            <div class="space-y-6">
+              @for(stat of moodStats(); track stat.moodName) {
+                <div>
+                    <h3 class="font-semibold text-lg flex items-center gap-2 text-on-surface"><span class="text-2xl">{{ stat.emoji }}</span> {{ stat.moodName }}</h3>
+                    @if(stat.topPreps.length > 0) {
+                        <ol class="list-decimal list-inside space-y-1 pl-8 mt-1 text-on-surface-variant">
+                            @for(p of stat.topPreps; track p.prep.id) {
+                                <li>
+                                    <span class="text-on-surface">
+                                        @if (p.man) {<span>{{ p.man.name }} - </span>}
+                                        <strong>{{ p.prep.name }}</strong>
+                                        @if (p.ai) {<span class="text-sm"> ({{ p.ai.amount }} {{ p.ai.unit }})</span>}
+                                    </span>
+                                    <span class="text-sm font-mono bg-surface-container-high rounded px-2 py-0.5 ml-2">{{ p.count }}x</span>
+                                </li>
+                            }
+                        </ol>
+                    } @else {
+                        <p class="text-on-surface-variant pl-4">{{ t().noAssociatedPreparations }}</p>
+                    }
+                </div>
+              }
+              <!-- Nachricht, wenn es überhaupt keine Stimmungs-Statistiken gibt -->
+              @if(moodStats().length === 0) {
+                <p class="text-on-surface-variant">{{ t().noDataForStatistic }}</p>
+              }
+            </div>
           </div>
-        </div>
+        }
         
         <!-- Karte: Positive Effekte -->
         @if (dataService.moduleSettings().showEffects) {

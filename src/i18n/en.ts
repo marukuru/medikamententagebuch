@@ -176,6 +176,7 @@ export const LANG_EN = {
 
     // Module Settings
     settingsModulesTitle: 'Modules',
+    moduleMood: 'Mood',
     moduleDosage: 'Dosage',
     moduleSymptoms: 'Symptoms',
     moduleActivities: 'Activities',

@@ -17,29 +17,31 @@
       </div>
 
       <!-- Sektion: Stimmungsauswahl -->
-      <div>
-        <div class="flex items-center justify-between mb-1">
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().moodLabel }}</label>
-          <button type="button" (click)="openCreateMoodForm()" [title]="t().addNewMoodTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
-            <fa-icon [icon]="faPlus" class="text-xs"></fa-icon>
-          </button>
-        </div>
-        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
-            @for(mood of dataService.moods(); track mood.id) {
-            <button 
-                type="button"
-                (click)="toggleMood(mood.id)"
-                [class.ring-2]="formMoodId() === mood.id"
-                [class.ring-primary-500]="formMoodId() === mood.id"
-                [class.bg-slate-200]="formMoodId() === mood.id"
-                [class.dark:bg-slate-600]="formMoodId() === mood.id"
-                class="cursor-pointer text-center p-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
-                <span class="text-3xl">{{ mood.emoji }}</span>
-                <span class="block text-xs mt-1">{{ mood.description }}</span>
+      @if (dataService.moduleSettings().showMood) {
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">{{ t().moodLabel }}</label>
+            <button type="button" (click)="openCreateMoodForm()" [title]="t().addNewMoodTitle" class="flex-shrink-0 w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
+              <fa-icon [icon]="faPlus" class="text-xs"></fa-icon>
             </button>
-            }
+          </div>
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+              @for(mood of dataService.moods(); track mood.id) {
+              <button 
+                  type="button"
+                  (click)="toggleMood(mood.id)"
+                  [class.ring-2]="formMoodId() === mood.id"
+                  [class.ring-primary-500]="formMoodId() === mood.id"
+                  [class.bg-slate-200]="formMoodId() === mood.id"
+                  [class.dark:bg-slate-600]="formMoodId() === mood.id"
+                  class="cursor-pointer text-center p-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                  <span class="text-3xl">{{ mood.emoji }}</span>
+                  <span class="block text-xs mt-1">{{ mood.description }}</span>
+              </button>
+              }
+          </div>
         </div>
-      </div>
+      }
 
       <!-- Sektion: Symptome (Mehrfachauswahl) -->
       @if (dataService.moduleSettings().showSymptoms) {

@@ -177,6 +177,7 @@ export const LANG_DE = {
     
     // Module Settings
     settingsModulesTitle: 'Module',
+    moduleMood: 'Stimmung',
     moduleDosage: 'Dosierung',
     moduleSymptoms: 'Symptome',
     moduleActivities: 'Aktivitäten',

@@ -1,4 +1,4 @@
-import { Injectable, signal, effect, computed, inject } from '@angular/core';
+import { Injectable, signal, effect, computed } from '@angular/core';
 import {
   Mood,
   Effect,
@@ -27,6 +27,7 @@ export interface LockSettings {
  * Definiert die Struktur für die Einstellungen der sichtbaren Module.
  */
 export interface ModuleSettings {
+  showMood: boolean;
   showDosage: boolean;
   showSymptoms: boolean;
   showActivities: boolean;
@@ -44,13 +45,12 @@ export interface ModuleSettings {
   providedIn: 'root',
 })
 export class DataService {
-  private translationService = inject(TranslationService);
-
   // --- State Signals ---
   // Jeder Teil des Anwendungszustands wird in einem eigenen Signal gehalten.
   theme = signal<'light' | 'dark'>('light');
   lockSettings = signal<LockSettings>({ isEnabled: false, pin: null, timeout: 0 });
   moduleSettings = signal<ModuleSettings>({
+    showMood: true,
     showDosage: true,
     showSymptoms: true,
     showActivities: true,
@@ -76,8 +76,9 @@ export class DataService {
   /**
    * Gibt die Tagebucheinträge in absteigender chronologischer Reihenfolge zurück.
    */
-  sortedDiaryEntries = computed(() => 
-    this.diaryEntries().slice().sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime())
+  sortedDiaryEntries = computed(() =>
+    // FIX: Explicitly cast Date objects to numbers for arithmetic operation to prevent type errors.
+    this.diaryEntries().slice().sort((a, b) => Number(new Date(b.datetime)) - Number(new Date(a.datetime)))
   );
 
   /**
@@ -125,7 +126,7 @@ export class DataService {
     this.preparations().slice().sort((a, b) => a.name.localeCompare(b.name, this.translationService.language(), { sensitivity: 'base' }))
   );
 
-  constructor() {
+  constructor(private translationService: TranslationService) {
     this.loadFromLocalStorage();
     // effect() registriert eine Funktion, die immer dann ausgeführt wird,
     // wenn sich eines der darin gelesenen Signale ändert.
@@ -149,7 +150,19 @@ export class DataService {
       const parsedData = JSON.parse(data);
       this.theme.set(parsedData.theme || 'light');
       this.lockSettings.set(parsedData.lockSettings || { isEnabled: false, pin: null, timeout: 0 });
-      this.moduleSettings.set(parsedData.moduleSettings || { showDosage: true, showSymptoms: true, showActivities: true, showEffects: true, showNote: true, showDateGaps: true });
+      
+      // Handle module settings with defaults for backward compatibility
+      const defaultModuleSettings = {
+        showMood: true,
+        showDosage: true,
+        showSymptoms: true,
+        showActivities: true,
+        showEffects: true,
+        showNote: true,
+        showDateGaps: true,
+      };
+      this.moduleSettings.set({ ...defaultModuleSettings, ...(parsedData.moduleSettings || {}) });
+
       this.moods.set(parsedData.moods || this.translationService.defaultMoods());
       this.effects.set(parsedData.effects || this.translationService.defaultEffects());
       this.symptoms.set(parsedData.symptoms || this.translationService.defaultSymptoms());
@@ -243,7 +256,7 @@ export class DataService {
         // Verknüpfung in Tagebucheinträgen aufheben
          this.diaryEntries.update(entries => entries.map(entry => {
             if (entry.symptomIds?.includes(id)) {
-              const newSymptomIds = entry.symptomIds.filter(sid => sid !== id);
+              const newSymptomIds = entry.symptomIds.filter((sid: string) => sid !== id);
               // Wenn keine Symptome mehr übrig sind, das Array ganz entfernen
               return { ...entry, symptomIds: newSymptomIds.length > 0 ? newSymptomIds : undefined };
             }
@@ -255,7 +268,7 @@ export class DataService {
         // Verknüpfung in Tagebucheinträgen aufheben
          this.diaryEntries.update(entries => entries.map(entry => {
             if (entry.activityIds?.includes(id)) {
-              const newActivityIds = entry.activityIds.filter(aid => aid !== id);
+              const newActivityIds = entry.activityIds.filter((aid: string) => aid !== id);
               return { ...entry, activityIds: newActivityIds.length > 0 ? newActivityIds : undefined };
             }
             return entry;
@@ -346,7 +359,17 @@ export class DataService {
         timeout: importedSettings.timeout ?? 0,
       });
 
-      this.moduleSettings.set(data.moduleSettings || { showDosage: true, showSymptoms: true, showActivities: true, showEffects: true, showNote: true, showDateGaps: true });
+      const defaultModuleSettings = {
+        showMood: true,
+        showDosage: true,
+        showSymptoms: true,
+        showActivities: true,
+        showEffects: true,
+        showNote: true,
+        showDateGaps: true,
+      };
+      this.moduleSettings.set({ ...defaultModuleSettings, ...(data.moduleSettings || {}) });
+      
       this.moods.set(data.moods || []);
       this.effects.set(data.effects || []);
       this.symptoms.set(data.symptoms || []);
@@ -371,7 +394,15 @@ export class DataService {
   resetToDefaults() {
     this.theme.set('light');
     this.lockSettings.set({ isEnabled: false, pin: null, timeout: 0 });
-    this.moduleSettings.set({ showDosage: true, showSymptoms: true, showActivities: true, showEffects: true, showNote: true, showDateGaps: true });
+    this.moduleSettings.set({ 
+        showMood: true, 
+        showDosage: true, 
+        showSymptoms: true, 
+        showActivities: true, 
+        showEffects: true, 
+        showNote: true, 
+        showDateGaps: true 
+    });
     this.moods.set(this.translationService.defaultMoods());
     this.effects.set(this.translationService.defaultEffects());
     this.symptoms.set(this.translationService.defaultSymptoms());
