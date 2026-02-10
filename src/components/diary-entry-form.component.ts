@@ -166,6 +166,15 @@ export class DiaryEntryFormComponent {
     this.formEffectIds.update(ids => ids.includes(effectId) ? ids.filter(id => id !== effectId) : [...ids, effectId]);
   }
 
+  toggleMood(moodId: string) {
+    this.isDirty.set(true);
+    if (this.formMoodId() === moodId) {
+      this.formMoodId.set(undefined);
+    } else {
+      this.formMoodId.set(moodId);
+    }
+  }
+
   isSymptomSelected(symptomId: string): boolean {
     return this.formSymptomIds().includes(symptomId);
   }
