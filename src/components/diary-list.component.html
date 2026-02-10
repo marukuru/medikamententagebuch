@@ -148,7 +148,7 @@
                     }
                   </div>
                   <!-- Stimmungs-Emoji -->
-                  <div class="text-3xl">{{ entry.mood.emoji }}</div>
+                  <div class="text-3xl w-8 h-8 flex items-center justify-center">{{ entry.mood?.emoji }}</div>
                 </div>
                 <!-- Emojis für Symptome, Effekte, Aktivitäten -->
                 <div class="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-xl">
@@ -236,11 +236,13 @@
 
       <div class="space-y-4">
         <p><strong>{{ t().date }}:</strong> {{ entry.datetime | date:'fullDate':undefined:translationService.language() }} {{ t().atTime }} {{ entry.datetime | date:'shortTime':undefined:translationService.language() }}</p>
-        <div class="flex items-center gap-3">
-          <strong>{{ t().mood }}:</strong> 
-          <span class="text-2xl">{{ entry.mood.emoji }}</span>
-          <span>{{ entry.mood.description }}</span>
-        </div>
+        @if(entry.mood) {
+          <div class="flex items-center gap-3">
+            <strong>{{ t().mood }}:</strong> 
+            <span class="text-2xl">{{ entry.mood.emoji }}</span>
+            <span>{{ entry.mood.description }}</span>
+          </div>
+        }
         
          @if (symptoms.length > 0 && dataService.moduleSettings().showSymptoms) {
           <div>

@@ -67,7 +67,7 @@ export class StatisticsComponent {
         if (dateF === 'all') return true;
         const entryDate = new Date(entry.datetime);
         const now = new Date();
-        // FIX: Explicitly cast Date objects to numbers for arithmetic operation to prevent type errors.
+        // FIX: Cast Date objects to numbers to perform arithmetic subtraction.
         const daysAgo = (Number(now) - Number(entryDate)) / (1000 * 3600 * 24);
         if (dateF === '7d') return daysAgo <= 7;
         if (dateF === '30d') return daysAgo <= 30;
@@ -95,7 +95,7 @@ export class StatisticsComponent {
   moodStats = computed(() => {
     const stats = new Map<string, { moodName: string, emoji: string, counts: Map<string, number> }>();
     for (const entry of this.filteredEntries()) {
-      if (!entry.preparationId) continue;
+      if (!entry.preparationId || !entry.mood) continue;
       
       if (!stats.has(entry.mood.id)) {
         stats.set(entry.mood.id, { moodName: entry.mood.description, emoji: entry.mood.emoji, counts: new Map() });

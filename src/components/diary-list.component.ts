@@ -78,7 +78,7 @@ export class DiaryListComponent {
         if (dateF === 'all') return true;
         const entryDate = new Date(entry.datetime);
         const now = new Date();
-        // FIX: Explicitly cast Date objects to numbers for arithmetic operation to prevent type errors.
+        // FIX: Cast Date objects to numbers to perform arithmetic subtraction.
         const daysAgo = (Number(now) - Number(entryDate)) / (1000 * 3600 * 24);
         if (dateF === '7d') return daysAgo <= 7;
         if (dateF === '30d') return daysAgo <= 30;
@@ -98,7 +98,7 @@ export class DiaryListComponent {
       // Erstellt einen durchsuchbaren Text aus allen relevanten Eintragsdaten
       const searchCorpus = [
         entry.note || '',
-        entry.mood.description,
+        entry.mood?.description || '',
         ...entry.effects.map(e => e.description),
         ...symptoms.map(s => s.description),
         ...activities.map(a => a.description),
@@ -128,7 +128,7 @@ export class DiaryListComponent {
         currentDate.setHours(0, 0, 0, 0);
         nextDate.setHours(0, 0, 0, 0);
 
-        // FIX: Explicitly cast Date objects to numbers for arithmetic operation to prevent type errors.
+        // FIX: Cast Date objects to numbers to perform arithmetic subtraction.
         const diffTime = Number(currentDate) - Number(nextDate);
         // Math.round, um Probleme mit der Sommerzeit zu vermeiden
         const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
@@ -163,7 +163,7 @@ export class DiaryListComponent {
       return 0;
     }
 
-    // FIX: Explicitly cast Date objects to numbers for arithmetic operation to prevent type errors.
+    // FIX: Cast Date objects to numbers to perform arithmetic subtraction.
     const diffTime = Number(today) - Number(firstEntryDate);
     const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
 

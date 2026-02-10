@@ -109,7 +109,7 @@ export const LANG_EN = {
     editEntryTitle: 'Edit Entry',
     newEntryTitle: 'New Entry',
     dateTimeLabel: 'Date & Time *',
-    moodLabel: 'Mood *',
+    moodLabel: 'Mood',
     symptomsLabel: 'Symptoms',
     activitiesLabel: 'Activities',
     preparationLabel: 'Preparation',
@@ -129,8 +129,9 @@ export const LANG_EN = {
     confirmDiscardMessage: 'Do you really want to close the form and discard all unsaved changes?',
     back: 'Back',
     confirmDiscardButton: 'Yes, discard',
+    moodOrPreparationHint: 'At least a mood or a preparation must be selected.',
     // alerts
-    moodIsRequired: 'Mood is a required field.',
+    moodOrPreparationRequired: 'Please select a mood or a preparation.',
     dosageFieldsIncomplete: 'For dosage, either both amount and unit must be provided, or both must be empty.',
     invalidPreparationError: 'Please select a valid preparation from the list or leave the field empty.',
     

@@ -118,7 +118,7 @@ export class DiaryEntryFormComponent {
             const entryDate = new Date(entry.datetime);
             this.formDate.set(this.formatDateForInput(entryDate));
             this.formTime.set(this.formatTimeForInput(entryDate));
-            this.formMoodId.set(entry.mood.id);
+            this.formMoodId.set(entry.mood?.id);
             this.formEffectIds.set(entry.effects.map(e => e.id));
             this.formSymptomIds.set(entry.symptomIds || []);
             this.formActivityIds.set(entry.activityIds || []);
@@ -238,11 +238,14 @@ export class DiaryEntryFormComponent {
 
   save() {
     const moodId = this.formMoodId();
-    const mood = this.dataService.moods().find(m => m.id === moodId);
-    if (!mood) {
-      this.toastService.showError(this.translationService.t('moodIsRequired'));
+    const prepId = this.formPreparationId();
+
+    if (!moodId && !prepId) {
+      this.toastService.showError(this.translationService.t('moodOrPreparationRequired'));
       return;
     }
+    
+    const mood = moodId ? this.dataService.moods().find(m => m.id === moodId) : undefined;
 
     const dosageAmount = this.formDosageAmount();
     const dosageUnit = this.formDosageUnit().trim();

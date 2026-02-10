@@ -96,7 +96,7 @@ export interface Preparation {
 export interface DiaryEntry {
   id: string;
   datetime: string; // ISO 8601 format
-  mood: Mood; // Copied entity
+  mood?: Mood; // Copied entity, now optional
   preparationId?: string;
   dosage?: Dosage; // Copied entity
   effects: Effect[]; // Copied entities

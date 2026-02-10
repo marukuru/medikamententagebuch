@@ -110,7 +110,7 @@ export const LANG_DE = {
     editEntryTitle: 'Eintrag bearbeiten',
     newEntryTitle: 'Neuer Eintrag',
     dateTimeLabel: 'Datum & Uhrzeit *',
-    moodLabel: 'Stimmung *',
+    moodLabel: 'Stimmung',
     symptomsLabel: 'Symptome',
     activitiesLabel: 'Aktivitäten',
     preparationLabel: 'Präparat',
@@ -130,8 +130,9 @@ export const LANG_DE = {
     confirmDiscardMessage: 'Möchten Sie das Formular wirklich schließen und alle ungespeicherten Änderungen verwerfen?',
     back: 'Zurück',
     confirmDiscardButton: 'Ja, verwerfen',
+    moodOrPreparationHint: 'Mindestens eine Stimmung oder ein Präparat muss ausgewählt werden.',
     // alerts
-    moodIsRequired: 'Stimmung ist ein Pflichtfeld.',
+    moodOrPreparationRequired: 'Bitte wählen Sie eine Stimmung oder ein Präparat aus.',
     dosageFieldsIncomplete: 'Für die Dosierung müssen Menge und Einheit angegeben werden, oder beide Felder leer sein.',
     invalidPreparationError: 'Bitte wählen Sie ein gültiges Präparat aus der Liste aus oder lassen Sie das Feld leer.',
     
