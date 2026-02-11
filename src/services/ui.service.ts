@@ -131,6 +131,10 @@ export class UiService {
             let currentFormValues;
             switch(currentFormState.type) {
                 case 'Preparation': currentFormValues = this.preparationForm(); break;
+                case 'Mood': currentFormValues = this.moodForm(); break;
+                case 'Effect': currentFormValues = this.effectForm(); break;
+                case 'Symptom': currentFormValues = this.symptomForm(); break;
+                case 'Activity': currentFormValues = this.activityForm(); break;
                 default: currentFormValues = {};
             }
             
@@ -190,6 +194,10 @@ export class UiService {
                     parentState.formValues.dosageId = createdItem.id;
                     break;
             }
+        } else if (createdType === 'CustomEmoji') {
+            // When a custom emoji is created, update the emoji field of the parent form.
+            // `createdItem` is the emoji string.
+            parentState.formValues.emoji = createdItem;
         }
     }
 

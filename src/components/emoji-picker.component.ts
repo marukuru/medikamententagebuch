@@ -36,7 +36,7 @@ export class EmojiPickerComponent {
   }
 
   openAddCustomEmojiForm() {
-    this.uiService.openCreateForm('CustomEmoji');
+    this.uiService.openSubCreateForm('CustomEmoji');
     this.closePicker();
   }
 
