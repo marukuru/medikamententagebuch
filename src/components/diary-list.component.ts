@@ -54,7 +54,8 @@ export class DiaryListComponent {
     const years = this.dataService.diaryEntries()
       .map(entry => new Date(entry.datetime).getFullYear());
     // Eindeutige Jahre ermitteln und absteigend sortieren
-    return [...new Set(years)].sort((a, b) => b - a);
+    // FIX: Explicitly cast sort parameters to number to ensure correct arithmetic operation.
+    return [...new Set(years)].sort((a, b) => Number(b) - Number(a));
   });
 
   /**
