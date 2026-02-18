@@ -17,7 +17,7 @@ import { LocalNotifications, ActionPerformed } from '@capacitor/local-notificati
 import { Page } from './models';
 import { EmojiPickerComponent } from './components/emoji-picker.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * AppComponent ist die Wurzelkomponente der Anwendung.
@@ -51,6 +51,7 @@ export class AppComponent {
 
   // --- Icons ---
   faEllipsisV = faEllipsisV;
+  faPlus = faPlus;
 
   /**
    * Ein Computed Signal, das den Titel und das Emoji der aktuellen Seite zurückgibt.

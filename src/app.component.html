@@ -137,7 +137,7 @@
                         @for(man of dataService.sortedManufacturers(); track man.id) { <option [value]="man.id">{{ man.name }}</option> }
                     </select>
                     <button type="button" (click)="uiService.openSubCreateForm('Manufacturer')" [title]="t().addNewManufacturerTitle" class="flex-shrink-0 w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
-                        <i class="fa fa-plus"></i>
+                        <fa-icon [icon]="faPlus"></fa-icon>
                     </button>
                 </div>
                 <div class="flex items-center gap-2">
@@ -146,7 +146,7 @@
                         @for(ai of dataService.sortedActiveIngredients(); track ai.id) { <option [value]="ai.id">{{ ai.amount }} {{ ai.unit }}</option> }
                     </select>
                      <button type="button" (click)="uiService.openSubCreateForm('ActiveIngredient')" [title]="t().addNewActiveIngredientTitle" class="flex-shrink-0 w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
-                        <i class="fa fa-plus"></i>
+                        <fa-icon [icon]="faPlus"></fa-icon>
                     </button>
                 </div>
                 <div class="flex items-center gap-2">
@@ -155,7 +155,7 @@
                         @for(dos of dataService.sortedDosages(); track dos.id) { <option [value]="dos.id">{{ dos.amount }} {{ dos.unit }}</option> }
                     </select>
                      <button type="button" (click)="uiService.openSubCreateForm('Dosage')" [title]="t().addNewDosageTitle" class="flex-shrink-0 w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors flex items-center justify-center">
-                        <i class="fa fa-plus"></i>
+                        <fa-icon [icon]="faPlus"></fa-icon>
                     </button>
                 </div>
             }
