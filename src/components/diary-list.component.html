@@ -266,14 +266,26 @@
           <div>
             <strong>{{ t().preparation }}:</strong>
             <div class="pl-4">
-              <p>
-                @if (details.man) {
-                  <span>{{ details.man.name }} - </span>
-                }
-                <span>{{ details.prep.name }}</span>
-              </p>
+              <button class="text-left hover:underline" (click)="showIngredientsForPrep.set(showIngredientsForPrep() === details.prep.id ? null : details.prep.id)">
+                <p>
+                  @if (details.man) {
+                    <span>{{ details.man.name }} - </span>
+                  }
+                  <span>{{ details.prep.name }}</span>
+                </p>
+              </button>
               @if (details.ai) {
                 <p class="text-sm text-slate-500">{{ t().activeIngredient }}: {{ details.ai.amount }} {{ details.ai.unit }}</p>
+              }
+              <!-- Compact ingredient list -->
+              @if (showIngredientsForPrep() === details.prep.id && dataService.moduleSettings().showIngredients) {
+                @let ingredients = getIngredients(entry.ingredientIds ?? details.prep.ingredientIds);
+                @if (ingredients.length > 0) {
+                  <p class="text-sm text-slate-500 mt-1">
+                    <span class="font-medium">{{ t().crudIngredients }}:</span>
+                    {{ formatIngredients(ingredients) }}
+                  </p>
+                }
               }
             </div>
           </div>

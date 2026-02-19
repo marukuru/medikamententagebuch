@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { DataService } from './data.service';
-import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, CrudEntity, EffectPerception, Page, Symptom, Activity } from '../models';
+import { Mood, Effect, Manufacturer, Dosage, ActiveIngredient, Preparation, CrudEntity, EffectPerception, Page, Symptom, Activity, Ingredient } from '../models';
 import { TranslationService, TranslationKey } from './translation.service';
 import { ToastService } from './toast.service';
 import { EMOJI_DATA } from '../emoji-data';
@@ -64,6 +64,7 @@ export class UiService {
     dosageForm = signal<Partial<Dosage>>({});
     activeIngredientForm = signal<Partial<ActiveIngredient>>({});
     preparationForm = signal<Partial<Preparation>>({});
+    ingredientForm = signal<Partial<Ingredient>>({});
     customEmojiForm = signal<{ emoji?: string }>({});
     
     private allDefaultEmojis = computed(() => {
@@ -96,6 +97,7 @@ export class UiService {
                     case 'Dosage': this.dosageForm.set(form.formValues); break;
                     case 'ActiveIngredient': this.activeIngredientForm.set(form.formValues); break;
                     case 'Preparation': this.preparationForm.set(form.formValues); break;
+                    case 'Ingredient': this.ingredientForm.set(form.formValues); break;
                     case 'CustomEmoji': this.customEmojiForm.set(form.formValues); break;
                 }
             }
@@ -171,33 +173,46 @@ export class UiService {
                 form.onSave?.(createdItem);
         
                 this.formStack.update(stack => {
-                    if (stack.length > 1) {
-                        const parentFormState = stack[stack.length - 2];
-                        this.updateParentFormState(parentFormState, form.type, createdItem);
+                    // Wenn es kein übergeordnetes Formular gibt, wird das aktuelle einfach entfernt.
+                    if (stack.length <= 1) {
+                        return [];
                     }
-                    return stack.slice(0, -1);
+
+                    // Erstellt eine neue, aktualisierte Version des übergeordneten Formularzustands (immutable update).
+                    const parentState = { 
+                        ...stack[stack.length - 2],
+                        formValues: { ...stack[stack.length - 2].formValues }
+                    };
+
+                    // Wendet die Update-Logik basierend auf dem Typ des erstellten Elements an.
+                    if (parentState.type === 'Preparation') {
+                        switch (form.type) {
+                            case 'Manufacturer':
+                                parentState.formValues.manufacturerId = createdItem.id;
+                                break;
+                            case 'ActiveIngredient':
+                                parentState.formValues.activeIngredientId = createdItem.id;
+                                break;
+                            case 'Dosage':
+                                parentState.formValues.dosageId = createdItem.id;
+                                break;
+                            case 'Ingredient': {
+                                const currentIds = parentState.formValues.ingredientIds || [];
+                                if (!currentIds.includes(createdItem.id)) {
+                                    parentState.formValues.ingredientIds = [...currentIds, createdItem.id];
+                                }
+                                break;
+                            }
+                        }
+                    } else if (form.type === 'CustomEmoji') {
+                        parentState.formValues.emoji = createdItem;
+                    }
+                    
+                    // Gibt einen neuen Stack zurück, der alle Elemente vor dem übergeordneten Element
+                    // sowie das aktualisierte übergeordnete Element enthält. Das untergeordnete Formular wird so entfernt.
+                    return [...stack.slice(0, -2), parentState];
                 });
             }
-        }
-    }
-
-    private updateParentFormState(parentState: FormState, createdType: CrudEntity, createdItem: any) {
-        if (parentState.type === 'Preparation') {
-            switch (createdType) {
-                case 'Manufacturer':
-                    parentState.formValues.manufacturerId = createdItem.id;
-                    break;
-                case 'ActiveIngredient':
-                    parentState.formValues.activeIngredientId = createdItem.id;
-                    break;
-                case 'Dosage':
-                    parentState.formValues.dosageId = createdItem.id;
-                    break;
-            }
-        } else if (createdType === 'CustomEmoji') {
-            // When a custom emoji is created, update the emoji field of the parent form.
-            // `createdItem` is the emoji string.
-            parentState.formValues.emoji = createdItem;
         }
     }
 
@@ -327,6 +342,19 @@ export class UiService {
                     return null;
                 }
                 return this.dataService.addItem(this.dataService.activeIngredients, { ...formValues, amount, unit } as Omit<ActiveIngredient, 'id'>);
+            }
+             case 'Ingredient': {
+                const formValues = this.ingredientForm();
+                const name = formValues.name?.trim();
+                if (!name) {
+                    this.showErrorToast('formErrorNameRequired');
+                    return null;
+                }
+                if (this.dataService.ingredients().some(i => i.name.toLowerCase() === name.toLowerCase())) {
+                    this.showErrorToast('duplicateIngredientError');
+                    return null;
+                }
+                return this.dataService.addItem(this.dataService.ingredients, { name } as Omit<Ingredient, 'id'>);
             }
             case 'Preparation': {
                 const formValues = this.preparationForm();
@@ -500,6 +528,20 @@ export class UiService {
                 this.dataService.updateItem(this.dataService.activeIngredients, { ...formValues, id, amount, unit } as ActiveIngredient);
                 break;
             }
+            case 'Ingredient': {
+                const formValues = this.ingredientForm();
+                const name = formValues.name?.trim();
+                if (!name) {
+                    this.showErrorToast('formErrorNameRequired');
+                    return false;
+                }
+                if (this.dataService.ingredients().some(i => i.id !== id && i.name.toLowerCase() === name.toLowerCase())) {
+                    this.showErrorToast('duplicateIngredientError');
+                    return false;
+                }
+                this.dataService.updateItem(this.dataService.ingredients, { ...formValues, id, name } as Ingredient);
+                break;
+            }
             case 'Preparation': {
                 const formValues = this.preparationForm();
                 const name = formValues.name?.trim();
@@ -511,7 +553,7 @@ export class UiService {
                     this.showErrorToast('duplicatePreparationError');
                     return false;
                 }
-                this.dataService.updateItem(this.dataService.preparations, { ...formValues, id, name } as Preparation);
+                this.dataService.updatePreparation({ ...formValues, id, name } as Preparation);
                 break;
             }
         }
@@ -530,6 +572,45 @@ export class UiService {
         this.dosageForm.set({});
         this.activeIngredientForm.set({});
         this.preparationForm.set({});
+        this.ingredientForm.set({});
         this.customEmojiForm.set({});
+    }
+
+    // --- Helfer für Präparat-Formular ---
+
+    // Helper computed signal to get full ingredient objects for the current preparation form
+    selectedIngredientsForPrepForm = computed(() => {
+        const ids = this.preparationForm().ingredientIds || [];
+        const allIngredients = this.dataService.ingredients();
+        return ids.map(id => allIngredients.find(ing => ing.id === id)).filter((ing): ing is Ingredient => !!ing);
+    });
+
+    // Helper computed signal to get ingredients that are not yet selected
+    availableIngredientsForPrepForm = computed(() => {
+        const selectedIds = this.preparationForm().ingredientIds || [];
+        // Directly depend on the base signal and sort here to ensure reactivity.
+        const allIngredients = this.dataService.ingredients();
+        const available = allIngredients.filter(ing => !selectedIds.includes(ing.id));
+        return available.slice().sort((a, b) => a.name.localeCompare(b.name, this.translationService.language(), { sensitivity: 'base' }));
+    });
+
+    // Method to add an ingredient to the form
+    addIngredientToPreparationForm(ingredientId: string) {
+        if (!ingredientId) return;
+        this.preparationForm.update(prep => {
+            const currentIds = prep.ingredientIds || [];
+            if (!currentIds.includes(ingredientId)) {
+                return { ...prep, ingredientIds: [...currentIds, ingredientId] };
+            }
+            return prep;
+        });
+    }
+
+    // Method to remove an ingredient from the form
+    removeIngredientFromPreparationForm(ingredientId: string) {
+        this.preparationForm.update(prep => {
+            const currentIds = prep.ingredientIds || [];
+            return { ...prep, ingredientIds: currentIds.filter(id => id !== ingredientId) };
+        });
     }
 }

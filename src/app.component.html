@@ -129,6 +129,9 @@
                 <input type="text" [(ngModel)]="uiService.activeIngredientForm().amount" name="amount" [placeholder]="t().formActiveIngredientAmountPlaceholder" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
                 <input type="text" [(ngModel)]="uiService.activeIngredientForm().unit" name="unit" [placeholder]="t().formActiveIngredientUnitPlaceholder" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
             }
+             @case('Ingredient') {
+                <input type="text" [(ngModel)]="uiService.ingredientForm().name" name="name" [placeholder]="t().formIngredientNamePlaceholder" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+            }
             @case('Preparation') {
                 <input type="text" [(ngModel)]="uiService.preparationForm().name" name="name" [placeholder]="t().formPreparationNamePlaceholder" required class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
                 <div class="flex items-center gap-2">
@@ -149,6 +152,37 @@
                         <fa-icon [icon]="faPlus"></fa-icon>
                     </button>
                 </div>
+                 <!-- Ingredients Section -->
+                @if (dataService.moduleSettings().showIngredients) {
+                    <div>
+                        <label class="block text-sm font-medium mb-1">{{ t().crudIngredients }}</label>
+                        <!-- Selected Ingredients Pills -->
+                        <div class="flex flex-wrap gap-2 mb-2 empty:mb-0">
+                            @for (ing of uiService.selectedIngredientsForPrepForm(); track ing.id) {
+                                <span class="inline-flex items-center gap-2 px-2 py-1 bg-primary-100 dark:bg-primary-900/50 text-primary-800 dark:text-primary-200 text-sm font-medium rounded-full">
+                                    {{ ing.name }}
+                                    <button type="button" (click)="uiService.removeIngredientFromPreparationForm(ing.id)" class="text-primary-500 hover:text-primary-700 dark:text-primary-300 dark:hover:text-primary-100">
+                                        &times;
+                                    </button>
+                                </span>
+                            }
+                        </div>
+                        <!-- Add Ingredient Dropdown & Button -->
+                        <div class="flex items-center gap-2">
+                            <select 
+                                (change)="uiService.addIngredientToPreparationForm($any($event.target).value); $any($event.target).value=''"
+                                class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                                <option value="">{{ t().selectIngredient }}</option>
+                                @for (ing of uiService.availableIngredientsForPrepForm(); track ing.id) {
+                                    <option [value]="ing.id">{{ ing.name }}</option>
+                                }
+                            </select>
+                            <button type="button" (click)="uiService.openSubCreateForm('Ingredient')" [title]="t().addNewIngredientTitle" class="flex-shrink-0 w-9 h-9 rounded-full bg-primary-500 text-white hover:bg-primary-600 transition-colors flex items-center justify-center">
+                                <fa-icon [icon]="faPlus"></fa-icon>
+                            </button>
+                        </div>
+                    </div>
+                }
                 <div class="flex items-center gap-2">
                     <select [(ngModel)]="uiService.preparationForm().dosageId" name="dosageId" class="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
                         <option [ngValue]="undefined">{{ t().formPreparationDosageOptional }}</option>

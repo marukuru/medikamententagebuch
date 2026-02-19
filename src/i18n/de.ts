@@ -69,7 +69,7 @@ export const LANG_DE = {
     positiveEffectsForSymptom: 'Präparate mit positiven Effekten bei Symptomen:',
     activitiesAndEffects: 'Aktivitäten & Effekte',
     positiveEffectsForActivity: 'Präparate mit positiven Effekten bei Aktivitäten:',
-
+    ingredientStats: 'Inhaltsstoffe',
 
     // Settings Page
     settingsTitle: 'Einstellungen',
@@ -79,6 +79,7 @@ export const LANG_DE = {
     crudActivities: 'Aktivitäten',
     crudManufacturers: 'Hersteller',
     crudPreparations: 'Präparate',
+    crudIngredients: 'Inhaltsstoffe',
     crudDosages: 'Dosierungen',
     crudActiveIngredients: 'Wirkstoffgehalte',
     crudCustomEmojis: 'Eigene Emojis',
@@ -147,6 +148,7 @@ export const LANG_DE = {
     formPerceptionNegative: 'negativ',
     formPerceptionNeutral: 'neutral',
     formManufacturerNamePlaceholder: 'Name des Herstellers',
+    formIngredientNamePlaceholder: 'Name des Inhaltsstoffs',
     formDosageAmountPlaceholder: 'Menge',
     formDosageUnitPlaceholder: 'Einheit',
     formActiveIngredientAmountPlaceholder: 'Menge',
@@ -158,9 +160,11 @@ export const LANG_DE = {
     formCustomEmojiPlaceholder: 'Einzelnes Emoji eingeben',
     addNewManufacturerTitle: 'Neuen Hersteller anlegen',
     addNewActiveIngredientTitle: 'Neuen Wirkstoffgehalt anlegen',
+    addNewIngredientTitle: 'Neuen Inhaltsstoff anlegen',
     addNewDosageTitle: 'Neue Standard-Dosierung anlegen',
     addCustomEmoji: 'Eigenes Emoji hinzufügen',
     changeEmoji: 'Emoji ändern',
+    selectIngredient: 'Inhaltsstoff auswählen...',
     emojiPickerTitle: 'Emoji auswählen',
     emojiCatSmileys: 'Smileys & Personen',
     emojiCatAnimals: 'Tiere & Natur',
@@ -182,6 +186,7 @@ export const LANG_DE = {
     moduleSymptoms: 'Symptome',
     moduleActivities: 'Aktivitäten',
     moduleEffects: 'Effekte',
+    moduleIngredients: 'Inhaltsstoffe',
     moduleNote: 'Notiz',
     moduleDateGaps: 'Datumslücken anzeigen',
 
@@ -241,6 +246,7 @@ export const LANG_DE = {
     duplicateDosageError: 'Eine Dosierung mit dieser Menge und Einheit existiert bereits.',
     duplicateActiveIngredientError: 'Ein Wirkstoffgehalt mit dieser Menge und Einheit existiert bereits.',
     duplicatePreparationError: 'Ein Präparat mit diesem Namen, Hersteller und Wirkstoffgehalt existiert bereits.',
+    duplicateIngredientError: 'Ein Inhaltsstoff mit diesem Namen existiert bereits.',
     duplicateCustomEmojiError: 'Dieses Emoji wurde bereits hinzugefügt.',
     invalidEmojiError: 'Bitte geben Sie ein einzelnes, gültiges Emoji ein.',
     // Form validation errors

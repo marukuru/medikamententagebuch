@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { DataService } from '../services/data.service';
-import { DiaryEntry, Preparation, Manufacturer, ActiveIngredient, Symptom, Activity } from '../models';
+import { DiaryEntry, Preparation, Manufacturer, ActiveIngredient, Symptom, Activity, Ingredient } from '../models';
 import { DiaryEntryFormComponent } from './diary-entry-form.component';
 import { TranslationService } from '../services/translation.service';
 import { UiService } from '../services/ui.service';
@@ -41,6 +41,7 @@ export class DiaryListComponent {
   editingEntry = signal<DiaryEntry | null>(null); // Hält den Eintrag, der gerade bearbeitet wird
   entryToDeleteId = signal<string | null>(null); // Hält die ID des Eintrags, für den die Löschbestätigung angezeigt wird
   showFilters = signal(false); // Steuert die Sichtbarkeit des Filter-Akkordeons
+  showIngredientsForPrep = signal<string | null>(null); // Hält die ID des Präparats, dessen Inhaltsstoffe angezeigt werden
 
   // --- Suche & Filter ---
   searchTerm = signal(''); // Der aktuelle Suchbegriff
@@ -231,6 +232,16 @@ export class DiaryListComponent {
     const allActivities = this.dataService.activities();
     return activityIds.map(id => allActivities.find(a => a.id === id)).filter((a): a is Activity => !!a);
   }
+  
+  getIngredients(ingredientIds?: string[]): Ingredient[] {
+    if (!ingredientIds || ingredientIds.length === 0) return [];
+    const allIngredients = this.dataService.ingredients();
+    return ingredientIds.map(id => allIngredients.find(i => i.id === id)).filter((i): i is Ingredient => !!i);
+  }
+
+  formatIngredients(ingredients: Ingredient[]): string {
+    return ingredients.map(i => i.name).join(', ');
+  }
 
   // --- Aktionsmethoden ---
   toggleFilters() {
@@ -249,6 +260,7 @@ export class DiaryListComponent {
   }
 
   viewEntry(entry: DiaryEntry) {
+    this.showIngredientsForPrep.set(null); // Inhaltsstoffe beim Öffnen immer ausblenden
     this.showDetail.set(entry);
   }
 

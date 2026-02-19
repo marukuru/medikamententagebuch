@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../services/data.service';
-import { Manufacturer, ActiveIngredient, Preparation, EffectPerception, Symptom, Activity } from '../models';
+import { Manufacturer, ActiveIngredient, Preparation, EffectPerception, Symptom, Activity, Effect, Ingredient } from '../models';
 import { TranslationService } from '../services/translation.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faFilter, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +13,14 @@ interface PreparationStat {
   prep: Preparation;
   man: Manufacturer | undefined;
   ai: ActiveIngredient | undefined;
+  count: number;
+}
+
+/**
+ * Interface zur Strukturierung von Inhaltsstoff-Statistiken.
+ */
+interface IngredientStat {
+  ing: Ingredient;
   count: number;
 }
 
@@ -171,6 +179,66 @@ export class StatisticsComponent {
 
     return result;
   });
+  
+  /**
+   * Berechnet, welche Inhaltsstoffe am häufigsten mit bestimmten Effekten assoziiert sind.
+   */
+  categorizedIngredientEffectStats = computed(() => {
+    const stats = new Map<string, { 
+        effect: Effect, 
+        counts: Map<string, number> 
+    }>();
+
+    for (const entry of this.filteredEntries()) {
+        if (!entry.preparationId || entry.effects.length === 0) continue;
+
+        const prep = this.dataService.preparations().find(p => p.id === entry.preparationId);
+        // Inhaltsstoffe aus dem Eintrag-Snapshot verwenden, falls vorhanden, andernfalls auf Live-Präparatdaten zurückgreifen.
+        const ingredientIds = entry.ingredientIds ?? prep?.ingredientIds;
+        if (!ingredientIds || ingredientIds.length === 0) continue;
+
+        for (const effect of entry.effects) {
+            if (!stats.has(effect.id)) {
+                stats.set(effect.id, { 
+                    effect: effect, 
+                    counts: new Map() 
+                });
+            }
+            const effectStat = stats.get(effect.id)!;
+            
+            for (const ingId of ingredientIds) {
+                effectStat.counts.set(ingId, (effectStat.counts.get(ingId) || 0) + 1);
+            }
+        }
+    }
+    
+    const result: { 
+        positive: { effectName: string, emoji: string, topIngredients: IngredientStat[] }[],
+        negative: { effectName: string, emoji: string, topIngredients: IngredientStat[] }[],
+    } = { positive: [], negative: [] };
+
+    stats.forEach((value) => {
+        const topIngredients = this.getSortedIngredientStats(value.counts).slice(0, 5);
+        if (topIngredients.length === 0) return;
+
+        const statObject = {
+            effectName: value.effect.description,
+            emoji: value.effect.emoji,
+            topIngredients: topIngredients
+        };
+
+        switch(value.effect.perception) {
+            case 'positive':
+                result.positive.push(statObject);
+                break;
+            case 'negative':
+                result.negative.push(statObject);
+                break;
+        }
+    });
+
+    return result;
+  });
 
   /**
    * Berechnet, welche Präparate bei bestimmten Symptomen positive Effekte gezeigt haben.
@@ -264,6 +332,17 @@ export class StatisticsComponent {
         return { prep, man, ai, count };
       })
       .filter((item): item is PreparationStat => item !== null)
+      .sort((a, b) => b.count - a.count);
+  }
+  
+  private getSortedIngredientStats(counts: Map<string, number>): IngredientStat[] {
+    return Array.from(counts.entries())
+      .map(([ingId, count]) => {
+          const ing = this.dataService.ingredients().find(i => i.id === ingId);
+          if (!ing) return null;
+          return { ing, count };
+      })
+      .filter((item): item is IngredientStat => item !== null)
       .sort((a, b) => b.count - a.count);
   }
   

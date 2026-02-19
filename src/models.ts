@@ -6,7 +6,7 @@ export type EffectPerception = 'positive' | 'negative' | 'neutral';
 /**
  * Definiert die Typen von Entitäten, die über die generischen CRUD-Formulare verwaltet werden können.
  */
-export type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredient' | 'Preparation' | 'CustomEmoji' | 'Symptom' | 'Activity';
+export type CrudEntity = 'Mood' | 'Effect' | 'Manufacturer' | 'Dosage' | 'ActiveIngredient' | 'Preparation' | 'CustomEmoji' | 'Symptom' | 'Activity' | 'Ingredient';
 
 /**
  * Definiert die möglichen Seiten/Ansichten der Anwendung.
@@ -78,6 +78,14 @@ export interface ActiveIngredient {
 }
 
 /**
+ * Repräsentiert einen Inhaltsstoff eines Präparats.
+ */
+export interface Ingredient {
+  id: string;
+  name: string;
+}
+
+/**
  * Repräsentiert ein medizinisches Präparat. Kann optional mit Hersteller, Wirkstoff und Standard-Dosierung verknüpft werden.
  */
 export interface Preparation {
@@ -86,6 +94,7 @@ export interface Preparation {
   manufacturerId?: string;
   activeIngredientId?: string;
   dosageId?: string;
+  ingredientIds?: string[];
 }
 
 /**
@@ -103,6 +112,7 @@ export interface DiaryEntry {
   symptomIds?: string[]; // Referenced entities
   activityIds?: string[]; // Referenced entities
   note?: string;
+  ingredientIds?: string[]; // Snapshot of ingredients
 }
 
 /**

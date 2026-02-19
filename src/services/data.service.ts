@@ -11,6 +11,7 @@ import {
   Reminder,
   Symptom,
   Activity,
+  Ingredient,
 } from '../models';
 import { TranslationService } from './translation.service';
 
@@ -34,6 +35,7 @@ export interface ModuleSettings {
   showEffects: boolean;
   showNote: boolean;
   showDateGaps: boolean;
+  showIngredients: boolean;
 }
 
 /**
@@ -57,6 +59,7 @@ export class DataService {
     showEffects: true,
     showNote: true,
     showDateGaps: true,
+    showIngredients: true,
   });
   moods = signal<Mood[]>([]);
   effects = signal<Effect[]>([]);
@@ -66,6 +69,7 @@ export class DataService {
   dosages = signal<Dosage[]>([]);
   activeIngredients = signal<ActiveIngredient[]>([]);
   preparations = signal<Preparation[]>([]);
+  ingredients = signal<Ingredient[]>([]);
   diaryEntries = signal<DiaryEntry[]>([]);
   reminders = signal<Reminder[]>([]);
   customEmojis = signal<string[]>([]);
@@ -125,6 +129,13 @@ export class DataService {
   sortedPreparations = computed(() =>
     this.preparations().slice().sort((a, b) => a.name.localeCompare(b.name, this.translationService.language(), { sensitivity: 'base' }))
   );
+  
+  /**
+   * Gibt die Inhaltsstoffe alphabetisch sortiert zurück.
+   */
+  sortedIngredients = computed(() =>
+    this.ingredients().slice().sort((a, b) => a.name.localeCompare(b.name, this.translationService.language(), { sensitivity: 'base' }))
+  );
 
   constructor(private translationService: TranslationService) {
     this.loadFromLocalStorage();
@@ -152,7 +163,7 @@ export class DataService {
       this.lockSettings.set(parsedData.lockSettings || { isEnabled: false, pin: null, timeout: 0 });
       
       // Handle module settings with defaults for backward compatibility
-      const defaultModuleSettings = {
+      const defaultModuleSettings: ModuleSettings = {
         showMood: true,
         showDosage: true,
         showSymptoms: true,
@@ -160,6 +171,7 @@ export class DataService {
         showEffects: true,
         showNote: true,
         showDateGaps: true,
+        showIngredients: true,
       };
       this.moduleSettings.set({ ...defaultModuleSettings, ...(parsedData.moduleSettings || {}) });
 
@@ -171,6 +183,7 @@ export class DataService {
       this.dosages.set(parsedData.dosages || []);
       this.activeIngredients.set(parsedData.activeIngredients || []);
       this.preparations.set(parsedData.preparations || []);
+      this.ingredients.set(parsedData.ingredients || []);
       this.diaryEntries.set(parsedData.diaryEntries || []);
       this.reminders.set(parsedData.reminders || []);
       this.customEmojis.set(parsedData.customEmojis || []);
@@ -199,6 +212,7 @@ export class DataService {
       dosages: this.dosages(),
       activeIngredients: this.activeIngredients(),
       preparations: this.preparations(),
+      ingredients: this.ingredients(),
       diaryEntries: this.diaryEntries(),
       reminders: this.reminders(),
       customEmojis: this.customEmojis(),
@@ -236,6 +250,23 @@ export class DataService {
 
   updateItem<T extends { id: string }>(stateSignal: ReturnType<typeof signal<T[]>>, updatedItem: T) {
     stateSignal.update(items => items.map(i => i.id === updatedItem.id ? updatedItem : i));
+  }
+
+  updatePreparation(updatedPrep: Preparation) {
+    // Zuerst das Präparat in der Hauptliste aktualisieren.
+    this.preparations.update(items => items.map(p => p.id === updatedPrep.id ? updatedPrep : p));
+
+    // Dann alle vorhandenen Tagebucheinträge, die dieses Präparat verwenden, rückwirkend aktualisieren.
+    // Dies stellt sicher, dass Analysen konsistent sind und die neuesten bekannten Inhaltsstoffe widerspiegeln.
+    this.diaryEntries.update(entries =>
+      entries.map(entry => {
+        if (entry.preparationId === updatedPrep.id) {
+          // Ein neues Eintragsobjekt mit den aktualisierten Inhaltsstoff-IDs erstellen.
+          return { ...entry, ingredientIds: updatedPrep.ingredientIds };
+        }
+        return entry;
+      })
+    );
   }
   
   /**
@@ -294,6 +325,17 @@ export class DataService {
         // Verknüpfung in Tagebucheinträgen aufheben
         this.diaryEntries.update(entries => entries.map(entry => entry.preparationId === id ? { ...entry, preparationId: undefined } : entry));
         break;
+      case 'Ingredient':
+        this.ingredients.update(items => items.filter(i => i.id !== id));
+        // Verknüpfung in Präparaten aufheben
+        this.preparations.update(preps => preps.map(prep => {
+            if (prep.ingredientIds?.includes(id)) {
+              const newIngredientIds = prep.ingredientIds.filter(ingId => ingId !== id);
+              return { ...prep, ingredientIds: newIngredientIds.length > 0 ? newIngredientIds : undefined };
+            }
+            return prep;
+          }));
+        break;
       case 'CustomEmoji':
         this.customEmojis.update(items => items.filter(i => i !== id));
         break;
@@ -325,6 +367,7 @@ export class DataService {
       dosages: this.dosages(),
       activeIngredients: this.activeIngredients(),
       preparations: this.preparations(),
+      ingredients: this.ingredients(),
       diaryEntries: this.diaryEntries(),
       reminders: this.reminders(),
       customEmojis: this.customEmojis(),
@@ -359,7 +402,7 @@ export class DataService {
         timeout: importedSettings.timeout ?? 0,
       });
 
-      const defaultModuleSettings = {
+      const defaultModuleSettings: ModuleSettings = {
         showMood: true,
         showDosage: true,
         showSymptoms: true,
@@ -367,6 +410,7 @@ export class DataService {
         showEffects: true,
         showNote: true,
         showDateGaps: true,
+        showIngredients: true,
       };
       this.moduleSettings.set({ ...defaultModuleSettings, ...(data.moduleSettings || {}) });
       
@@ -378,6 +422,7 @@ export class DataService {
       this.dosages.set(data.dosages || []);
       this.activeIngredients.set(data.activeIngredients || []);
       this.preparations.set(data.preparations || []);
+      this.ingredients.set(data.ingredients || []);
       this.diaryEntries.set(data.diaryEntries || []);
       this.reminders.set(data.reminders || []);
       this.customEmojis.set(data.customEmojis || []);
@@ -401,7 +446,8 @@ export class DataService {
         showActivities: true, 
         showEffects: true, 
         showNote: true, 
-        showDateGaps: true 
+        showDateGaps: true,
+        showIngredients: true,
     });
     this.moods.set(this.translationService.defaultMoods());
     this.effects.set(this.translationService.defaultEffects());
@@ -411,6 +457,7 @@ export class DataService {
     this.dosages.set([]);
     this.activeIngredients.set([]);
     this.preparations.set([]);
+    this.ingredients.set([]);
     this.diaryEntries.set([]);
     this.reminders.set([]);
     this.customEmojis.set([]);

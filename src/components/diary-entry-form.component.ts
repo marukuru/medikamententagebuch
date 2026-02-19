@@ -255,6 +255,7 @@ export class DiaryEntryFormComponent {
     }
     
     const mood = moodId ? this.dataService.moods().find(m => m.id === moodId) : undefined;
+    const prep = prepId ? this.dataService.preparations().find(p => p.id === prepId) : undefined;
 
     const dosageAmount = this.formDosageAmount();
     const dosageUnit = this.formDosageUnit().trim();
@@ -278,7 +279,8 @@ export class DiaryEntryFormComponent {
         ...this.entryToEdit()!,
         datetime: newDatetime,
         mood: mood,
-        preparationId: this.formPreparationId(),
+        preparationId: prep?.id,
+        ingredientIds: prep?.ingredientIds,
         effects: effects,
         symptomIds: this.formSymptomIds().length > 0 ? this.formSymptomIds() : undefined,
         activityIds: this.formActivityIds().length > 0 ? this.formActivityIds() : undefined,
@@ -290,7 +292,8 @@ export class DiaryEntryFormComponent {
       const newEntry: Omit<DiaryEntry, 'id'> = {
         datetime: newDatetime,
         mood: mood,
-        preparationId: this.formPreparationId(),
+        preparationId: prep?.id,
+        ingredientIds: prep?.ingredientIds,
         effects: effects,
         symptomIds: this.formSymptomIds().length > 0 ? this.formSymptomIds() : undefined,
         activityIds: this.formActivityIds().length > 0 ? this.formActivityIds() : undefined,

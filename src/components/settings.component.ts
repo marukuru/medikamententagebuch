@@ -95,6 +95,7 @@ export class SettingsComponent {
       { type: 'Activity' as const, title: t.crudActivities, emoji: '🤸', items: this.dataService.activities(), display: (i: any) => `${i.emoji} ${i.description}` },
       { type: 'Manufacturer' as const, title: t.crudManufacturers, emoji: '🏢', items: this.dataService.sortedManufacturers(), display: (i: any) => i.name },
       { type: 'Preparation' as const, title: t.crudPreparations, emoji: '💊', items: this.dataService.sortedPreparations(), display: (i: any) => i.name },
+      { type: 'Ingredient' as const, title: t.crudIngredients, emoji: '🌿', items: this.dataService.sortedIngredients(), display: (i: any) => i.name },
       { type: 'Dosage' as const, title: t.crudDosages, emoji: '💧', items: this.dataService.sortedDosages(), display: (i: any) => `${i.amount} ${i.unit}` },
       { type: 'ActiveIngredient' as const, title: t.crudActiveIngredients, emoji: '🧪', items: this.dataService.sortedActiveIngredients(), display: (i: any) => `${i.amount} ${i.unit}` },
       { type: 'CustomEmoji' as const, title: t.crudCustomEmojis, emoji: '✨', items: this.dataService.customEmojis(), display: (i: any) => i }

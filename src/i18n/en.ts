@@ -69,6 +69,7 @@ export const LANG_EN = {
     positiveEffectsForSymptom: 'Preparations with positive effects for symptoms:',
     activitiesAndEffects: 'Activities & Effects',
     positiveEffectsForActivity: 'Preparations with positive effects for activities:',
+    ingredientStats: 'Ingredients',
 
     // Settings Page
     settingsTitle: 'Settings',
@@ -78,6 +79,7 @@ export const LANG_EN = {
     crudActivities: 'Activities',
     crudManufacturers: 'Manufacturers',
     crudPreparations: 'Preparations',
+    crudIngredients: 'Ingredients',
     crudDosages: 'Dosages',
     crudActiveIngredients: 'Active Ingredients',
     crudCustomEmojis: 'Custom Emojis',
@@ -146,6 +148,7 @@ export const LANG_EN = {
     formPerceptionNegative: 'negative',
     formPerceptionNeutral: 'neutral',
     formManufacturerNamePlaceholder: 'Manufacturer name',
+    formIngredientNamePlaceholder: 'Ingredient name',
     formDosageAmountPlaceholder: 'Amount',
     formDosageUnitPlaceholder: 'Unit',
     formActiveIngredientAmountPlaceholder: 'Amount',
@@ -157,9 +160,11 @@ export const LANG_EN = {
     formCustomEmojiPlaceholder: 'Enter a single emoji',
     addNewManufacturerTitle: 'Add new manufacturer',
     addNewActiveIngredientTitle: 'Add new active ingredient',
+    addNewIngredientTitle: 'Add new ingredient',
     addNewDosageTitle: 'Add new standard dosage',
     addCustomEmoji: 'Add custom emoji',
     changeEmoji: 'Change emoji',
+    selectIngredient: 'Select ingredient...',
     emojiPickerTitle: 'Select Emoji',
     emojiCatSmileys: 'Smileys & People',
     emojiCatAnimals: 'Animals & Nature',
@@ -181,6 +186,7 @@ export const LANG_EN = {
     moduleSymptoms: 'Symptoms',
     moduleActivities: 'Activities',
     moduleEffects: 'Effects',
+    moduleIngredients: 'Ingredients',
     moduleNote: 'Note',
     moduleDateGaps: 'Show date gaps',
 
@@ -240,6 +246,7 @@ export const LANG_EN = {
     duplicateDosageError: 'A dosage with this amount and unit already exists.',
     duplicateActiveIngredientError: 'An active ingredient with this amount and unit already exists.',
     duplicatePreparationError: 'A preparation with this name, manufacturer, and active ingredient already exists.',
+    duplicateIngredientError: 'An ingredient with this name already exists.',
     duplicateCustomEmojiError: 'This emoji has already been added.',
     invalidEmojiError: 'Please enter a single, valid emoji.',
     // Form validation errors
