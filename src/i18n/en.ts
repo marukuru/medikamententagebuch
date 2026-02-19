@@ -13,8 +13,6 @@ export const LANG_EN = {
 
     // Info Page
     version: 'Version',
-    developedBy: 'Developed by',
-    withArtificialStupidity: 'with artificial stupidity',
     
     // Diary List Page
     diaryListTitle: 'Medicine Diary',
@@ -53,7 +51,7 @@ export const LANG_EN = {
     daysSkippedSingular: '{{count}} day skipped',
     daysSkippedPlural: '{{count}} days skipped',
 
-    // Emojis & Symbols
+    // Emojis & Symbole
     emojiDiary: '💊',
     emojiStatistics: '📊',
     emojiSettings: '⚙️',

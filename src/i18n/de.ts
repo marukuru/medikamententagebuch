@@ -13,8 +13,6 @@ export const LANG_DE = {
 
     // Info Page
     version: 'Version',
-    developedBy: 'Entwickelt von',
-    withArtificialStupidity: 'mit künstlicher Dummheit',
     
     // Diary List Page
     diaryListTitle: 'Medikamententagebuch',
