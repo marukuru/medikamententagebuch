@@ -89,16 +89,16 @@ export class SettingsComponent {
   entityConfigs = computed(() => {
     const t = this.t();
     return [
-      { type: 'Mood' as const, title: t.crudMoods, emoji: '🙆', items: this.dataService.moods(), display: (i: any) => `${i.emoji} ${i.description}` },
-      { type: 'Symptom' as const, title: t.crudSymptoms, emoji: '🤒', items: this.dataService.symptoms(), display: (i: any) => `${i.emoji} ${i.description}` },
-      { type: 'Effect' as const, title: t.crudEffects, emoji: '🧖', items: this.dataService.effects(), display: (i: any) => `${i.emoji} ${i.description}` },
-      { type: 'Activity' as const, title: t.crudActivities, emoji: '🤸', items: this.dataService.activities(), display: (i: any) => `${i.emoji} ${i.description}` },
-      { type: 'Manufacturer' as const, title: t.crudManufacturers, emoji: '🏢', items: this.dataService.sortedManufacturers(), display: (i: any) => i.name },
-      { type: 'Preparation' as const, title: t.crudPreparations, emoji: '💊', items: this.dataService.sortedPreparations(), display: (i: any) => i.name },
-      { type: 'Ingredient' as const, title: t.crudIngredients, emoji: '🌿', items: this.dataService.sortedIngredients(), display: (i: any) => i.name },
-      { type: 'Dosage' as const, title: t.crudDosages, emoji: '💧', items: this.dataService.sortedDosages(), display: (i: any) => `${i.amount} ${i.unit}` },
-      { type: 'ActiveIngredient' as const, title: t.crudActiveIngredients, emoji: '🧪', items: this.dataService.sortedActiveIngredients(), display: (i: any) => `${i.amount} ${i.unit}` },
-      { type: 'CustomEmoji' as const, title: t.crudCustomEmojis, emoji: '✨', items: this.dataService.customEmojis(), display: (i: any) => i }
+      { type: 'Mood' as const, title: t.crudMoods, emoji: t.emojiSettingsMoods, items: this.dataService.moods(), display: (i: any) => `${i.emoji} ${i.description}` },
+      { type: 'Symptom' as const, title: t.crudSymptoms, emoji: t.emojiSettingsSymptoms, items: this.dataService.symptoms(), display: (i: any) => `${i.emoji} ${i.description}` },
+      { type: 'Effect' as const, title: t.crudEffects, emoji: t.emojiSettingsEffects, items: this.dataService.effects(), display: (i: any) => `${i.emoji} ${i.description}` },
+      { type: 'Activity' as const, title: t.crudActivities, emoji: t.emojiSettingsActivities, items: this.dataService.activities(), display: (i: any) => `${i.emoji} ${i.description}` },
+      { type: 'Manufacturer' as const, title: t.crudManufacturers, emoji: t.emojiSettingsManufacturers, items: this.dataService.sortedManufacturers(), display: (i: any) => i.name },
+      { type: 'Preparation' as const, title: t.crudPreparations, emoji: t.emojiSettingsPreparations, items: this.dataService.sortedPreparations(), display: (i: any) => i.name },
+      { type: 'Ingredient' as const, title: t.crudIngredients, emoji: t.emojiSettingsIngredients, items: this.dataService.sortedIngredients(), display: (i: any) => i.name },
+      { type: 'Dosage' as const, title: t.crudDosages, emoji: t.emojiSettingsDosages, items: this.dataService.sortedDosages(), display: (i: any) => `${i.amount} ${i.unit}` },
+      { type: 'ActiveIngredient' as const, title: t.crudActiveIngredients, emoji: t.emojiSettingsActiveIngredients, items: this.dataService.sortedActiveIngredients(), display: (i: any) => `${i.amount} ${i.unit}` },
+      { type: 'CustomEmoji' as const, title: t.crudCustomEmojis, emoji: t.emojiSettingsCustomEmojis, items: this.dataService.customEmojis(), display: (i: any) => i }
     ];
   });
   

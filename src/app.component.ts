@@ -61,15 +61,15 @@ export class AppComponent {
     const t = this.t();
     switch (page) {
       case 'diary':
-        return { title: t.diaryListTitle, emoji: '💊' };
+        return { title: t.diaryListTitle, emoji: t.emojiDiary };
       case 'stats':
-        return { title: t.statisticsTitle, emoji: '📊' };
+        return { title: t.statisticsTitle, emoji: t.emojiStatistics };
       case 'settings':
-        return { title: t.settingsTitle, emoji: '⚙️' };
+        return { title: t.settingsTitle, emoji: t.emojiSettings };
       case 'info':
-        return { title: t.info, emoji: 'ℹ️' };
+        return { title: t.info, emoji: t.emojiInfo };
       default: // Sollte nicht eintreten
-        return { title: t.appName, emoji: '💊' };
+        return { title: t.appName, emoji: t.emojiDiary };
     }
   });
 

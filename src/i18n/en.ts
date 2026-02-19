@@ -53,6 +53,45 @@ export const LANG_EN = {
     daysSkippedSingular: '{{count}} day skipped',
     daysSkippedPlural: '{{count}} days skipped',
 
+    // Emojis & Symbols
+    emojiDiary: '💊',
+    emojiStatistics: '📊',
+    emojiSettings: '⚙️',
+    emojiInfo: 'ℹ️',
+    emojiDiaryListEmpty: '📝',
+    emojiDiaryListNoResults: '🧐',
+    emojiButtonClose: '🔙',
+    emojiButtonEdit: '✏️',
+    emojiButtonDelete: '❌',
+    emojiButtonRemove: '×',
+
+    // Emojis for statistics cards
+    emojiStatsTopPreparations: '💊',
+    emojiStatsSymptoms: '🤒',
+    emojiStatsActivities: '🤸',
+    emojiStatsMoods: '🙆',
+    emojiStatsPositiveEffects: '😊',
+    emojiStatsNegativeEffects: '😟',
+    emojiStatsIngredients: '🌿',
+
+    // Emojis for settings cards
+    emojiSettingsMoods: '🙆',
+    emojiSettingsSymptoms: '🤒',
+    emojiSettingsEffects: '🧖',
+    emojiSettingsActivities: '🤸',
+    emojiSettingsManufacturers: '🏢',
+    emojiSettingsPreparations: '💊',
+    emojiSettingsIngredients: '🌿',
+    emojiSettingsDosages: '💧',
+    emojiSettingsActiveIngredients: '🧪',
+    emojiSettingsCustomEmojis: '✨',
+    emojiSettingsReminders: '⏰',
+    emojiSettingsModules: '🧩',
+    emojiSettingsSecurity: '🔒',
+    emojiSettingsDesign: '🎨',
+    emojiSettingsLanguage: '🌐',
+    emojiSettingsData: '💾',
+
     // Statistics Page
     statisticsTitle: 'Statistics',
     top5Preparations: 'Top 5 Preparations',

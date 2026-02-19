@@ -69,7 +69,7 @@
         <!-- Karte: Top Präparate -->
         <div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant">
           <h2 class="text-2xl font-normal mb-4 flex items-center gap-3">
-              <span class="text-3xl">💊</span>
+              <span class="text-3xl">{{ t().emojiStatsTopPreparations }}</span>
               <span>{{ t().top5Preparations }}</span>
           </h2>
           @if(topPreparations().length > 0) {
@@ -94,7 +94,7 @@
         @if (dataService.moduleSettings().showSymptoms && dataService.moduleSettings().showEffects) {
           <div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant">
             <h2 class="text-2xl font-normal mb-4 flex items-center gap-3">
-                <span class="text-3xl">🤒</span>
+                <span class="text-3xl">{{ t().emojiStatsSymptoms }}</span>
                 <span>{{ t().symptoms }}</span>
             </h2>
             @if(symptomReliefStats().length > 0) {
@@ -128,7 +128,7 @@
         @if (dataService.moduleSettings().showActivities && dataService.moduleSettings().showEffects) {
           <div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant">
             <h2 class="text-2xl font-normal mb-4 flex items-center gap-3">
-                <span class="text-3xl">🤸</span>
+                <span class="text-3xl">{{ t().emojiStatsActivities }}</span>
                 <span>{{ t().activities }}</span>
             </h2>
             @if(activityEffectStats().length > 0) {
@@ -162,7 +162,7 @@
         @if (dataService.moduleSettings().showMood) {
           <div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant">
             <h2 class="text-2xl font-normal mb-4 flex items-center gap-3">
-                <span class="text-3xl">🙆</span>
+                <span class="text-3xl">{{ t().emojiStatsMoods }}</span>
                 <span>{{ t().moods }}</span>
             </h2>
             <div class="space-y-6">
@@ -199,7 +199,7 @@
         @if (dataService.moduleSettings().showEffects) {
           <div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant">
             <h2 class="text-2xl font-normal mb-4 flex items-center gap-3">
-                <span class="text-3xl">😊</span>
+                <span class="text-3xl">{{ t().emojiStatsPositiveEffects }}</span>
                 <span>{{ t().positiveEffects }}</span>
             </h2>
             <div class="space-y-6">
@@ -231,7 +231,7 @@
         @if (dataService.moduleSettings().showEffects) {
           <div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant">
             <h2 class="text-2xl font-normal mb-4 flex items-center gap-3">
-                <span class="text-3xl">😟</span>
+                <span class="text-3xl">{{ t().emojiStatsNegativeEffects }}</span>
                 <span>{{ t().negativeEffects }}</span>
             </h2>
             <div class="space-y-6">
@@ -263,14 +263,14 @@
         @if (dataService.moduleSettings().showIngredients && dataService.moduleSettings().showEffects) {
           <div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant">
             <h2 class="text-2xl font-normal mb-4 flex items-center gap-3">
-                <span class="text-3xl">🌿</span>
+                <span class="text-3xl">{{ t().emojiStatsIngredients }}</span>
                 <span>{{ t().ingredientStats }}</span>
             </h2>
             
             <!-- Positive Effekte -->
             <div>
               <h3 class="text-xl font-medium mb-3 flex items-center gap-2">
-                  <span class="text-2xl">😊</span>
+                  <span class="text-2xl">{{ t().emojiStatsPositiveEffects }}</span>
                   <span>{{ t().positiveEffects }}</span>
               </h3>
               @if(categorizedIngredientEffectStats().positive.length > 0) {
@@ -297,7 +297,7 @@
             <!-- Negative Effekte -->
             <div class="mt-8 pt-6 border-t border-outline-variant">
               <h3 class="text-xl font-medium mb-3 flex items-center gap-2">
-                  <span class="text-2xl">😟</span>
+                  <span class="text-2xl">{{ t().emojiStatsNegativeEffects }}</span>
                   <span>{{ t().negativeEffects }}</span>
               </h3>
               @if(categorizedIngredientEffectStats().negative.length > 0) {

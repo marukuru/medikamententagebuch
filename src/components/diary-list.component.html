@@ -80,14 +80,14 @@
     @if (dataService.diaryEntries().length === 0) {
       <!-- Fall: Keine Einträge in der gesamten App -->
       <div class="text-center py-16 px-6 bg-slate-100 dark:bg-slate-800 rounded-lg">
-        <p class="text-5xl mb-4">📝</p>
+        <p class="text-5xl mb-4">{{ t().emojiDiaryListEmpty }}</p>
         <h2 class="text-xl font-semibold text-slate-700 dark:text-slate-300">{{ t().noEntriesYet }}</h2>
         <p class="text-slate-500 dark:text-slate-400 mt-2">{{ t().noEntriesYetDescription }}</p>
       </div>
     } @else if (paginatedEntries().length === 0) {
       <!-- Fall: Einträge vorhanden, aber keine Treffer mit aktuellem Filter/Suche -->
        <div class="text-center py-16 px-6 bg-slate-100 dark:bg-slate-800 rounded-lg">
-        <p class="text-5xl mb-4">🧐</p>
+        <p class="text-5xl mb-4">{{ t().emojiDiaryListNoResults }}</p>
         <h2 class="text-xl font-semibold text-slate-700 dark:text-slate-300">{{ t().noFilterResults }}</h2>
         <p class="text-slate-500 dark:text-slate-400 mt-2">{{ t().noFilterResultsDescription }}</p>
       </div>
@@ -333,13 +333,13 @@
         <!-- Aktionsbuttons am Ende des Modals -->
         <div class="flex justify-end flex-wrap gap-2 pt-4 border-t border-slate-200 dark:border-slate-700 mt-6">
            <button (click)="showDetail.set(null)" class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-600 hover:bg-slate-300 dark:hover:bg-slate-500 transition-colors">
-            🔙 {{ t().close }}
+            {{ t().emojiButtonClose }} {{ t().close }}
           </button>
           <button (click)="editEntry(entry)" class="px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-colors">
-            ✏️ {{ t().edit }}
+            {{ t().emojiButtonEdit }} {{ t().edit }}
           </button>
           <button (click)="requestDeleteConfirmation(entry.id)" class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors">
-            ❌ {{ t().delete }}
+            {{ t().emojiButtonDelete }} {{ t().delete }}
           </button>
         </div>
       </div>

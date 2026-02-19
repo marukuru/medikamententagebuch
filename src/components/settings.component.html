@@ -38,7 +38,7 @@
        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
           <div class="flex justify-between items-center mb-4 gap-4">
             <h2 class="text-xl md:text-2xl font-semibold flex items-center gap-3">
-              <span class="text-2xl md:text-3xl">⏰</span>
+              <span class="text-2xl md:text-3xl">{{ t().emojiSettingsReminders }}</span>
               <span>{{ t().remindersTitle }}</span>
             </h2>
             <button (click)="openReminderModal()" [title]="t().addReminder" class="flex-shrink-0 w-9 h-9 rounded-full bg-primary-500 text-white hover:bg-primary-600 transition-colors flex items-center justify-center">
@@ -66,7 +66,7 @@
       <!-- Karte: Modul-Einstellungen -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
-            <span class="text-3xl">🧩</span>
+            <span class="text-3xl">{{ t().emojiSettingsModules }}</span>
             <span>{{ t().settingsModulesTitle }}</span>
         </h2>
         <div class="space-y-4">
@@ -96,7 +96,7 @@
       <!-- Karte: Sicherheits-Einstellungen -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
-            <span class="text-3xl">🔒</span>
+            <span class="text-3xl">{{ t().emojiSettingsSecurity }}</span>
             <span>{{ t().security }}</span>
         </h2>
         <div class="space-y-4">
@@ -135,7 +135,7 @@
       <!-- Karte: Design-Einstellungen -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
-            <span class="text-3xl">🎨</span>
+            <span class="text-3xl">{{ t().emojiSettingsDesign }}</span>
             <span>{{ t().design }}</span>
         </h2>
         <div class="flex flex-wrap gap-4">
@@ -162,7 +162,7 @@
       <!-- Karte: Sprach-Einstellungen -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
-            <span class="text-3xl">🌐</span>
+            <span class="text-3xl">{{ t().emojiSettingsLanguage }}</span>
             <span>{{ t().language }}</span>
         </h2>
         <div class="flex flex-wrap gap-4">
@@ -189,7 +189,7 @@
       <!-- Karte: Datenverwaltung -->
       <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-slate-200 dark:border-slate-700">
         <h2 class="text-xl md:text-2xl font-semibold mb-4 flex items-center gap-2">
-            <span class="text-3xl">💾</span>
+            <span class="text-3xl">{{ t().emojiSettingsData }}</span>
             <span>{{ t().dataManagement }}</span>
         </h2>
         <div class="flex flex-wrap gap-4">
