@@ -2,6 +2,18 @@
 
 Eine App zur Erfassung der Einnahme von Medizin und deren Auswirkungen. Verwalten Sie Tagebucheinträge, sehen Sie Statistiken und passen Sie Ihre Daten an.
 
+## 🖼 Screenshots
+<p align="center">
+<img width="12%" src="https://github.com/user-attachments/assets/e96c698d-6b34-4762-9bd3-bef83719dd60" />
+<img width="12%" src="https://github.com/user-attachments/assets/d722ce81-d262-4482-bf9d-c89e1414762f" />
+<img width="12%" src="https://github.com/user-attachments/assets/fe29ee13-0fd6-4e1f-a106-fc1a80a966f5" />
+<img width="12%" src="https://github.com/user-attachments/assets/aff2df0d-3759-413d-87c3-e12262d63b42" />
+<img width="12%" src="https://github.com/user-attachments/assets/8cc64aec-dbc6-4ec5-a0f1-2fe3e7bc5770" />
+<img width="12%" src="https://github.com/user-attachments/assets/15642547-b7d2-47d9-9317-b55c94be27ee" />
+<img width="12%" src="https://github.com/user-attachments/assets/5aa2339c-a066-45fb-af8a-ffac56a42e9c" />
+<img width="12%" src="https://github.com/user-attachments/assets/f9f87fab-d57e-41b3-a3d5-567c88c8cc34" />
+</p>
+
 ## ✨ Features
 
 -   **✍️ Umfassendes Tagebuch:** Erfassen Sie Einnahmen mit allen relevanten Details:
